@@ -220,7 +220,7 @@ a project also get an **Items** tab.
 
 - A **Global filter** is basically a list of taxa (**Items** in KeyBase).
   KeyBase only stores these items and only when the filter is applied looks for
-  the keys the items are in anjd which other keys need to be traversed to get to
+  the keys the items are in and other keys that need to be traversed to get to
   these keys.
 
 - There are two types of global filters, ""User filters** (indicated as **My filters**) that every user and only they can see and **Project filters** that only project Managers can make but that everybody can see.
