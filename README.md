@@ -174,7 +174,7 @@ a project also get an **Items** tab.
 
 
 - When uploading a new key file, you first get a screen to confirm if KeyBase
-  piucked the right separator:
+  picked the right separator:
 
 ![alt text](image-6.png) 
 
@@ -189,6 +189,9 @@ a project also get an **Items** tab.
   can be ignored, but users do so at their own peril. Keys with reticulations
   (multiple leads that lead to the same couplet), for example, will not be
   editable if KeyBase ever gets a key editor.
+
+- If there are no errors or warnings, this screen will not show and the key will
+  be loaded.
 
 - We discussed editable tables before and this would be a good place for one, as
   mostly these errors are easily fixed.
