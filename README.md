@@ -29,6 +29,30 @@ inside-out so that we do not again end up with ten years of technical debt.
 The KeyBase plugin is also old, but it is working fine, so upgrading that will
 be left for a next phase.
 
+## Current codebase
+
+The code for the current iteration of KeyBase is in the following GitHub
+repositories:
+
+Application: https://github.com/rbgvictoria/keybase
+
+API: https://github.com/rbgvictoria/keybase-ws
+
+The code for the KeyBase plugin, which is the only bit I had thought we'd leave
+intact for now, is at
+https://github.com/rbgvictoria/keybase/blob/master/js/jquery.keybase.key.js.
+This needs to be changed to vanilla Javascript though before we do the
+redevelopment of VicFlora next (financial) year. @twocngdagz, please make a
+judgement whether we should replace it as part of this project, or whether we
+should postpone it. If we are going to do it now, there are some changes I would
+like to make.
+
+## Licensing
+
+We have agreed to share the copyright for all the code between Fast Flow
+Management (FFM) and the Royal Botanic Gardens Victoria (RBGV). We'll find an
+appropriate Open Source licence to put on all the code.
+
 ## Architecture
 
 We have decided on an architecture of Laravel + Inertia + React.
@@ -227,4 +251,10 @@ a project also get an **Items** tab.
 
 - As the global filters are not really global anymore but apply to a single project, I would like to see if we can get rid of the **Filter page** and put it in the **Filter tab** on the **Project page**.
 
+## Help pages
 
+I will set up a site for Help pages in HydePHP (https://hydephp.com/). The pages
+will be in Markdown, so we can decide later how they will fit in with KeyBase. I
+will try to write the pages at the same time the development happen, or in
+advance, so the developers can also use it to understand better what they need
+to be doing.
