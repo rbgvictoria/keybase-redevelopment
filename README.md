@@ -16,7 +16,9 @@ run. VicFlora, for example, only uses the interactive player and the bracketed
 key. It also offers the option to filter items in a key, that applications can
 choose to implement or not (VicFlora does not use it).
 
-KeyBase does not currently have an editor, but people have always been able to upload keys as CSV files. The homepage being defaced by a hacker in December 2023, however, forced us to turn off this functionality.
+KeyBase does not currently have an editor, but people have always been able to
+upload keys as CSV files. The homepage being defaced by a hacker in December
+2023, however, forced us to turn off this functionality.
 
 The aim of the current redevelopment is to convert KeyBase from a
 proof-of-concept to a production-ready web application. The main focus will be
