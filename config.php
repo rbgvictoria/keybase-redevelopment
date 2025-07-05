@@ -27,10 +27,6 @@ return [
         }
     },
     'url' => function ($page, $path) {
-        return Str::startsWith($path, 'http') ? $path : $page->baseUrl . '/' . trimPath($path);
+        return Str::startsWith($path, 'http') ? $path : '/' . trimPath($path);
     },
-    'link' => function ($page, $link) {
-        return Str::startsWith($link, 'http') ? $link : $page->baseUrl . '/' . trim($link, '/');
-    },
-
 ];
