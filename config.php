@@ -5,7 +5,7 @@ use Illuminate\Support\Str;
 return [
     'baseUrl' => '',
     'production' => false,
-    'siteName' => 'Docs Starter Template',
+    'siteName' => 'KeyBase Redevelopment',
     'siteDescription' => 'Beautiful docs powered by Jigsaw',
 
     // Algolia DocSearch credentials
