@@ -10,7 +10,7 @@
         <meta property="og:title" content="{{ $page->title ?  $page->title . ' | ' : '' }}{{ $page->siteName }}"/>
         <meta property="og:description" content="{{ $page->description ?? $page->siteDescription }}"/>
         <meta property="og:url" content="{{ $page->getUrl() }}"/>
-        <meta property="og:image" content="/assets/img/keybase.png"/>
+        <meta property="og:image" content="{{ $page->baseUrl }}/assets/img/keybase.png"/>
         <meta property="og:type" content="website"/>
 
         <meta name="twitter:image:alt" content="{{ $page->siteName }}">
@@ -30,6 +30,8 @@
         @if ($page->production)
             <!-- Insert analytics code here -->
         @endif
+
+        <base href="{{ $page->baseUrl }}/">
 
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
         <link rel="stylesheet" href="{{ $page->baseUrl }}{{ mix('css/main.css', 'assets/build') }}">

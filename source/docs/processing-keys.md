@@ -19,7 +19,7 @@ having two leads. Each lead starts with the number of the couplet, followed by a
 statement and then by either the number of the next couplet to go to or the
 result of the identification.
 
-![bracketed key](/assets/images/keybase/bracketed-key.png)
+![bracketed key](assets/images/keybase/bracketed-key.png)
 
 <caption>
 
@@ -37,7 +37,7 @@ However, larger keys become hard to follow without the numbers or even with the
 numbers. Therefore, for larger keys the bracketed format is the better format
 (but this is subject to personal opinion).
 
-![indented-key](/assets/images/keybase/indented-key.png)
+![indented-key](assets/images/keybase/indented-key.png)
 
 <caption>
 
@@ -51,7 +51,7 @@ figure 3 has the structure of the key in figures 1 and 2, but the taxon names
 have been replaced by numbered item labels and the statements of the leads are
 not shown.
 
-![](/assets/images/keybase/decision-tree-no-errors.drawio.svg) 
+![](assets/images/keybase/decision-tree-no-errors.drawio.svg) 
 
 <caption>
 
@@ -70,7 +70,7 @@ data constructs, i.e. sets of (almost always two) leads with the same parent.
 
 <br>
 
-![](/assets/images/keybase/graph-leads.drawio.svg)
+![](assets/images/keybase/graph-leads.drawio.svg)
 
 <caption>
 
@@ -85,7 +85,7 @@ exceptions to this rule as will be discussed, but KeyBase has gotten by very
 well for 15 years without implementing these exceptions.
 
 
-![couplets](/assets/images/keybase/bracketed-key.drawio.svg)
+![couplets](assets/images/keybase/bracketed-key.drawio.svg)
 
 <caption>
 
@@ -97,7 +97,7 @@ While the bracketed key format lends itself better for exchange and
 dissemination, the indented format (**figure 6**) is closer to the way the key
 is stored in the database and might be better for illustrating what is going on.
 
-![nested sets](/assets/images/keybase/indented-key.drawio.svg)
+![nested sets](assets/images/keybase/indented-key.drawio.svg)
 
 <caption>
 
@@ -272,7 +272,7 @@ skip that as well.
 
 ### Singletons <small><span style="color:red;font-weight:bold">[Error]</span></small>
 
-![](/assets/images/keybase/decision-tree-singleton.drawio.svg)
+![](assets/images/keybase/decision-tree-singleton.drawio.svg)
 
 <caption>
 
@@ -303,11 +303,11 @@ $isSingleton = $from->filter(fn ($value) => $value == $inKey[$i$]['from'])->coun
 
 ### Polytomies <small><span style="color:orange;font-weight:bold">[Warning]</span></small>
 
-![](/assets/images/keybase/decision-tree-polytomy.drawio.svg)
+![](assets/images/keybase/decision-tree-polytomy.drawio.svg)
 
 <caption>
 
-**Figure 8.** Graph of key with polytomy. [[Example CSV import](/assets/images/keybase/decision-tree-polytomy.drawio.svg)]
+**Figure 8.** Graph of key with polytomy. [[Example CSV import](assets/images/keybase/decision-tree-polytomy.drawio.svg)]
 
 </caption>
 
@@ -333,7 +333,7 @@ $isPolytomy = $from->filter(fn ($value) => $value == $inKey[$i]['from'])->count(
 
 ### Orphans <small><span style="color:red;font-weight:bold">[Error]</span></small>
 
-![](/assets/images/keybase/decision-tree-orphan.drawio.svg)
+![](assets/images/keybase/decision-tree-orphan.drawio.svg)
 
 <caption>
 
@@ -363,7 +363,7 @@ $isOrphan = $toCouplets->doesntContain($inKey[$i]['from']);
 
 ### Dead ends <small><span style="color:red;font-weight:bold">[Error]</span></small>
 
-![](/assets/images/keybase/decision-tree-dead-end.drawio.svg)
+![](assets/images/keybase/decision-tree-dead-end.drawio.svg)
 
 <caption>
 
@@ -393,7 +393,7 @@ $isDeadEnd = $toCouplets->contains($inKey[$i]['to']) && $from->doesntContain($in
 
 ### Loops <small><span style="color:red;font-weight:bold">[Error]</span></small>
 
-![](/assets/images/keybase/decision-tree-loop.drawio.svg)
+![](assets/images/keybase/decision-tree-loop.drawio.svg)
 
 <caption>
 
@@ -469,7 +469,7 @@ $isLoop = $loops->get($i);
 
 ### Reticulations <small><span style="color:orange;font-weight:bold">[Warning]</span></small>
 
-![](/assets/images/keybase/decision-tree-reticulation.drawio.svg)
+![](assets/images/keybase/decision-tree-reticulation.drawio.svg)
 
 <caption>
 
@@ -485,7 +485,7 @@ There are two ways of dealing with reticulations. One is repeating the sub-graph
 as many times as needed to repair the tree structure (**figure 13**). This is
 what KeyBase does now and is the same as not dealing with reticulations. 
 
-![](/assets/images/keybase/indented-key-reticulation-resolved.drawio.svg)
+![](assets/images/keybase/indented-key-reticulation-resolved.drawio.svg)
 
 <caption>
 
@@ -499,7 +499,7 @@ to the couplet link to with the `reticulation` (`reticulation_id` in the
 database) property. So this is one of the exceptions to the rule that leads
 either have an item or are the parent of another set of leads.
 
-![](/assets/images/keybase/indented-key-reticulation-new-graph.drawio.svg)
+![](assets/images/keybase/indented-key-reticulation-new-graph.drawio.svg)
 
 <caption>
 
@@ -535,7 +535,7 @@ $isReticulation = $toCouplets->contain$($inKey[$i]['to']) && !$toCouplets->conta
 
 ### Sub-keys <small><span style="color:blue;font-weight:bold">[Info]</span></small>
 
-![](/assets/images/keybase/indented-key-subkeys.drawio.svg)
+![](assets/images/keybase/indented-key-subkeys.drawio.svg)
 
 <caption>
 
@@ -653,7 +653,7 @@ link this key to the present key, KeyBase has a data structure we call a
 'shortcut' (from now on). A shortcut is a lead with an item. The parent of the
 shortcut is the lead with the keyed-out item (**figure 16**).
 
-![shortcut](/assets/images/keybase/couplets-shortcut.drawio.svg)
+![shortcut](assets/images/keybase/couplets-shortcut.drawio.svg)
 
 <caption>
 
@@ -760,7 +760,7 @@ separated by the pipe ('`|`') character, _e.g._ `Corymbia|Blakella`, added in
 the same cell in the 'to' column in an import file, will be interpreted and
 treated as multiple items coming from the same lead (**figure 17**).  
 
-![unfinished key](/assets/images/keybase/unfinished-key.drawio.svg)
+![unfinished key](assets/images/keybase/unfinished-key.drawio.svg)
 
 <caption>
 

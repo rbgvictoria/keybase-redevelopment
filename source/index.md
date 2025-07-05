@@ -121,7 +121,7 @@ The project page has got four tabs: **Keys** (tree), **Keys** (list), **About**
 and **Contributors**. Logged in users also get a **Filters** tab and Managers of
 a project also get an **Items** tab. 
 
-![alt text](/assets/images/keybase-redevelopment/image.png)
+![alt text](assets/images/keybase-redevelopment/image.png)
 
 - The content of the **Keys** tabs comes from the
   `/project_keys_get/{projectId}` endpoint.
@@ -161,7 +161,7 @@ a project also get an **Items** tab.
 
 ## Key page
 
-![alt text](/assets/images/keybase-redevelopment/image-1.png)
+![alt text](assets/images/keybase-redevelopment/image-1.png)
 
 ### Interactive key, Bracketed key and Indented key tabs
 
@@ -178,7 +178,7 @@ a project also get an **Items** tab.
 ### About tab
 - The **About** tab contains the keys metadata:
 
-![alt text](/assets/images/keybase-redevelopment/image-2.png)
+![alt text](assets/images/keybase-redevelopment/image-2.png)
 
 - It also contains a list of the items that key out in a key (in the **Items**
   tab) and gives access to the exports and the **Edit** page (for new keys the
@@ -189,11 +189,11 @@ a project also get an **Items** tab.
   format) and KeyBase's own format, which is in JSON. We can ditch LPXK and SDD,
   as there are no applications that use these formats anymore.
 
-  ![alt text](/assets/images/keybase-redevelopment/image-3.png)
+  ![alt text](assets/images/keybase-redevelopment/image-3.png)
 
 ### Edit key
 
-![alt text](/assets/images/keybase-redevelopment/image-4.png)
+![alt text](assets/images/keybase-redevelopment/image-4.png)
 
 - All metadata fields are shown in the screenshot above.
 
@@ -203,17 +203,17 @@ a project also get an **Items** tab.
 
 - The form to provide the **Source** of the key is currently in a modal. I think it would be nicer to have it in a collapsible form section.
 
-![alt text](/assets/images/keybase-redevelopment/image-5.png)
+![alt text](assets/images/keybase-redevelopment/image-5.png)
 
 
 - When uploading a new key file, you first get a screen to confirm if KeyBase
   picked the right separator:
 
-![alt text](/assets/images/keybase-redevelopment/image-6.png) 
+![alt text](assets/images/keybase-redevelopment/image-6.png) 
 
 - The next screen shows the result of the tests whether all the leads in the key have been correctly linked up:
 
-![alt text](/assets/images/keybase-redevelopment/image-7.png)
+![alt text](assets/images/keybase-redevelopment/image-7.png)
 
 (I broke this one on purpose)
 
@@ -233,7 +233,7 @@ a project also get an **Items** tab.
 
 - The **Search** box at the top of the page searches for keys across projects.
 
-![alt text](/assets/images/keybase-redevelopment/image-8.png)
+![alt text](assets/images/keybase-redevelopment/image-8.png)
 
 - The **Search** box needs an autocomplete. There is an endpoint in the API for this (currently `/autocomplete_item_name`).
 
@@ -244,12 +244,12 @@ a project also get an **Items** tab.
 - **Local Filters** are fully embedded in the KeyBase plugin, so nothing special
   needs to be done for them.
 
-![alt text](/assets/images/keybase-redevelopment/image-9.png)
+![alt text](assets/images/keybase-redevelopment/image-9.png)
 
 - **Global filters** are managed on the **Filters** page. Only logged-in users
   have access to that, because global filters are stored in the database.
 
-![alt text](/assets/images/keybase-redevelopment/image-10.png)  
+![alt text](assets/images/keybase-redevelopment/image-10.png)  
 
 - A **Global filter** is basically a list of taxa (**Items** in KeyBase).
   KeyBase only stores these items and only when the filter is applied looks for
