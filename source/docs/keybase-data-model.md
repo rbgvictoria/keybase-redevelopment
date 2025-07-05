@@ -9,7 +9,8 @@ section: content
 
 ## Key
 
-Keys are the core of KeyBase. To make keys work, we need three things (tables), **keys**, **leads** and **items**.
+Keys are the core of KeyBase. To make keys work, we need three types of
+resources (tables), **keys**, **leads** and **items**.
 
 ![keys, leads and items](/assets/images/keybase/keys-leads-items.svg)
 
