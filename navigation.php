@@ -11,7 +11,7 @@ return [
     //     ],
     // ],
     // 'Jigsaw Docs' => 'https://jigsaw.tighten.co/docs/installation',
-    'Home' => '/',
+    'KeyBase redevelopment' => '/',
     'KeyBase data model' => [
         'url' => 'docs/keybase-data-model'
     ],
