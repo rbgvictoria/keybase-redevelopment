@@ -1,6 +1,18 @@
 /* Add your custom styles here */
 
+.docsearch-content {
+    font-size: 16px;
+}
+
 .docsearch-content ul {
     list-style-type: disc;
     margin-left: 1rem;
+}
+
+.docsearch-content ol {
+    margin-left: 1rem;
+}
+
+.docsearch-content a {
+    font-weight: 400;
 }
