@@ -3,7 +3,7 @@
 use Illuminate\Support\Str;
 
 return [
-    'baseUrl' => '',
+    'baseUrl' => 'http://keybase-docs.test',
     'production' => false,
     'siteName' => 'KeyBase Redevelopment',
     'siteDescription' => 'Beautiful docs powered by Jigsaw',
@@ -27,6 +27,10 @@ return [
         }
     },
     'url' => function ($page, $path) {
-        return Str::startsWith($path, 'http') ? $path : '/' . trimPath($path);
+        return Str::startsWith($path, 'http') ? $path : $page->baseUrl . '/' . trimPath($path);
     },
+    'link' => function ($page, $link) {
+        return Str::startsWith($link, 'http') ? $link : $page->baseUrl . '/' . trim($link, '/');
+    },
+
 ];
