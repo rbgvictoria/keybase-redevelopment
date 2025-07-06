@@ -21,13 +21,14 @@ result of the identification.
 
 ![bracketed key](assets/images/keybase/bracketed-key.png)
 
-<caption>
-
-**Figure 1.** Bracketed key from **KeyBase (2025)**. _Flora of Victoria: Key to
-Acaulon species_. &lt;[https://keybase.rbg.vic.gov.au/keys/show/12181](https://keybase.rbg.vic.gov.au/keys/show/12181)&gt; [Seen:
-24-05-2025]. [https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed](https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed)
-
-</caption>
+<figcaption>
+    <b>Figure 1.</b> Bracketed key from <b>KeyBase (2025)</b>. <i>Flora of 
+    Victoria: Key to Acaulon species</i>. &lt;<a
+    href="https://keybase.rbg.vic.gov.au/keys/show/12181"
+    >https://keybase.rbg.vic.gov.au/keys/show/12181</a>&gt; [Seen: 24-05-2025]. 
+    <a href="https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed"
+    >https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed</a>
+</figcaption>
 
 Another often-used format is the indented key (**figure 2**). In an indented key
 the next couplet a lead leads to follows immediately below the lead. Because of
@@ -39,12 +40,11 @@ numbers. Therefore, for larger keys the bracketed format is the better format
 
 ![indented-key](assets/images/keybase/indented-key.png)
 
-<caption>
-
-**Figure 2.** Same key as in figure 1 displayed as an indented key.
-[https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented](https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented)
-
-</caption>
+<figcaption>
+    <b>Figure 2.</b> Same key as in figure 1 displayed as an indented key. <a
+    href="https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented"
+    >https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented</a>
+</figcaption>
 
 Keys can be represented as the decision tree in **figure 3**. The graph in
 figure 3 has the structure of the key in figures 1 and 2, but the taxon names
@@ -53,31 +53,28 @@ not shown.
 
 ![](assets/images/keybase/decision-tree-no-errors.drawio.svg) 
 
-<caption>
-
-
-**Figure 3.** Graph of key in figures 1 and 2. In this graph the circles are couplets,
-arrows are leads and rectangles are the keyed out items (identification results). 
-
-</caption>
+<figcaption>
+    <b>Figure 3.</b> Graph of key in figures 1 and 2. In this graph the circles 
+    are couplets, arrows are leads and rectangles are the keyed out items 
+    (identification results). 
+</figcaption>
 
 A key is a graph, but the vertices and edges in this graph are not the nodes and
 relationships of graph databases. All the data is in the leads and the vertices
 are not so much entities as branching points. So, in KeyBase, the leads are the
-entities and are stored as records. Leads (Lead records) are linked through the `parent`
-(`parent_id` in the database) property (figure 4B). Couplets, in KeyBase, are
-data constructs, i.e. sets of (almost always two) leads with the same parent.
+entities and are stored as records. Leads (Lead records) are linked through the
+`parent` (`parent_id` in the database) property (figure 4B). Couplets, in
+KeyBase, are data constructs, i.e. sets of (almost always two) leads with the
+same parent.
 
 <br>
 
 ![](assets/images/keybase/graph-leads.drawio.svg)
 
-<caption>
-
-**Figure 4.** Conversion of decision tree to graph of leads that is stored in
-KeyBase.
-
-</caption>
+<figcaption>
+    <b>Figure 4.</b> Conversion of decision tree to graph of leads that is 
+    stored in KeyBase.
+</figcaption>
 
 If we split the graph into couplets (**figure 5**) we can see that a lead either
 has an item or is the parent of another couplet of leads. There are a few
@@ -87,11 +84,9 @@ well for 15 years without implementing these exceptions.
 
 ![couplets](assets/images/keybase/bracketed-key.drawio.svg)
 
-<caption>
-
-**Figure 5.** Bracketed key in the KeyBase data model, showing couplets.
-
-</caption>
+<figcaption>
+    <b>Figure 5.</b> Bracketed key in the KeyBase data model, showing couplets.
+</figcaption>
 
 While the bracketed key format lends itself better for exchange and
 dissemination, the indented format (**figure 6**) is closer to the way the key
@@ -99,11 +94,10 @@ is stored in the database and might be better for illustrating what is going on.
 
 ![nested sets](assets/images/keybase/indented-key.drawio.svg)
 
-<caption>
-
-**Figure 6.** Indented key in the KeyBase data model, showing nested sets.
-
-</caption>
+<figcaption>
+    <b>Figure 6.</b> Indented key in the KeyBase data model, showing nested 
+    sets.
+</figcaption>
 
 The boxes outlined with a broken line in figure 6 are nested sets. Nested sets
 can be stored in the database by storing the numbers in the top- and
@@ -124,11 +118,10 @@ or Excel. KeyBase used to support two XML formats, SDD and LPXK, but other
 applications that people stopped using when KeyBase came onto the
 scene are needed to produce data in these formats, so they are used very little.
 
-<caption>
+<x-tablecaption>
+    <b>Table 1.</b> Key from figures 1 and 2 as tabular data<sup>1</sup>.
+</x-tablecaption>
 
-**Table 1** Key from figures 1 and 2 as tabular data<sup>1</sup>.
-
-</caption>
 
 from | statement | to
 -|-|-
@@ -143,7 +136,10 @@ from | statement | to
 5 | Mature spores 30-50 µm diam., finely papillose; capsules usually orange; leaf margin usually entire | Acaulon integrifolium
 5 | Mature spores 50-65 µm diam., very coarsely granular; capsules ferrugineous to dark brown; leaf margin usually crenulate to irregularly dentate | Acaulon granulosum
 
-<sup>1</sup> [Data in this table as CSV](./examples/key-import-example.csv)
+<x-table-footnote>
+    <sup>1</sup> <a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-example.csv">Data in this table 
+    as CSV</a>
+</x-table-footnote>
 
 In its simplest (and most common) form, the CSV for a key will have three
 columns, `from`, `statement` and `to`. Note that currently the CSV files that
@@ -270,16 +266,16 @@ key can just be uploaded without further feedback from the user.
 Currently the first screen only reports which delimiter was used. I think we can
 skip that as well.
 
-### Singletons <small><span style="color:red;font-weight:bold">[Error]</span></small>
+### Singletons 
+
+<x-debug-badge variant='outline' type="error"/>
 
 ![](assets/images/keybase/decision-tree-singleton.drawio.svg)
 
-<caption>
-
-**Figure 7.** Graph of key with singleton couplet. [[Example CSV
-import](./examples/key-import-singleton-example.csv)]
-
-</caption>
+<figcaption>
+  <b>Figure 7.</b> Graph of key with singleton couplet. [<a
+  href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-singleton-example.csv">Example CSV import</a>]
+</figcaption>
 
 Couplets with a single lead serve no purpose in the key and are errors. They
 might also interfere with the rendering of the key later on, as they are not
@@ -301,15 +297,17 @@ $isSingleton = $from->filter(fn ($value) => $value == $inKey[$i$]['from'])->coun
 ```
 
 
-### Polytomies <small><span style="color:orange;font-weight:bold">[Warning]</span></small>
+### Polytomies 
+
+<x-debug-badge variant='outline' type="warning"/>
 
 ![](assets/images/keybase/decision-tree-polytomy.drawio.svg)
 
-<caption>
-
-**Figure 8.** Graph of key with polytomy. [[Example CSV import](assets/images/keybase/decision-tree-polytomy.drawio.svg)]
-
-</caption>
+<figcaption>
+    <b>Figure 8.</b> Graph of key with polytomy. [<a
+    href="assets/images/keybase/decision-tree-polytomy.drawio.svg">Example CSV
+    import</a>]
+</figcaption>
 
 Polytomies, i.e. couplets with more than two leads, are harmless, but they are
 not considered good practice and they may have gone into or been left in the key
@@ -331,16 +329,16 @@ $isPolytomy = $from->filter(fn ($value) => $value == $inKey[$i]['from'])->count(
 ```
 
 
-### Orphans <small><span style="color:red;font-weight:bold">[Error]</span></small>
+### Orphans
+
+<x-debug-badge variant='outline' type="error"/>
 
 ![](assets/images/keybase/decision-tree-orphan.drawio.svg)
 
-<caption>
-
-**Figure 9.** Graph of key with orphan couplet. [[Example CSV
-import](./examples/key-import-orphan-example.csv)]
-
-</caption>
+<figcaption>
+    <b>Figure 9.</b> Graph of key with orphan couplet. [<a
+    href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-orphan-example.csv">Example CSV import</a>]
+</figcaption>
 
 Orphans are couplets, except the first couplets, that are not in the 'to'
 column, so people using the key cannot get to them.
@@ -361,16 +359,17 @@ $isOrphan = $toCouplets->doesntContain($inKey[$i]['from']);
 ```
 
 
-### Dead ends <small><span style="color:red;font-weight:bold">[Error]</span></small>
+### Dead ends
+
+<x-debug-badge variant='outline' type="error"/>
 
 ![](assets/images/keybase/decision-tree-dead-end.drawio.svg)
 
-<caption>
+<figcaption>
+    <b>Figure 10.</b> Graph of key with dead end. [<a 
+    href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-dead-end-example.csv">Example CSV import</a>]
+</figcaption>
 
-**Figure 10.** Graph of key with dead end. [[Example CSV
-import](./examples/key-import-dead-end-example.csv)]
-
-</caption>
 
 Dead ends are the opposite of orphans. They are couplet numbers in the 'to'
 column without couplets. They are mostly the result of typos (as are orphans).
@@ -391,16 +390,16 @@ $isDeadEnd = $toCouplets->contains($inKey[$i]['to']) && $from->doesntContain($in
 ```
 
 
-### Loops <small><span style="color:red;font-weight:bold">[Error]</span></small>
+### Loops
+
+<x-debug-badge variant='outline' type="error"/>
 
 ![](assets/images/keybase/decision-tree-loop.drawio.svg)
 
-<caption>
-
-**Figure 11.** Graph of key with loop. [[Example CSV
-import](./examples/key-import-loop-example.csv)]
-
-</caption>
+<figcaption>
+    <b>Figure 11.</b> Graph of key with loop. [<a
+    href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-loop-example.csv">Example CSV import</a>]
+</figcaption>
 
 Loops are created when a lead points back to a couplet that is on the path
 already taken. Loops are the biggest problem when uploading a key, as new leads
@@ -467,15 +466,16 @@ $isLoop = $loops->get($i);
 ```
 
 
-### Reticulations <small><span style="color:orange;font-weight:bold">[Warning]</span></small>
+### Reticulations
+
+<x-debug-badge variant='outline' type="warning"/>
 
 ![](assets/images/keybase/decision-tree-reticulation.drawio.svg)
 
-<caption>
-
-**Figure 12.** Graph of key with reticulation. [[Example CSV import](./examples/key-import-reticulation-example.csv)]
-
-</caption>
+<figcaption>
+    <b>Figure 12.</b> Graph of key with reticulation. [<a
+    href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-reticulation-example.csv">Example CSV import</a>]
+</figcaption>
 
 Reticulations are created when multiple leads go to the same couplet.
 Reticulations do no harm but, if ignored, lead to a different key than the user
@@ -487,11 +487,10 @@ what KeyBase does now and is the same as not dealing with reticulations.
 
 ![](assets/images/keybase/indented-key-reticulation-resolved.drawio.svg)
 
-<caption>
-
-**Figure 13.** Graph of key with reticulation resolved by repeating the sub-graph.
-
-</caption>
+<figcaption>
+    <b>Figure 13.</b> Graph of key with reticulation resolved by repeating the 
+    sub-graph.
+</figcaption>
 
 Possibly a better way of dealing with reticulations is starting a new graph
 (**figure 14**). This involves creating a new root lead that the leads leading
@@ -501,11 +500,10 @@ either have an item or are the parent of another set of leads.
 
 ![](assets/images/keybase/indented-key-reticulation-new-graph.drawio.svg)
 
-<caption>
-
-**Figure 14.** Graph of key with reticulation resolved by starting a new graph.
-
-</caption>
+<figcaption>
+    <b>Figure 14.</b> Graph of key with reticulation resolved by starting a new 
+    graph.
+</figcaption>
 
 Reticulations when dealt with this way will cause problems later on, as keys
 with reticulations cannot be displayed as indented keys and for that reason will
@@ -530,18 +528,18 @@ $isReticulation = $toCouplets->contain$($inKey[$i]['to']) && !$toCouplets->conta
 
 **Examples**
 
-- [AusGrass2: Key to the genera of Poaceae](examples/ausgrass2-key-to-the-genera-of-poaceae.tsv)
+- [AusGrass2: Key to the genera of Poaceae](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/ausgrass2-key-to-the-genera-of-poaceae.tsv)
 
 
-### Sub-keys <small><span style="color:blue;font-weight:bold">[Info]</span></small>
+### Sub-keys
+
+<x-debug-badge variant='outline' type="info"/>
 
 ![](assets/images/keybase/indented-key-subkeys.drawio.svg)
 
-<caption>
-
-**Figure 15.** Key with sub-keys.
-
-</caption>
+<figcaption>
+    <b>Figure 15.</b> Key with sub-keys.
+</figcaption>
 
 Large keys, of which we have quite a few in KeyBase, are often split into
 smaller sub-keys (**figure 15**). Currently KeyBase does not deal with sub-keys,
@@ -598,6 +596,7 @@ $inKeys = $inKey->groupBy('subkey');
 > }
 > ```
 
+
 In the main key (`$inKeys['']`), non-numeric values in the `$to` collection can be either
 sub-keys or items:
 
@@ -625,13 +624,15 @@ $hasSubkey = $subkeys->filter(fn ($value) => $value == $inKeys[''][$i]['to'])->c
 
 **Examples**
 
-- [Example CSV of key with sub-keys](./examples/keybase-import-key-with-subkeys-example.csv)
-- [Jepson Flora – Key to the families](./examples/jepson-families-subkey.tsv), https://keybase.rbg.vic.gov.au/keys/show/3854
-- [Jepson Flora – Key to the genera of Brassicaceae](./examples/jepson-brassicaceae-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/10032
-- [Horticultural Flora of South-eastern Australia: Key to the species of Eucalyptus](./examples/horticultural-flora-of-southeastern-australia-species-of-eucalyptus-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/7394
-- [Eucalypts of North Coast New South Wales: Key to the species of Eucalyptus](./examples/eucalypts-of-north-coast-new-south-wales-species-of-eucaluptus-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/13167
+- [Example CSV of key with sub-keys](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/keybase-import-key-with-subkeys-example.tsv)
+- [Jepson Flora – Key to the families](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/jepson-families-subkey.tsv), https://keybase.rbg.vic.gov.au/keys/show/3854
+- [Jepson Flora – Key to the genera of Brassicaceae](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/jepson-brassicaceae-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/10032
+- [Horticultural Flora of South-eastern Australia: Key to the species of Eucalyptus](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/horticultural-flora-of-southeastern-australia-species-of-eucalyptus-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/7394
+- [Eucalypts of North Coast New South Wales: Key to the species of Eucalyptus](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/eucalypts-of-north-coast-new-south-wales-species-of-eucaluptus-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/13167
 
-#### Unreachable sub-keys <small><span style="color:red;font-weight:bold">[Error]</span></small>
+#### Unreachable sub-keys
+
+<x-debug-badge variant='outline' type="error"/>
 
 If there are sub-keys in a key, there should also be a test for sub-keys that do
 not key out in the main key:
@@ -644,7 +645,9 @@ The inverse situation, _i.e._, sub-keys that key out in the main key but that
 are not there, is theoretically possible but will not be recognised, as these
 sub-keys will be considered items.
 
-### Shortcuts <small><span style="color:blue;font-weight:bold">[Info]</span></small>
+### Shortcuts
+
+<x-debug-badge variant='outline' type="info"/>
 
 Sometimes, an item that keys out only has a single member (in the project), so
 there will not be a key for this item. However, this member itself can have
@@ -655,14 +658,13 @@ shortcut is the lead with the keyed-out item (**figure 16**).
 
 ![shortcut](assets/images/keybase/couplets-shortcut.drawio.svg)
 
-<caption>
-
-**Figure 16.** Couplet with keyed out item _Senegalia_ and a shortcut
-to _Senegalia greggii_ in **KeyBase (2025)**, _Vascular plants of
-California: Jepson Herbarium, UC Berkeley: Fabaceae Group 1_.
-&lt;https://keybase.rbg.vic.gov.au/keys/show/10038&gt; [Seen: 26-05-2025].
-
-</caption>
+<figcaption>
+    <b>Figure 16.</b> Couplet with keyed out item <i>Senegalia</i> and a shortcut
+    to <i>Senegalia greggii</i> in <b>KeyBase (2025)</b>, <i>Vascular plants of
+    California: Jepson Herbarium, UC Berkeley: Fabaceae Group 1</i>.
+    &lt;<a href="https://keybase.rbg.vic.gov.au/keys/show/10038"
+    >https://keybase.rbg.vic.gov.au/keys/show/10038</a>&gt; [Seen: 26-05-2025].
+</figcaption>
 
 Shortcuts can currently be provided in the input file by appending a colon (':')
 and an item name, optionally separated by a space, _e.g._ `:Senegalia greggii`,
@@ -690,10 +692,12 @@ $hasShortcut = !empty($inKey[$i]['shortcut']);
 
 **Examples**:
 
-- [Flora of Victoria: Key to the families of Monocotyledons](./examples/flora-of-victoria-families-of-monocotyledons-shortcut.tsv), https://keybase.rbg.vic.gov.au/keys/show/1906
-- [Flora of Victoria: Key to the genera of Aizoaceae](./examples/flora-of-victoria-genera-of-aizoaceae-shortcut.tsv), https://keybase.rbg.vic.gov.au/keys/show/2185
+- [Flora of Victoria: Key to the families of Monocotyledons](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/flora-of-victoria-families-of-monocotyledons-shortcut.tsv), https://keybase.rbg.vic.gov.au/keys/show/1906
+- [Flora of Victoria: Key to the genera of Aizoaceae](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/flora-of-victoria-genera-of-aizoaceae-shortcut.tsv), https://keybase.rbg.vic.gov.au/keys/show/2185
 
-#### Shortcuts already in key <small><span style="color:red;font-weight:bold">[Error]</span></small>
+#### Shortcuts already in key
+
+<x-debug-badge variant='outline' type="error"/>
 
 Shortcuts to items that are already keyed out in the key will cause problems
 later, as they will create a loop, so need to be caught before the key is
@@ -711,7 +715,9 @@ For a single lead with index `$i`:
 $hasSpuriousShortcut = $hasShortcut && $toItems->contains(preg_split('/ ?: ?/', $inKey[$i]['to'])[1]);
 ```
 
-#### Chained shortcuts <small><span style="color:red;font-weight:bold">[Error]</span></small>
+#### Chained shortcuts
+
+<x-debug-badge variant='outline' type="error"/>
 
 There are a few instances in KeyBase where people have tried to chain shortcuts.
 While chained shortcuts do not break anything, KeyBase does not treat them as
@@ -753,7 +759,9 @@ item, but we will put something in the documentation.
 > This should not be an issue anymore once we have a separate column for
 > shortcuts.
 
-### Multi-item leads <small><span style="color:orange;font-weight:bold">[Warning]</span></small>
+### Multi-item leads
+
+<x-debug-badge variant='outline' type="warning"/>
 
 The new version of KeyBase will support unfinished keys. Multiple item labels,
 separated by the pipe ('`|`') character, _e.g._ `Corymbia|Blakella`, added in
@@ -762,11 +770,10 @@ treated as multiple items coming from the same lead (**figure 17**).
 
 ![unfinished key](assets/images/keybase/unfinished-key.drawio.svg)
 
-<caption>
-
-**Figure 17.** Key that is not fully resolved: lead `6` leads to more than one item.
-
-</caption>
+<figcaption>
+    <b>Figure 17.</b> Key that is not fully resolved: lead `6` leads to more 
+    than one item.
+</figcaption>
 
 To find multi-items in a key:
 
@@ -793,7 +800,7 @@ them into a single item.
 
 **Examples**
 
-- [ACT Flora: Key to the genera of Faboideae](examples/act-flora-genera-of-faboideae-incomplete.tsv)
+- [ACT Flora: Key to the genera of Faboideae](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/act-flora-genera-of-faboideae-incomplete.tsv)
 
 ## Processing key files
 
