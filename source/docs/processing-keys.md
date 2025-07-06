@@ -21,14 +21,11 @@ result of the identification.
 
 ![bracketed key](assets/images/keybase/bracketed-key.png)
 
-<figcaption>
-    <b>Figure 1.</b> Bracketed key from <b>KeyBase (2025)</b>. <i>Flora of 
-    Victoria: Key to Acaulon species</i>. &lt;<a
-    href="https://keybase.rbg.vic.gov.au/keys/show/12181"
-    >https://keybase.rbg.vic.gov.au/keys/show/12181</a>&gt; [Seen: 24-05-2025]. 
-    <a href="https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed"
-    >https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed</a>
-</figcaption>
+<x-figcaption>
+**Figure 1.** Bracketed key from **KeyBase (2025)**. _Flora of 
+Victoria: Key to Acaulon species_. &lt;[https://keybase.rbg.vic.gov.au/keys/show/12181](https://keybase.rbg.vic.gov.au/keys/show/12181)&gt; [Seen: 24-05-2025]. 
+[https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed](https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed)</a>
+</x-figcaption>
 
 Another often-used format is the indented key (**figure 2**). In an indented key
 the next couplet a lead leads to follows immediately below the lead. Because of
@@ -40,11 +37,10 @@ numbers. Therefore, for larger keys the bracketed format is the better format
 
 ![indented-key](assets/images/keybase/indented-key.png)
 
-<figcaption>
-    <b>Figure 2.</b> Same key as in figure 1 displayed as an indented key. <a
-    href="https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented"
-    >https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented</a>
-</figcaption>
+<x-figcaption>
+**Figure 2.** Same key as in figure 1 displayed as an indented key.
+[https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented](https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented)
+</x-figcaption>
 
 Keys can be represented as the decision tree in **figure 3**. The graph in
 figure 3 has the structure of the key in figures 1 and 2, but the taxon names
@@ -53,11 +49,11 @@ not shown.
 
 ![](assets/images/keybase/decision-tree-no-errors.drawio.svg) 
 
-<figcaption>
-    <b>Figure 3.</b> Graph of key in figures 1 and 2. In this graph the circles 
-    are couplets, arrows are leads and rectangles are the keyed out items 
-    (identification results). 
-</figcaption>
+<x-figcaption>
+**Figure 3.** Graph of key in figures 1 and 2. In this graph the circles are
+couplets, arrows are leads and rectangles are the keyed out items
+(identification results). 
+</x-figcaption>
 
 A key is a graph, but the vertices and edges in this graph are not the nodes and
 relationships of graph databases. All the data is in the leads and the vertices
@@ -71,10 +67,10 @@ same parent.
 
 ![](assets/images/keybase/graph-leads.drawio.svg)
 
-<figcaption>
-    <b>Figure 4.</b> Conversion of decision tree to graph of leads that is 
-    stored in KeyBase.
-</figcaption>
+<x-figcaption>
+**Figure 4.** Conversion of decision tree to graph of leads that is stored in 
+KeyBase.
+</x-figcaption>
 
 If we split the graph into couplets (**figure 5**) we can see that a lead either
 has an item or is the parent of another couplet of leads. There are a few
@@ -84,9 +80,9 @@ well for 15 years without implementing these exceptions.
 
 ![couplets](assets/images/keybase/bracketed-key.drawio.svg)
 
-<figcaption>
-    <b>Figure 5.</b> Bracketed key in the KeyBase data model, showing couplets.
-</figcaption>
+<x-figcaption>
+**Figure 5.** Bracketed key in the KeyBase data model, showing couplets.
+</x-figcaption>
 
 While the bracketed key format lends itself better for exchange and
 dissemination, the indented format (**figure 6**) is closer to the way the key
@@ -94,10 +90,9 @@ is stored in the database and might be better for illustrating what is going on.
 
 ![nested sets](assets/images/keybase/indented-key.drawio.svg)
 
-<figcaption>
-    <b>Figure 6.</b> Indented key in the KeyBase data model, showing nested 
-    sets.
-</figcaption>
+<x-figcaption>
+**Figure 6.** Indented key in the KeyBase data model, showing nested sets.
+</x-figcaption>
 
 The boxes outlined with a broken line in figure 6 are nested sets. Nested sets
 can be stored in the database by storing the numbers in the top- and
@@ -119,7 +114,7 @@ applications that people stopped using when KeyBase came onto the
 scene are needed to produce data in these formats, so they are used very little.
 
 <x-tablecaption>
-    <b>Table 1.</b> Key from figures 1 and 2 as tabular data<sup>1</sup>.
+**Table 1.** Key from figures 1 and 2 as tabular data <sup>1</sup>.
 </x-tablecaption>
 
 
@@ -137,8 +132,9 @@ from | statement | to
 5 | Mature spores 50-65 µm diam., very coarsely granular; capsules ferrugineous to dark brown; leaf margin usually crenulate to irregularly dentate | Acaulon granulosum
 
 <x-table-footnote>
-    <sup>1</sup> <a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-example.csv">Data in this table 
-    as CSV</a>
+<sup>1</sup>
+[https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-example.csv](Data
+in this table as CSV)
 </x-table-footnote>
 
 In its simplest (and most common) form, the CSV for a key will have three
@@ -272,10 +268,11 @@ skip that as well.
 
 ![](assets/images/keybase/decision-tree-singleton.drawio.svg)
 
-<figcaption>
-  <b>Figure 7.</b> Graph of key with singleton couplet. [<a
-  href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-singleton-example.csv">Example CSV import</a>]
-</figcaption>
+<x-figcaption>
+**Figure 7.** Graph of key with singleton couplet.
+[[https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-singleton-example.csv](Example
+CSV import)]
+</x-figcaption>
 
 Couplets with a single lead serve no purpose in the key and are errors. They
 might also interfere with the rendering of the key later on, as they are not
@@ -303,11 +300,10 @@ $isSingleton = $from->filter(fn ($value) => $value == $inKey[$i$]['from'])->coun
 
 ![](assets/images/keybase/decision-tree-polytomy.drawio.svg)
 
-<figcaption>
-    <b>Figure 8.</b> Graph of key with polytomy. [<a
-    href="assets/images/keybase/decision-tree-polytomy.drawio.svg">Example CSV
-    import</a>]
-</figcaption>
+<x-figcaption>
+**Figure 8.** Graph of key with polytomy.
+[[assets/images/keybase/decision-tree-polytomy.drawio.svg](Example CSV import)]
+</x-figcaption>
 
 Polytomies, i.e. couplets with more than two leads, are harmless, but they are
 not considered good practice and they may have gone into or been left in the key
@@ -335,10 +331,11 @@ $isPolytomy = $from->filter(fn ($value) => $value == $inKey[$i]['from'])->count(
 
 ![](assets/images/keybase/decision-tree-orphan.drawio.svg)
 
-<figcaption>
-    <b>Figure 9.</b> Graph of key with orphan couplet. [<a
-    href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-orphan-example.csv">Example CSV import</a>]
-</figcaption>
+<x-figcaption>
+**Figure 9.** Graph of key with orphan couplet. 
+[[https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-orphan-example.csv](Example 
+CSV import)]
+</x-figcaption>
 
 Orphans are couplets, except the first couplets, that are not in the 'to'
 column, so people using the key cannot get to them.
@@ -365,10 +362,11 @@ $isOrphan = $toCouplets->doesntContain($inKey[$i]['from']);
 
 ![](assets/images/keybase/decision-tree-dead-end.drawio.svg)
 
-<figcaption>
-    <b>Figure 10.</b> Graph of key with dead end. [<a 
-    href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-dead-end-example.csv">Example CSV import</a>]
-</figcaption>
+<x-figcaption>
+**Figure 10.** Graph of key with dead end. 
+[[https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-dead-end-example.csv](Example 
+CSV import)]
+</x-figcaption>
 
 
 Dead ends are the opposite of orphans. They are couplet numbers in the 'to'
@@ -396,10 +394,11 @@ $isDeadEnd = $toCouplets->contains($inKey[$i]['to']) && $from->doesntContain($in
 
 ![](assets/images/keybase/decision-tree-loop.drawio.svg)
 
-<figcaption>
-    <b>Figure 11.</b> Graph of key with loop. [<a
-    href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-loop-example.csv">Example CSV import</a>]
-</figcaption>
+<x-figcaption>
+**Figure 11.** Graph of key with loop. 
+[[https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-loop-example.csv](Example 
+CSV import)]
+</x-figcaption>
 
 Loops are created when a lead points back to a couplet that is on the path
 already taken. Loops are the biggest problem when uploading a key, as new leads
@@ -472,10 +471,11 @@ $isLoop = $loops->get($i);
 
 ![](assets/images/keybase/decision-tree-reticulation.drawio.svg)
 
-<figcaption>
-    <b>Figure 12.</b> Graph of key with reticulation. [<a
-    href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-reticulation-example.csv">Example CSV import</a>]
-</figcaption>
+<x-figcaption>
+**Figure 12.** Graph of key with reticulation. 
+[[https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-reticulation-example.csv](Example 
+CSV import)]
+</x-figcaption>
 
 Reticulations are created when multiple leads go to the same couplet.
 Reticulations do no harm but, if ignored, lead to a different key than the user
@@ -487,10 +487,10 @@ what KeyBase does now and is the same as not dealing with reticulations.
 
 ![](assets/images/keybase/indented-key-reticulation-resolved.drawio.svg)
 
-<figcaption>
-    <b>Figure 13.</b> Graph of key with reticulation resolved by repeating the 
-    sub-graph.
-</figcaption>
+<x-figcaption>
+**Figure 13.** Graph of key with reticulation resolved by repeating the 
+subgraph.
+</x-figcaption>
 
 Possibly a better way of dealing with reticulations is starting a new graph
 (**figure 14**). This involves creating a new root lead that the leads leading
@@ -500,10 +500,9 @@ either have an item or are the parent of another set of leads.
 
 ![](assets/images/keybase/indented-key-reticulation-new-graph.drawio.svg)
 
-<figcaption>
-    <b>Figure 14.</b> Graph of key with reticulation resolved by starting a new 
-    graph.
-</figcaption>
+<x-figcaption>
+**Figure 14.** Graph of key with reticulation resolved by starting a new graph.
+</x-figcaption>
 
 Reticulations when dealt with this way will cause problems later on, as keys
 with reticulations cannot be displayed as indented keys and for that reason will
@@ -537,9 +536,9 @@ $isReticulation = $toCouplets->contain$($inKey[$i]['to']) && !$toCouplets->conta
 
 ![](assets/images/keybase/indented-key-subkeys.drawio.svg)
 
-<figcaption>
-    <b>Figure 15.</b> Key with sub-keys.
-</figcaption>
+<x-figcaption>
+**Figure 15.** Key with sub-keys.
+</x-figcaption>
 
 Large keys, of which we have quite a few in KeyBase, are often split into
 smaller sub-keys (**figure 15**). Currently KeyBase does not deal with sub-keys,
@@ -657,13 +656,14 @@ shortcut is the lead with the keyed-out item (**figure 16**).
 
 ![shortcut](assets/images/keybase/couplets-shortcut.drawio.svg)
 
-<figcaption>
-    <b>Figure 16.</b> Couplet with keyed out item <i>Senegalia</i> and a shortcut
-    to <i>Senegalia greggii</i> in <b>KeyBase (2025)</b>, <i>Vascular plants of
-    California: Jepson Herbarium, UC Berkeley: Fabaceae Group 1</i>.
-    &lt;<a href="https://keybase.rbg.vic.gov.au/keys/show/10038"
-    >https://keybase.rbg.vic.gov.au/keys/show/10038</a>&gt; [Seen: 26-05-2025].
-</figcaption>
+<x-figcaption>
+
+**Figure 16.** Couplet with keyed out item _Senegalia_ and a shortcut to
+_Senegalia greggii_ in **KeyBase (2025)**, _Vascular plants of California:
+Jepson Herbarium, UC Berkeley: Fabaceae Group 1_.
+&lt;[https://keybase.rbg.vic.gov.au/keys/show/10038](https://keybase.rbg.vic.gov.au/keys/show/10038)&gt;
+[Seen: 26-05-2025].
+</x-figcaption>
 
 Shortcuts can currently be provided in the input file by appending a colon (':')
 and an item name, optionally separated by a space, _e.g._ `:Senegalia greggii`,
@@ -769,10 +769,10 @@ treated as multiple items coming from the same lead (**figure 17**).
 
 ![unfinished key](assets/images/keybase/unfinished-key.drawio.svg)
 
-<figcaption>
-    <b>Figure 17.</b> Key that is not fully resolved: lead `6` leads to more 
-    than one item.
-</figcaption>
+<x-figcaption>
+**Figure 17.** Key that is not fully resolved: lead `6` leads to more than one
+item.
+</x-figcaption>
 
 To find multi-items in a key:
 
