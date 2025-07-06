@@ -42,3 +42,42 @@
     @apply mt-2;
 }
 
+.docsearch-content .alert {
+    @apply my-3;
+    @apply py-1;
+    @apply px-2;
+}
+
+.docsearch-content .alert.alert-error {
+    @apply bg-red-500;
+    @apply bg-opacity-20;
+}
+
+.docsearch-content .alert.alert-warning {
+    @apply bg-yellow-600;
+    @apply bg-opacity-20;
+}
+
+.docsearch-content .alert.alert-info {
+    @apply bg-blue-600;
+    @apply bg-opacity-20;
+}
+
+
+.docsearch-content .alert .alert-header {
+    @apply pt-2;
+    @apply pb-4;
+    @apply font-bold;
+}
+
+.docsearch-content .alert.alert-error .alert-header {
+    @apply text-red-500;
+}
+
+.docsearch-content .alert.alert-warning .alert-header {
+    @apply text-yellow-600;
+}
+
+.docsearch-content .alert.alert-info .alert-header {
+    @apply text-blue-600;
+}

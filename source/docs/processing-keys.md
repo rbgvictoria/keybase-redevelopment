@@ -570,32 +570,31 @@ To find sub-keys in a key:
   }
 ```
 
-If a key has sub-keys, it needs to split up into a main key and sub-keys:
+If a key has sub-keys, it needs to be split up into a main key and sub-keys:
 
 ```php
 $inKeys = $inKey->groupBy('subkey');
 ```
 
-> **Note**
->
-> `$inKey->groupBy('subkey')` also works when the 'subkey' key is absent from
-> all items in the collection, so it might be a good idea to do this for all
-> imported files no matter if there is a 'subkey' column or not. Then the key
-> has sub-keys if the `$inKeys` collection has more than one item and you find
-> the subkeys using:
->
-> ```php
-> $subkeys = $inKeys->keys()->slice(1);
-> ```
-> 
-> Everything else can then be done in the `foreach` loop:
->
-> ```php
-> foreach ($inKeys as $key => $inKey) {
->     //  
-> }
-> ```
+<x-alert type="info" title="Note">
+`$inKey-groupBy('subkey')` also works when the 'subkey' key is absent from
+all items in the collection, so it might be a good idea to do this for all
+imported files no matter if there is a 'subkey' column or not. Then the key
+has sub-keys if the `$inKeys` collection has more than one item and you find
+the subkeys using:
 
+```php
+$subkeys = $inKeys-keys()-slice(1);
+```
+
+Everything else can then be done in the `foreach` loop:
+
+```php
+foreach ($inKeys as $key =$inKey) {
+    //  
+}
+```
+</x-alert>
 
 In the main key (`$inKeys['']`), non-numeric values in the `$to` collection can be either
 sub-keys or items:
@@ -728,10 +727,10 @@ users. Also, shortcuts are meant to connect keys, not link extra items to keys
 
 So, from now on, we will report chained shortcuts as errors.
 
-> **Note**
->
-> This should not be an issue anymore once we have a separate column for
-> shortcuts.
+<x-alert type="info" title="Note">
+This should not be an issue anymore once we have a separate column for 
+shortcuts.
+</x-alert>
 
 To find chained shortcuts in a provided key, you can run:
 
@@ -754,10 +753,10 @@ that, as it is inappropriate use of shortcuts. We are not even going to have a
 warning for it, _i.e._ we are going to treat it as a shortcut with a single
 item, but we will put something in the documentation.
 
-> **Note**
->
-> This should not be an issue anymore once we have a separate column for
-> shortcuts.
+<x-alert type="info" title="Note">
+This should not be an issue anymore once we have a separate column for 
+shortcuts.
+</x-alert>
 
 ### Multi-item leads
 
