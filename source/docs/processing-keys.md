@@ -133,8 +133,7 @@ from | statement | to
 
 <x-table-footnote>
 <sup>1</sup>
-[https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-example.csv](Data
-in this table as CSV)
+[Data in this table as CSV](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-example.csv)
 </x-table-footnote>
 
 In its simplest (and most common) form, the CSV for a key will have three
