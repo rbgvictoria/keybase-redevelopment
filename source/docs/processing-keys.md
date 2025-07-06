@@ -582,13 +582,16 @@ has subkeys if the `$inKeys` collection has more than one item and you find
 the subkeys using:
 
 ```php
-$subkeys = $inKeys-keys()-slice(1);
+$subkeys = $inKeys-keys();
+
+// or strictly speaking:
+// $subkeys = $inKeys->keys()->slice(1);
 ```
 
 Everything else can then be done in the `foreach` loop:
 
 ```php
-foreach ($inKeys as $key => $inKey) {
+foreach ($inKeys as $subkey => $inKey) {
     //  
 }
 ```
