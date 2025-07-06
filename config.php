@@ -5,7 +5,7 @@ use Illuminate\Support\Str;
 return [
     'baseUrl' => 'http://keybase-docs.test',
     'production' => false,
-    'siteName' => 'KeyBase Redevelopment',
+    'siteName' => 'KeyBase redevelopment',
     'siteDescription' => 'Beautiful docs powered by Jigsaw',
 
     // Algolia DocSearch credentials
