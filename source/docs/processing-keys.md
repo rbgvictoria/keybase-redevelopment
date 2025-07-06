@@ -529,28 +529,28 @@ $isReticulation = $toCouplets->contain$($inKey[$i]['to']) && !$toCouplets->conta
 - [AusGrass2: Key to the genera of Poaceae](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/ausgrass2-key-to-the-genera-of-poaceae.tsv)
 
 
-### Sub-keys
+### Subkeys
 
 <x-debug-badge variant='outline' type="info"/>
 
 ![](assets/images/keybase/indented-key-subkeys.drawio.svg)
 
 <x-figcaption>
-**Figure 15.** Key with sub-keys.
+**Figure 15.** Key with subkeys.
 </x-figcaption>
 
 Large keys, of which we have quite a few in KeyBase, are often split into
-smaller sub-keys (**figure 15**). Currently KeyBase does not deal with sub-keys,
-but merging sub-keys into one big key is the largest (and perhaps only)
+smaller subkeys (**figure 15**). Currently KeyBase does not deal with subkeys,
+but merging subkeys into one big key is the largest (and perhaps only)
 source of reticulations, so it is a high priority for me to fix this in the new
-version. Sub-keys are much more straightforward to deal with than and are much
-preferable to reticulations and if KeyBase can deal with sub-keys, we might not
+version. Subkeys are much more straightforward to deal with than and are much
+preferable to reticulations and if KeyBase can deal with subkeys, we might not
 need special treatment for reticulations.
 
-CSV files for keys with sub-keys need a fourth 'subkey' column. Therefore they
+CSV files for keys with subkeys need a fourth 'subkey' column. Therefore they
 need to have a header row, otherwise KeyBase will ignore this column.
 
-To find sub-keys in a key:
+To find subkeys in a key:
 
 ```bash
 > $hasSubkeys = $inKey->filter(fn ($lead) => isset($lead['subkey']))->count() ? true : false;
@@ -568,7 +568,7 @@ To find sub-keys in a key:
   }
 ```
 
-If a key has sub-keys, it needs to be split up into a main key and sub-keys:
+If a key has subkeys, it needs to be split up into a main key and subkeys:
 
 ```php
 $inKeys = $inKey->groupBy('subkey');
@@ -578,7 +578,7 @@ $inKeys = $inKey->groupBy('subkey');
 `$inKey-groupBy('subkey')` also works when the 'subkey' key is absent from
 all items in the collection, so it might be a good idea to do this for all
 imported files no matter if there is a 'subkey' column or not. Then the key
-has sub-keys if the `$inKeys` collection has more than one item and you find
+has subkeys if the `$inKeys` collection has more than one item and you find
 the subkeys using:
 
 ```php
@@ -588,14 +588,14 @@ $subkeys = $inKeys-keys()-slice(1);
 Everything else can then be done in the `foreach` loop:
 
 ```php
-foreach ($inKeys as $key =$inKey) {
+foreach ($inKeys as $key => $inKey) {
     //  
 }
 ```
 </x-alert>
 
 In the main key (`$inKeys['']`), non-numeric values in the `$to` collection can be either
-sub-keys or items:
+subkeys or items:
 
 ```bash
 > $to = $inKeys['']->map(fn ($lead) => $lead['to']);
@@ -613,7 +613,7 @@ sub-keys or items:
     all: []
 ```
 
-To check if a lead with index `$i` goes to a sub-key:
+To check if a lead with index `$i` goes to a subkey:
 
 ```php
 $hasSubkey = $subkeys->filter(fn ($value) => $value == $inKeys[''][$i]['to'])->count() > 0;
@@ -621,26 +621,26 @@ $hasSubkey = $subkeys->filter(fn ($value) => $value == $inKeys[''][$i]['to'])->c
 
 **Examples**
 
-- [Example CSV of key with sub-keys](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/keybase-import-key-with-subkeys-example.tsv)
+- [Example CSV of key with subkeys](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/keybase-import-key-with-subkeys-example.tsv)
 - [Jepson Flora – Key to the families](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/jepson-families-subkey.tsv), https://keybase.rbg.vic.gov.au/keys/show/3854
 - [Jepson Flora – Key to the genera of Brassicaceae](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/jepson-brassicaceae-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/10032
 - [Horticultural Flora of South-eastern Australia: Key to the species of Eucalyptus](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/horticultural-flora-of-southeastern-australia-species-of-eucalyptus-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/7394
 - [Eucalypts of North Coast New South Wales: Key to the species of Eucalyptus](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/eucalypts-of-north-coast-new-south-wales-species-of-eucaluptus-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/13167
 
-#### Unreachable sub-keys
+#### Unreachable subkeys
 
 <x-debug-badge variant='outline' type="error"/>
 
-If there are sub-keys in a key, there should also be a test for sub-keys that do
+If there are subkeys in a key, there should also be a test for subkeys that do
 not key out in the main key:
 
 ```php
 $unreachableSubkeys = $subkeys->diff($to);
 ```
 
-The inverse situation, _i.e._, sub-keys that key out in the main key but that
+The inverse situation, _i.e._, subkeys that key out in the main key but that
 are not there, is theoretically possible but will not be recognised, as these
-sub-keys will be considered items.
+subkeys will be considered items.
 
 ### Shortcuts
 
