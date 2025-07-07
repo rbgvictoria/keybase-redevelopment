@@ -2,82 +2,124 @@
 
 .docsearch-content {
     @apply text-base;
-}
 
-.docsearch-content ul {
-    @apply list-disc;
-    @apply mx-1;
-}
+    ul {
+        @apply list-disc;
+        @apply mx-4;
+    }
 
-.docsearch-content ol {
-    @apply mx-1;
-}
+    ol {
+        @apply mx-4;
+    }
 
-.docsearch-content a {
-    @apply font-normal;
-}
+    a {
+        @apply font-normal;
+    }
 
-.docsearch-content table td,
-.docsearch-content table th {
-    @apply border;
-    @apply border-gray-300;
-    @apply px-2
-}
+    table {
+        td, th {
+            @apply border;
+            @apply border-gray-300;
+            @apply px-2
+        }
 
-.docsearch-content table th {
-    @apply bg-gray-300;
-}
+        th {
+            @apply bg-gray-300;
+        }
 
-.docsearch-content figcaption,
-.docsearch-content .tablecaption,
-.docsearch-content .table-footnote {
-    @apply text-sm;
-}
+    }
 
-.docsearch-content .tablecaption {
-    margin-bottom: -1rem;
-}
+    figcaption,
+    .tablecaption,
+    .table-footnote {
+        @apply leading-snug;
+        @apply text-sm;
+    }
 
-.docsearch-content .table-footnote {
-    margin-top: -1rem;
-}
+    .tablecaption {
+        @apply -mb-4;
+    }
 
-.docsearch-content .alert {
-    @apply my-3;
-    @apply py-1;
-    @apply px-2;
-}
+    .table-footnote {
+        @apply -mt-4;
+    }
 
-.docsearch-content .alert.alert-error {
-    @apply bg-red-500;
-    @apply bg-opacity-20;
-}
+    .badge {
+        @apply border;
+        @apply rounded-full;
+        @apply py-0;
+        @apply px-3;
+        @apply text-base;
+        @apply text-white;
 
-.docsearch-content .alert.alert-warning {
-    @apply bg-yellow-600;
-    @apply bg-opacity-20;
-}
+        &.badge-error {
+            @apply border-red-500;
+            @apply bg-red-500;
+        }
 
-.docsearch-content .alert.alert-info {
-    @apply bg-blue-600;
-    @apply bg-opacity-20;
-}
+        &.badge-warning {
+            @apply border-orange-500;
+            @apply bg-orange-500;
+        }
 
+        &.badge-info {
+            @apply border-blue-600;
+            @apply bg-blue-600;
+        }
 
-.docsearch-content .alert .alert-header {
-    @apply pt-2;
-    @apply pb-4;
-    @apply font-bold;
-}
+        &.badge-outline {
+            @apply bg-transparent;
 
-.docsearch-content .alert.alert-error .alert-header {
-    @apply text-red-500;
-}
+            &.badge-error {
+                @apply text-red-500;
+            }
 
-.docsearch-content .alert.alert-warning .alert-header {
-    @apply text-yellow-600;
-}
+            &.badge-warning {
+                @apply text-orange-500;
+            }
 
-.docsearch-content .alert.alert-info .alert-header {
-    @apply text-blue-600;
+            &.badge-info {
+                @apply text-blue-600;
+            }
+        }
+    }
+
+    .alert {
+        @apply my-3;
+        @apply py-1;
+        @apply px-2;
+
+        &.alert-error {
+            @apply bg-red-500;
+            @apply bg-opacity-20;
+            
+            .alert-header {
+                @apply text-red-500;
+            }
+        }
+
+        &.alert-warning {
+            @apply bg-orange-500;
+            @apply bg-opacity-20;
+
+            .alert-header {
+                @apply text-orange-500;
+            }
+        }
+
+        &.alert-info {
+            @apply bg-blue-600;
+            @apply bg-opacity-20;
+
+            .alert-header {
+                @apply text-blue-600;
+            }
+        }
+
+        .alert-header {
+            @apply pt-2;
+            @apply pb-4;
+            @apply font-bold;
+        }
+    } 
 }
