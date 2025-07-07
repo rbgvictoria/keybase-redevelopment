@@ -63,8 +63,8 @@
         }
 
         &.badge-warning {
-            @apply border-orange-600;
-            @apply bg-orange-600;
+            @apply border-orange-700;
+            @apply bg-orange-700;
         }
 
         &.badge-info {
@@ -80,7 +80,7 @@
             }
 
             &.badge-warning {
-                @apply text-orange-600;
+                @apply text-orange-700;
             }
 
             &.badge-info {
@@ -104,11 +104,11 @@
         }
 
         &.alert-warning {
-            @apply bg-orange-600;
+            @apply bg-orange-700;
             @apply bg-opacity-20;
 
             .alert-header {
-                @apply text-orange-600;
+                @apply text-orange-700;
             }
         }
 
@@ -127,4 +127,12 @@
             @apply font-bold;
         }
     } 
+
+    .hljs-number, .hljs-literal, .hljs-params {
+        color: #7A4300;
+    }
+
+    .hljs-title {
+        color: #005875;
+    }
 }
