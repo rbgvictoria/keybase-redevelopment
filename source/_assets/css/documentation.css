@@ -57,13 +57,13 @@
         @apply text-white;
 
         &.badge-error {
-            @apply border-red-500;
-            @apply bg-red-500;
+            @apply border-red-600;
+            @apply bg-red-600;
         }
 
         &.badge-warning {
-            @apply border-orange-500;
-            @apply bg-orange-500;
+            @apply border-orange-600;
+            @apply bg-orange-600;
         }
 
         &.badge-info {
@@ -75,11 +75,11 @@
             @apply bg-transparent;
 
             &.badge-error {
-                @apply text-red-500;
+                @apply text-red-600;
             }
 
             &.badge-warning {
-                @apply text-orange-500;
+                @apply text-orange-600;
             }
 
             &.badge-info {
@@ -94,20 +94,20 @@
         @apply px-2;
 
         &.alert-error {
-            @apply bg-red-500;
+            @apply bg-red-600;
             @apply bg-opacity-20;
             
             .alert-header {
-                @apply text-red-500;
+                @apply text-red-600;
             }
         }
 
         &.alert-warning {
-            @apply bg-orange-500;
+            @apply bg-orange-600;
             @apply bg-opacity-20;
 
             .alert-header {
-                @apply text-orange-500;
+                @apply text-orange-600;
             }
         }
 

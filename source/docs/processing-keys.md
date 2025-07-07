@@ -113,11 +113,9 @@ or Excel. KeyBase used to support two XML formats, SDD and LPXK, but other
 applications that people stopped using when KeyBase came onto the
 scene are needed to produce data in these formats, so they are used very little.
 
-<x-tablecaption>
+<caption>
 **Table 1.** Key from figures 1 and 2 as tabular data <sup>1</sup>.
-</x-tablecaption>
-
-
+</caption>
 from | statement | to
 -|-|-
 1 | Plants to 1 mm tall; lamellae absent; leaf margins recurved | 2
@@ -262,7 +260,7 @@ Currently the first screen only reports which delimiter was used. I think we can
 skip that as well.
 
 
-### Singletons <x-debug-badge variant='outline' type="error"/>
+### Singletons <x-debug-badge variant="outline" type="error"/>
 
 ![](assets/images/keybase/decision-tree-singleton.drawio.svg)
 
@@ -292,7 +290,7 @@ $isSingleton = $from->filter(fn ($value) => $value == $inKey[$i$]['from'])->coun
 ```
 
 
-### Polytomies <x-debug-badge variant='outline' type="warning"/>
+### Polytomies <x-debug-badge variant="outline" type="warning"/>
 
 ![](assets/images/keybase/decision-tree-polytomy.drawio.svg)
 
@@ -321,7 +319,7 @@ $isPolytomy = $from->filter(fn ($value) => $value == $inKey[$i]['from'])->count(
 ```
 
 
-### Orphans <x-debug-badge variant='outline' type="error"/>
+### Orphans <x-debug-badge variant="outline" type="error"/>
 
 ![](assets/images/keybase/decision-tree-orphan.drawio.svg)
 
@@ -350,7 +348,7 @@ $isOrphan = $toCouplets->doesntContain($inKey[$i]['from']);
 ```
 
 
-### Dead ends <x-debug-badge variant='outline' type="error"/>
+### Dead ends <x-debug-badge variant="outline" type="error"/>
 
 ![](assets/images/keybase/decision-tree-dead-end.drawio.svg)
 
@@ -380,7 +378,7 @@ $isDeadEnd = $toCouplets->contains($inKey[$i]['to']) && $from->doesntContain($in
 ```
 
 
-### Loops <x-debug-badge variant='outline' type="error"/>
+### Loops <x-debug-badge variant="outline" type="error"/>
 
 ![](assets/images/keybase/decision-tree-loop.drawio.svg)
 
@@ -455,7 +453,7 @@ $isLoop = $loops->get($i);
 ```
 
 
-### Reticulations <x-debug-badge variant='outline' type="warning"/>
+### Reticulations <x-debug-badge variant="outline" type="warning"/>
 
 ![](assets/images/keybase/decision-tree-reticulation.drawio.svg)
 
@@ -518,7 +516,7 @@ $isReticulation = $toCouplets->contain$($inKey[$i]['to']) && !$toCouplets->conta
 - [AusGrass2: Key to the genera of Poaceae](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/ausgrass2-key-to-the-genera-of-poaceae.tsv)
 
 
-### Subkeys <x-debug-badge variant='outline' type="info"/>
+### Subkeys <x-debug-badge variant="outline" type="info"/>
 
 ![](assets/images/keybase/indented-key-subkeys.drawio.svg)
 
@@ -617,7 +615,7 @@ $hasSubkey = $subkeys->filter(fn ($value) => $value == $inKeys[''][$i]['to'])->c
 - [Horticultural Flora of South-eastern Australia: Key to the species of Eucalyptus](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/horticultural-flora-of-southeastern-australia-species-of-eucalyptus-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/7394
 - [Eucalypts of North Coast New South Wales: Key to the species of Eucalyptus](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/eucalypts-of-north-coast-new-south-wales-species-of-eucaluptus-subkeys.tsv), https://keybase.rbg.vic.gov.au/keys/show/13167
 
-#### Unreachable subkeys <x-debug-badge variant='outline' type="error"/>
+#### Unreachable subkeys <x-debug-badge variant="outline" type="error"/>
 
 If there are subkeys in a key, there should also be a test for subkeys that do
 not key out in the main key:
@@ -630,7 +628,7 @@ The inverse situation, _i.e._, subkeys that key out in the main key but that
 are not there, is theoretically possible but will not be recognised, as these
 subkeys will be considered items.
 
-### Shortcuts <x-debug-badge variant='outline' type="info"/>
+### Shortcuts <x-debug-badge variant="outline" type="info"/>
 
 Sometimes, an item that keys out only has a single member (in the project), so
 there will not be a key for this item. However, this member itself can have
@@ -679,7 +677,7 @@ $hasShortcut = !empty($inKey[$i]['shortcut']);
 - [Flora of Victoria: Key to the families of Monocotyledons](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/flora-of-victoria-families-of-monocotyledons-shortcut.tsv), https://keybase.rbg.vic.gov.au/keys/show/1906
 - [Flora of Victoria: Key to the genera of Aizoaceae](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/flora-of-victoria-genera-of-aizoaceae-shortcut.tsv), https://keybase.rbg.vic.gov.au/keys/show/2185
 
-#### Shortcuts already in key <x-debug-badge variant='outline' type="error"/>
+#### Shortcuts already in key <x-debug-badge variant="outline" type="error"/>
 
 Shortcuts to items that are already keyed out in the key will cause problems
 later, as they will create a loop, so need to be caught before the key is
@@ -697,7 +695,7 @@ For a single lead with index `$i`:
 $hasSpuriousShortcut = $hasShortcut && $toItems->contains(preg_split('/ ?: ?/', $inKey[$i]['to'])[1]);
 ```
 
-#### Chained shortcuts <x-debug-badge variant='outline' type="error"/>
+#### Chained shortcuts <x-debug-badge variant="outline" type="error"/>
 
 There are a few instances in KeyBase where people have tried to chain shortcuts.
 While chained shortcuts do not break anything, KeyBase does not treat them as
@@ -725,7 +723,7 @@ And for a single lead:
 // $hasChainedShortcut = substr_count($lead['to'], ':') > 1 ? true : false;
 ```
 
-#### Multi-item shortcuts <x-debug-badge type="warning" variant="outline"/>
+#### Multi-item shortcuts <x-debug-badge variant="outline" type="warning"/>
 
 Some keys in KeyBase have shortcuts with what are meant to be multiple items.
 This may look like `Campanulaceae: Githopsis, Heterocodon, Triodanis`. KeyBase
@@ -739,7 +737,7 @@ This should not be an issue anymore once we have a separate column for
 shortcuts.
 </x-alert>
 
-### Multi-item leads <x-debug-badge variant='outline' type="warning"/>
+### Multi-item leads <x-debug-badge variant="outline" type="warning"/>
 
 The new version of KeyBase will support unfinished keys. Multiple item labels,
 separated by the pipe ('`|`') character, _e.g._ `Corymbia|Blakella`, added in
