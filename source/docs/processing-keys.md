@@ -19,7 +19,7 @@ having two leads. Each lead starts with the number of the couplet, followed by a
 statement and then by either the number of the next couplet to go to or the
 result of the identification.
 
-![bracketed key](assets/images/keybase/bracketed-key.png)
+![](assets/images/keybase/bracketed-key.png)
 
 <x-figcaption>
 **Figure 1.** Bracketed key from **KeyBase (2025)**. _Flora of 
@@ -35,7 +35,7 @@ However, larger keys become hard to follow without the numbers or even with the
 numbers. Therefore, for larger keys the bracketed format is the better format
 (but this is subject to personal opinion).
 
-![indented-key](assets/images/keybase/indented-key.png)
+![](assets/images/keybase/indented-key.png)
 
 <x-figcaption>
 **Figure 2.** Same key as in figure 1 displayed as an indented key.
@@ -78,7 +78,7 @@ exceptions to this rule as will be discussed, but KeyBase has gotten by very
 well for 15 years without implementing these exceptions.
 
 
-![couplets](assets/images/keybase/bracketed-key.drawio.svg)
+![](assets/images/keybase/bracketed-key.drawio.svg)
 
 <x-figcaption>
 **Figure 5.** Bracketed key in the KeyBase data model, showing couplets.
@@ -88,7 +88,7 @@ While the bracketed key format lends itself better for exchange and
 dissemination, the indented format (**figure 6**) is closer to the way the key
 is stored in the database and might be better for illustrating what is going on.
 
-![nested sets](assets/images/keybase/indented-key.drawio.svg)
+![](assets/images/keybase/indented-key.drawio.svg)
 
 <x-figcaption>
 **Figure 6.** Indented key in the KeyBase data model, showing nested sets.
@@ -637,7 +637,7 @@ link this key to the present key, KeyBase has a data structure we call a
 'shortcut' (from now on). A shortcut is a lead with an item. The parent of the
 shortcut is the lead with the keyed-out item (**figure 16**).
 
-![shortcut](assets/images/keybase/couplets-shortcut.drawio.svg)
+![](assets/images/keybase/couplets-shortcut.drawio.svg)
 
 <x-figcaption>
 
@@ -744,7 +744,7 @@ separated by the pipe ('`|`') character, _e.g._ `Corymbia|Blakella`, added in
 the same cell in the 'to' column in an import file, will be interpreted and
 treated as multiple items coming from the same lead (**figure 17**).  
 
-![unfinished key](assets/images/keybase/unfinished-key.drawio.svg)
+![](assets/images/keybase/unfinished-key.drawio.svg)
 
 <x-figcaption>
 **Figure 17.** Key that is not fully resolved: lead `6` leads to more than one
