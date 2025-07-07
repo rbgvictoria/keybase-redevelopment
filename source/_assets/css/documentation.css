@@ -29,6 +29,10 @@
 
     }
 
+    pre {
+        @apply bg-gray-100;
+    }
+
     figcaption,
     .tablecaption,
     .table-footnote {
