@@ -140,15 +140,10 @@ applications that people stopped using when KeyBase came onto the
 scene are needed to produce data in these formats, so they are used very little.
 
 
-<caption>
-
-**Table 1.** Key from figures 1 and 2 as tabular data <sup>1</sup>.
-
-</caption>
-
+**Table 1.** Key from figures 1 and 2 as tabular data <sup>1</sup>. {.caption}
 
 from | statement | to
--|-|-
+-|-|-:
 1 | Plants to 1 mm tall; lamellae absent; leaf margins recurved | 2
 1 | Plants c. 2 mm tall; leaves with 2 or 3 irregular longitudinal lamellae (often inconspicuous) on the adaxial surface of the costa; margins not recurved | 3
 2 | Costa excurrent in a reddish gold arista | Acaulon chrysacanthum
@@ -160,12 +155,9 @@ from | statement | to
 5 | Mature spores 30-50 µm diam., finely papillose; capsules usually orange; leaf margin usually entire | Acaulon integrifolium
 5 | Mature spores 50-65 µm diam., very coarsely granular; capsules ferrugineous to dark brown; leaf margin usually crenulate to irregularly dentate | Acaulon granulosum
 
-<x-table-footnote>
-
 <sup>1</sup>
-[Data in this table as CSV](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-example.csv)
+[Data in this table as CSV](https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-example.csv) {.table-footnote}
 
-</x-table-footnote>
 
 In its simplest (and most common) form, the CSV for a key will have three
 columns, `from`, `statement` and `to`. Note that currently the CSV files that
