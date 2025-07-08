@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="Processing keys">
+
+        <meta property="og:site_name" content="KeyBase redevelopment"/>
+        <meta property="og:title" content="Processing keys | KeyBase redevelopment"/>
+        <meta property="og:description" content="Processing keys"/>
+        <meta property="og:url" content="https://rbgvictoria.github.io/keybase-redevelopment/docs/processing-keys"/>
+        <meta property="og:image" content="https://rbgvictoria.github.io/keybase-redevelopment/assets/img/keybase.png"/>
+        <meta property="og:type" content="website"/>
+
+        <meta name="twitter:image:alt" content="KeyBase redevelopment">
+        <meta name="twitter:card" content="summary_large_image">
+
+        
+        <title>KeyBase redevelopment | Processing keys</title>
+
+        <link rel="home" href="https://rbgvictoria.github.io/keybase-redevelopment">
+        <link rel="icon" href="/favicon.ico">
+
+        
+                    <!-- Insert analytics code here -->
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
+        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=148dcaaa6e9627933193c44262957701">
+
+
+            </head>
+
+    <body class="flex flex-col justify-between min-h-screen bg-gray-50 text-gray-800 leading-normal font-sans">
+        <header class="flex items-center shadow bg-sky-600 border-b h-24 mb-8 py-4" role="banner">
+            <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center">
+                    <a href="" title="KeyBase redevelopment home" class="inline-flex items-center">
+                        <img class="h-8 md:h-10 mr-3" src="/assets/img/keybase-logo-80.png" alt="KeyBase redevelopment logo" />
+
+                        <h1 class="text-lg md:text-2xl text-white font-semibold hover:text-gray-200 my-0 pr-4">KeyBase redevelopment</h1>
+                    </a>
+                </div>
+
+                <div class="flex flex-1 justify-end items-center text-right md:pl-10">
+                                    </div>
+            </div>
+
+                <button class="flex justify-center items-center bg-gray-50 border bg-gray-50 h-10 mr-4 px-5 rounded-full lg:hidden focus:outline-none"
+    onclick="navMenu.toggle()"
+    aria-label="nav menu"
+>
+    <svg id="js-nav-menu-show" xmlns="http://www.w3.org/2000/svg"
+        class="fill-current text-sky-700 h-9 w-4" viewBox="0 0 32 32"
+    >
+        <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"/>
+    </svg>
+
+    <svg id="js-nav-menu-hide" xmlns="http://www.w3.org/2000/svg"
+        class="hidden fill-current text-white h-9 w-4" viewBox="0 0 36 30"
+    >
+        <polygon points="32.8,4.4 28.6,0.2 18,10.8 7.4,0.2 3.2,4.4 13.8,15 3.2,25.6 7.4,29.8 18,19.2 28.6,29.8 32.8,25.6 22.2,15 "/>
+    </svg>
+</button>
+
+        </header>
+
+        <main role="main" class="w-full flex-auto">
+            <section class="container max-w-8xl mx-auto px-6 md:px-8 py-4">
+    <div class="flex flex-col lg:flex-row">
+        <nav id="js-nav-menu" class="nav-menu hidden lg:block">
+            <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-data-model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            KeyBase data model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-organisational-model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            KeyBase organisational model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/processing-keys"
+            class="lvl0  active font-semibold text-sky-700 nav-menu__item hover:text-blue-500"
+        >
+            Processing keys
+        </a>
+    
+    </li>
+    </ul>
+        </nav>
+
+        <div class="docsearch-content w-full lg:w-3/5 break-words pb-16 lg:pl-4" v-pre>
+            <h1>Processing keys</h1>
+<ul class="table-of-contents">
+<li><a href="#content-anatomy-of-an-identification-key">Anatomy of an identification key</a></li>
+<li><a href="#content-things-to-look-out-for">Things to look out for</a>
+<ul>
+<li><a href="#content-singletons">Singletons </a></li>
+<li><a href="#content-polytomies">Polytomies </a></li>
+<li><a href="#content-orphans">Orphans </a></li>
+<li><a href="#content-dead-ends">Dead ends </a></li>
+<li><a href="#content-loops">Loops </a></li>
+<li><a href="#content-reticulations">Reticulations </a></li>
+<li><a href="#content-subkeys">Subkeys </a>
+<ul>
+<li><a href="#content-unreachable-subkeys">Unreachable subkeys </a></li>
+</ul>
+</li>
+<li><a href="#content-shortcuts">Shortcuts </a>
+<ul>
+<li><a href="#content-shortcuts-already-in-key">Shortcuts already in key </a></li>
+<li><a href="#content-chained-shortcuts">Chained shortcuts </a></li>
+<li><a href="#content-multi-item-shortcuts">Multi-item shortcuts </a></li>
+</ul>
+</li>
+<li><a href="#content-multi-item-leads">Multi-item leads </a></li>
+</ul>
+</li>
+<li><a href="#content-processing-key-files">Processing key files</a></li>
+</ul>
+<h2><a id="content-anatomy-of-an-identification-key" href="#content-anatomy-of-an-identification-key" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Anatomy of an identification key</h2>
+<p>The pathway keys—or dichotomous keys—that are managed in KeyBase, and have been
+published in the literature for the last 200 years or so, come in two main
+forms, both of which can be reproduced by KeyBase.</p>
+<p>Most keys in the literature, at least the botanical literature, are bracketed
+keys (<strong>figure 1</strong>). In a bracketed key the key is divided in couplets, each couplet
+having two leads. Each lead starts with the number of the couplet, followed by a
+statement and then by either the number of the next couplet to go to or the
+result of the identification.</p>
+<p><img src="../../assets/images/keybase/bracketed-key.png" alt="" /></p>
+<figcaption>
+<p><strong>Figure 1.</strong> Bracketed key from <strong>KeyBase (2025)</strong>. <em>Flora of Victoria: Key to
+Acaulon species</em>. &lt;<a href="https://keybase.rbg.vic.gov.au/keys/show/12181">https://keybase.rbg.vic.gov.au/keys/show/12181</a>&gt; [Seen:
+24-05-2025]. <a href="https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed">https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed</a></p>
+</figcaption><p>Another often-used format is the indented key (<strong>figure 2</strong>). In an indented key
+the next couplet a lead leads to follows immediately below the lead. Because of
+this it is not necessary to show the number of the next couplet. In fact couplet
+numbers are not necessary at all, as the indentation takes care of that.
+However, larger keys become hard to follow without the numbers or even with the
+numbers. Therefore, for larger keys the bracketed format is the better format
+(but this is subject to personal opinion).</p>
+<p><img src="../../assets/images/keybase/indented-key.png" alt="" /></p>
+<figcaption>
+<p><strong>Figure 2.</strong> Same key as in figure 1 displayed as an indented key.
+<a href="https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented">https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented</a></p>
+</figcaption><p>Keys can be represented as the decision tree in <strong>figure 3</strong>. The graph in
+figure 3 has the structure of the key in figures 1 and 2, but the taxon names
+have been replaced by numbered item labels and the statements of the leads are
+not shown.</p>
+<p><img src="../../assets/images/keybase/decision-tree-no-errors.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 3.</strong> Graph of key in figures 1 and 2. In this graph the circles are
+couplets, arrows are leads and rectangles are the keyed out items
+(identification results).</p>
+</figcaption><p>A key is a graph, but the vertices and edges in this graph are not the nodes and
+relationships of graph databases. All the data is in the leads and the vertices
+are not so much entities as branching points. So, in KeyBase, the leads are the
+entities and are stored as records. Leads (Lead records) are linked through the
+<code>parent</code> (<code>parent_id</code> in the database) property (figure 4B). Couplets, in
+KeyBase, are data constructs, i.e. sets of (almost always two) leads with the
+same parent.</p>
+<br>
+<p><img src="../../assets/images/keybase/graph-leads.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 4.</strong> Conversion of decision tree to graph of leads that is stored in
+KeyBase.</p>
+</figcaption><p>If we split the graph into couplets (<strong>figure 5</strong>) we can see that a lead either
+has an item or is the parent of another couplet of leads. There are a few
+exceptions to this rule as will be discussed, but KeyBase has gotten by very
+well for 15 years without implementing these exceptions.</p>
+<p><img src="../../assets/images/keybase/bracketed-key.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 5.</strong> Bracketed key in the KeyBase data model, showing couplets.</p>
+</figcaption><p>While the bracketed key format lends itself better for exchange and
+dissemination, the indented format (<strong>figure 6</strong>) is closer to the way the key
+is stored in the database and might be better for illustrating what is going on.</p>
+<p><img src="../../assets/images/keybase/indented-key.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 6.</strong> Indented key in the KeyBase data model, showing nested sets.</p>
+</figcaption><p>The boxes outlined with a broken line in figure 6 are nested sets. Nested sets
+can be stored in the database by storing the numbers in the top- and
+bottom-right corners of the boxes as <code>left</code> and <code>right</code>. KeyBase currently still
+stores the nested sets in the database, but for the last ten years, nested sets
+have been created by the plugin, so it is not necessary to store them in the
+database anymore. This makes KeyBase more flexible in what it can do with keys.
+Nested sets are used in the KeyBase player to get the remaining and discarded
+items. So, for couplet <strong>3</strong> in figure 6 remaining items are the items on the
+leads of which the value of <code>left</code> is between 8 and 21 and the discarded items
+are items on the leads where the value of <code>left</code> is outside this range. Nested
+sets also make the filters work.</p>
+<p>The bracketed format lends itself very well to exchange as tabular data (<strong>table
+1</strong>), which is why CSV is the preferred format for importing and exporting keys
+in KeyBase. From now on KeyBase will only support tabular data, which can be CSV
+or Excel. KeyBase used to support two XML formats, SDD and LPXK, but other
+applications that people stopped using when KeyBase came onto the
+scene are needed to produce data in these formats, so they are used very little.</p>
+<p class="caption"><strong>Table 1.</strong> Key from figures 1 and 2 as tabular data <sup>1</sup>.</p>
+<table>
+<thead>
+<tr>
+<th>from</th>
+<th>statement</th>
+<th align="right">to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Plants to 1 mm tall; lamellae absent; leaf margins recurved</td>
+<td align="right">2</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Plants c. 2 mm tall; leaves with 2 or 3 irregular longitudinal lamellae (often inconspicuous) on the adaxial surface of the costa; margins not recurved</td>
+<td align="right">3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Costa excurrent in a reddish gold arista</td>
+<td align="right">Acaulon chrysacanthum</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Costa excurrent in a long hyaline hair-point</td>
+<td align="right">Acaulon leucochaete</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Plants triquetrous when viewed from above; leaves strongly keeled</td>
+<td align="right">Acaulon triquetrum</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Plants not triquetrous when viewed from above; leaves not keeled</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Spores echinate; capsules brown; leaf margin usually entire</td>
+<td align="right">Acaulon mediterraneum</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Spores papillose; capsules orange or dark ferrugineous; leaf margin entire, crenulate or irregularly dentate</td>
+<td align="right">5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Mature spores 30-50 µm diam., finely papillose; capsules usually orange; leaf margin usually entire</td>
+<td align="right">Acaulon integrifolium</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Mature spores 50-65 µm diam., very coarsely granular; capsules ferrugineous to dark brown; leaf margin usually crenulate to irregularly dentate</td>
+<td align="right">Acaulon granulosum</td>
+</tr>
+</tbody>
+</table>
+<p class="table-footnote"><sup>1</sup>
+<a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-example.csv">Data in this table as CSV</a></p>
+<p>In its simplest (and most common) form, the CSV for a key will have three
+columns, <code>from</code>, <code>statement</code> and <code>to</code>. Note that currently the CSV files that
+can be imported into and exported from KeyBase do not have column headers. In
+the new version the exports will have column headers but a large part of the
+imported files will not, so a script that deals with the uploaded files will
+need to check whether there are column headers or not (just by checking if the
+first value in the first row is numeric or not) and, if there are not, add the
+three abovementioned column headers.</p>
+<p>When the CSV file has been processed you end up with a collection like below (I
+think KeyBase might ship the data between the frontend and backend as JSON, but
+I am not sure).</p>
+<pre><code class="language-php">$inKey = collect([
+    [
+      &quot;from&quot; =&gt; 1,
+      &quot;text&quot; =&gt; &quot;Plants to 1 mm tall; lamellae absent; leaf margins recurved&quot;,
+      &quot;to&quot; =&gt; 2,
+    ],
+    [
+      &quot;from&quot; =&gt; 1,
+      &quot;text&quot; =&gt; &quot;Plants c. 2 mm tall; leaves with 2 or 3 irregular longitudinal lamellae (often inconspicuous) on the adaxial surface of the costa; margins not recurved&quot;,
+      &quot;to&quot; =&gt; 3,
+    ],
+...,
+    [
+      &quot;from&quot; =&gt; 5,
+      &quot;text&quot; =&gt; &quot;Mature spores 30-50 µm diam., finely papillose; capsules usually orange; leaf margin usually entire&quot;,
+      &quot;to&quot; =&gt; &quot;Acaulon integrifolium&quot;,
+    ],
+    [
+      &quot;from&quot; =&gt; 5,
+      &quot;text&quot; =&gt; &quot;Mature spores 50-65 µm diam., very coarsely granular; capsules ferrugineous to dark brown; leaf margin usually crenulate to irregularly dentate&quot;,
+      &quot;to&quot; =&gt; &quot;Acaulon granulosum&quot;,
+    ],
+  ])
+</code></pre>
+<p>Before the validation and uploading of the key, we create arrays with the values
+of the ‘from’ and ‘to’ columns (you do not have to do that, but it is how I did
+it).</p>
+<pre><code class="language-bash">&gt; $from = $inKey-&gt;map(fn ($lead) =&gt; $lead['from']);
+= Illuminate\Support\Collection {#5180
+    all: [
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      4,
+      4,
+      5,
+      5,
+    ],
+  }
+</code></pre>
+<pre><code class="language-bash">&gt; $to = $inKey-&gt;map(fn ($lead) =&gt; $lead['to']);
+= Illuminate\Support\Collection {#5237
+    all: [
+      2,
+      3,
+      &quot;Acaulon chrysacanthum&quot;,
+      &quot;Acaulon leucochaete&quot;,
+      &quot;Acaulon triquetrum&quot;,
+      4,
+      &quot;Acaulon mediterraneum&quot;,
+      5,
+      &quot;Acaulon integrifolium&quot;,
+      &quot;Acaulon granulosum&quot;,
+    ],
+  }
+</code></pre>
+<p>The array for the ‘to’ column needs to be split into couplets and items. KeyBase
+uses the convention that couplet indexes are always numeric (in literature
+sometimes letters or roman numerals are used), so the numbers are couplets and
+the strings items.</p>
+<pre><code class="language-bash">&gt; $toCouplets = $to-&gt;filter(fn ($item) =&gt; is_numeric($item));
+= Illuminate\Support\Collection {#5210
+    all: [
+      0 =&gt; 2,
+      1 =&gt; 3,
+      5 =&gt; 4,
+      7 =&gt; 5,
+    ]
+  }
+</code></pre>
+<pre><code class="language-bash">&gt; $toItems = $to-&gt;filter(fn ($item) =&gt; !is_numeric($item));
+= Illuminate\Support\Collection {#5241 
+    all: [
+      2 =&gt; &quot;Acaulon chrysacanthum&quot;,
+      3 =&gt; &quot;Acaulon leucochaete&quot;,
+      4 =&gt; &quot;Acaulon triquetrum&quot;,
+      6 =&gt; &quot;Acaulon mediterraneum&quot;,
+      8 =&gt; &quot;Acaulon integrifolium&quot;,
+      9 =&gt; &quot;Acaulon granulosum&quot;,
+    ]
+  }
+</code></pre>
+<h2><a id="content-things-to-look-out-for" href="#content-things-to-look-out-for" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Things to look out for</h2>
+<p>There are (quite) a few exceptions from the ideal key structure illustrated
+above that we need to look out for when validating keys and for some that are
+not errors also when uploading the keys. They are reported back to the user with
+the standard debug messages ‘Error’, ‘Warning’ and ‘Info’.</p>
+<p>Errors break the key, so keys with errors will not be uploaded. Warnings do not
+break the tree but are not good practice and might not have been the intention
+of the user, so we let the user decide. If there are no debug messages to report, the
+key can just be uploaded without further feedback from the user.
+Currently the first screen only reports which delimiter was used. I think we can
+skip that as well.</p>
+<h3><a id="content-singletons" href="#content-singletons" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Singletons <span class="badge 
+    badge-outline 
+    badge-error" aria-hidden="true" aria-label="debug level: error">Error</span></h3>
+<p><img src="../../assets/images/keybase/decision-tree-singleton.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 7.</strong> Graph of key with singleton couplet. [<a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-singleton-example.csv">Example CSV
+import</a>]</p>
+</figcaption><p>Couplets with a single lead serve no purpose in the key and are errors. They
+might also interfere with the rendering of the key later on, as they are not
+expected.</p>
+<p>To find singletons in a key:</p>
+<pre><code class="language-bash">&gt; $singletons = $from-&gt;countBy()-&gt;filter(fn ($value) =&gt; $value == 1)-&gt;keys()-&gt;all();
+= [
+    6,
+  ]
+</code></pre>
+<p>To check if a lead is a singleton:</p>
+<pre><code class="language-php">$isSingleton = $from-&gt;filter(fn ($value) =&gt; $value == $inKey[$i$]['from'])-&gt;count() == 1
+</code></pre>
+<h3><a id="content-polytomies" href="#content-polytomies" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Polytomies <span class="badge 
+    badge-outline 
+    badge-warning" aria-hidden="true" aria-label="debug level: warning">Warning</span></h3>
+<p><img src="../../assets/images/keybase/decision-tree-polytomy.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 8.</strong> Graph of key with polytomy. [<a href="https://github.com/rbgvictoria/keybase_model/blob/main/docs/examples/key-import-polytomy-example.csv">Example CSV
+import</a>]</p>
+</figcaption><p>Polytomies, i.e. couplets with more than two leads, are harmless, but they are
+not considered good practice and they may have gone into or been left in the key
+by accident, so we issue a warning.</p>
+<p>To find polytomies in a key:</p>
+<pre><code class="language-bash">&gt; $polytomies = $from-&gt;countBy()-&gt;filter(fn ($value) =&gt; $value &gt; 2)-&gt;keys()-&gt;all();
+= [
+    5,
+  ]
+</code></pre>
+<p>To check if a lead with index <code>$i</code> is part of a polytomy:</p>
+<pre><code class="language-php">$isPolytomy = $from-&gt;filter(fn ($value) =&gt; $value == $inKey[$i]['from'])-&gt;count() &gt; 2;
+</code></pre>
+<h3><a id="content-orphans" href="#content-orphans" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Orphans <span class="badge 
+    badge-outline 
+    badge-error" aria-hidden="true" aria-label="debug level: error">Error</span></h3>
+<p><img src="../../assets/images/keybase/decision-tree-orphan.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 9.</strong> Graph of key with orphan couplet. [<a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-orphan-example.csv">Example CSV
+import</a>]</p>
+</figcaption><p>Orphans are couplets, except the first couplets, that are not in the ‘to’
+column, so people using the key cannot get to them.</p>
+<p>To find orphans in a key:</p>
+<pre><code class="language-bash">&gt; $orphans = $from-&gt;unique()-&gt;diff($toCouplets)-&gt;slice(1)-&gt;all();
+= [
+    6,
+  ]
+</code></pre>
+<p>To check if a lead with index <code>$i</code> is an orphan:</p>
+<pre><code class="language-php">$isOrphan = $toCouplets-&gt;doesntContain($inKey[$i]['from']);
+</code></pre>
+<h3><a id="content-dead-ends" href="#content-dead-ends" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Dead ends <span class="badge 
+    badge-outline 
+    badge-error" aria-hidden="true" aria-label="debug level: error">Error</span></h3>
+<p><img src="../../assets/images/keybase/decision-tree-dead-end.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 10.</strong> Graph of key with dead end. [<a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-dead-end-example.csv">Example CSV
+import</a>]</p>
+</figcaption><p>Dead ends are the opposite of orphans. They are couplet numbers in the ‘to’
+column without couplets. They are mostly the result of typos (as are orphans).</p>
+<p>To find dead ends in a key:</p>
+<pre><code class="language-bash">&gt; $deadEnds = $toCouplets-&gt;diff($from)-&gt;all();
+= [
+    7,
+  ]
+</code></pre>
+<p>To check if a lead is a dead end:</p>
+<pre><code class="language-php">$isDeadEnd = $toCouplets-&gt;contains($inKey[$i]['to']) &amp;&amp; $from-&gt;doesntContain($inKey[$i]['to']);
+</code></pre>
+<h3><a id="content-loops" href="#content-loops" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Loops <span class="badge 
+    badge-outline 
+    badge-error" aria-hidden="true" aria-label="debug level: error">Error</span></h3>
+<p><img src="../../assets/images/keybase/decision-tree-loop.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 11.</strong> Graph of key with loop. [<a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-loop-example.csv">Example CSV
+import</a>]</p>
+</figcaption><p>Loops are created when a lead points back to a couplet that is on the path
+already taken. Loops are the biggest problem when uploading a key, as new leads
+are created until the system has run out of memory, and they are also the
+hardest to find, as one has to traverse the key to find them.</p>
+<pre><code class="language-php">class ErrorCheckService extends Service {
+    private $from;
+    private $to;
+    private $loops;
+
+    public function __construct($inKey)
+    {
+        $this-&gt;from = $inKey-&gt;map(fn ($lead) =&gt; $lead['from']);
+        $this-&gt;to = $inKey-&gt;map(fn ($lead) =&gt; $lead['to']);
+    }
+
+    public function checkForLoops()
+    {
+        $this-&gt;loops = collect([]);
+        $this-&gt;traverseKey(collect([]), $this-&gt;from[0]);
+        return $this-&gt;loops;
+    }
+    
+    private function traverseKey($path, $couplet) 
+    {
+        $path-&gt;push($couplet);
+        
+        foreach ($this-&gt;from-&gt;filter(fn ($value) =&gt; $value == $couplet)-&gt;keys() as $lead) {
+            $goTo = $this-&gt;to[$lead];
+            if ($goTo) { // not an orphan 
+                if ($this-&gt;from-&gt;contains($goTo)) { // goTo is a couplet (not an item)
+                    if ($path-&gt;contains($goTo)) { // goTo is on path: append to loops array
+                        $this-&gt;loops-&gt;put($lead, $goTo);
+                    }
+                    else { // goTo is not on path: go to next couplet
+                        $this-&gt;traverseKey($path, $goTo);
+                    }
+                }
+            }
+        }
+    }
+}
+
+$service = new ErrorCheckService($inkey)
+</code></pre>
+<p>To check for loops in a key:</p>
+<pre><code class="language-bash">&gt; $loops = $service-&gt;checkForLoops();
+= Illuminate\Support\Collection {#5307
+    all: [
+      7 =&gt; 6,
+    ]
+  }
+</code></pre>
+<p>To check if a lead with index <code>$i</code> creates a loop:</p>
+<pre><code class="language-php">$isLoop = $loops-&gt;get($i);
+</code></pre>
+<h3><a id="content-reticulations" href="#content-reticulations" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Reticulations <span class="badge 
+    badge-outline 
+    badge-warning" aria-hidden="true" aria-label="debug level: warning">Warning</span></h3>
+<p><img src="../../assets/images/keybase/decision-tree-reticulation.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 12.</strong> Graph of key with reticulation. [<a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/key-import-reticulation-example.csv">Example CSV
+import</a>]</p>
+</figcaption><p>Reticulations are created when multiple leads go to the same couplet.
+Reticulations do no harm but, if ignored, lead to a different key than the user
+expects, so we need to catch them and deal with them properly.</p>
+<p>There are two ways of dealing with reticulations. One is repeating the sub-graph
+as many times as needed to repair the tree structure (<strong>figure 13</strong>). This is
+what KeyBase does now and is the same as not dealing with reticulations.</p>
+<p><img src="../../assets/images/keybase/indented-key-reticulation-resolved.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 13.</strong> Graph of key with reticulation resolved by repeating the
+subgraph.</p>
+</figcaption><p>Possibly a better way of dealing with reticulations is starting a new graph
+(<strong>figure 14</strong>). This involves creating a new root lead that the leads leading
+to the couplet link to with the <code>reticulation</code> (<code>reticulation_id</code> in the
+database) property. So this is one of the exceptions to the rule that leads
+either have an item or are the parent of another set of leads.</p>
+<p><img src="../../assets/images/keybase/indented-key-reticulation-new-graph.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 14.</strong> Graph of key with reticulation resolved by starting a new graph.</p>
+</figcaption><p>Reticulations when dealt with this way will cause problems later on, as keys
+with reticulations cannot be displayed as indented keys and for that reason will
+also not be able to be edited when KeyBase gets a key editor. For this reason,
+we will not treat reticulations as a feature and will keep ironing out
+reticulations and warn people about them like KeyBase has always done.</p>
+<p>This will find reticulations in a key:</p>
+<pre><code class="language-bash">&gt; $reticulations = $toCouplets-&gt;countBy()-&gt;filter(fn ($value) =&gt; $value &gt; 1)-&gt;keys()-&gt;all();
+= [
+    2,
+  ]
+</code></pre>
+<p>To check if a lead with index <code>$i</code> is in a reticulation:</p>
+<pre><code class="language-php">$isReticulation = $toCouplets-&gt;contain$($inKey[$i]['to']) &amp;&amp; !$toCouplets-&gt;containsOneItem(fn ($value) =&gt; $value == $inKey[$i]['to']);
+</code></pre>
+<p><strong>Examples</strong></p>
+<ul>
+<li><a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/ausgrass2-key-to-the-genera-of-poaceae.tsv">AusGrass2: Key to the genera of Poaceae</a></li>
+</ul>
+<h3><a id="content-subkeys" href="#content-subkeys" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Subkeys <span class="badge 
+    badge-outline 
+    badge-info" aria-hidden="true" aria-label="debug level: info">Info</span></h3>
+<p><img src="../../assets/images/keybase/indented-key-subkeys.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 15.</strong> Key with subkeys.</p>
+</figcaption><p>Large keys, of which we have quite a few in KeyBase, are often split into
+smaller subkeys (<strong>figure 15</strong>). Currently KeyBase does not deal with subkeys,
+but merging subkeys into one big key is the largest (and perhaps only)
+source of reticulations, so it is a high priority for me to fix this in the new
+version. Subkeys are much more straightforward to deal with than and are much
+preferable to reticulations and if KeyBase can deal with subkeys, we might not
+need special treatment for reticulations.</p>
+<p>CSV files for keys with subkeys need a fourth ‘subkey’ column. Therefore they
+need to have a header row, otherwise KeyBase will ignore this column.</p>
+<p>To find subkeys in a key:</p>
+<pre><code class="language-bash">&gt; $hasSubkeys = $inKey-&gt;filter(fn ($lead) =&gt; isset($lead['subkey']))-&gt;count() ? true : false;
+= true
+</code></pre>
+<pre><code class="language-bash">&gt; $subkeys = $inkey-&gt;map(fn ($lead) =&gt; $lead['subkey'])-&gt;unique()-&gt;values();
+= Illuminate\Support\Collection {#5102
+    all: [
+      &quot;Subkey 1&quot;,
+      &quot;Subkey 2&quot;,
+      &quot;Subkey 3&quot;,
+    ]
+  }
+</code></pre>
+<p>If a key has subkeys, it needs to be split up into a main key and subkeys:</p>
+<pre><code class="language-php">$inKeys = $inKey-&gt;groupBy('subkey');
+</code></pre>
+<div class="alert alert-info">
+    <div class="alert-header">
+        Note
+    </div>
+    <div class="alert-body">
+        `$inKey-groupBy('subkey')` also works when the 'subkey' key is absent from
+all items in the collection, so it might be a good idea to do this for all
+imported files no matter if there is a 'subkey' column or not. Then the key
+has subkeys if the `$inKeys` collection has more than one item and you find
+the subkeys using:
+<pre><code class="language-php">$subkeys = $inKeys-keys();
+
+// or strictly speaking:
+// $subkeys = $inKeys-&gt;keys()-&gt;slice(1);
+</code></pre>
+<p>Everything else can then be done in the <code>foreach</code> loop:</p>
+<pre><code class="language-php">foreach ($inKeys as $subkey =&gt; $inKey) {
+    //  
+}
+</code></pre>
+    </div>
+</div><p>In the main key (<code>$inKeys['']</code>), non-numeric values in the <code>$to</code> collection can be either
+subkeys or items:</p>
+<pre><code class="language-bash">&gt; $to = $inKeys['']-&gt;map(fn ($lead) =&gt; $lead['to']);
+= Illuminate\Support\Collection {#5217
+    all: [
+      &quot;Subkey 1&quot;,
+      2,
+      &quot;Subkey 2&quot;,
+      &quot;Subkey 3&quot;,
+    ]
+  }
+
+&gt; $toItems = $to-&gt;filter(fn ($item) =&gt; !is_numeric($item))-&gt;diff($subkeys);
+= Illuminate\Support\Collection {5281 
+    all: []
+</code></pre>
+<p>To check if a lead with index <code>$i</code> goes to a subkey:</p>
+<pre><code class="language-php">$hasSubkey = $subkeys-&gt;filter(fn ($value) =&gt; $value == $inKeys[''][$i]['to'])-&gt;count() &gt; 0;
+</code></pre>
+<p><strong>Examples</strong></p>
+<ul>
+<li><a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/keybase-import-key-with-subkeys-example.tsv">Example CSV of key with subkeys</a></li>
+<li><a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/jepson-families-subkey.tsv">Jepson Flora – Key to the families</a>, <a href="https://keybase.rbg.vic.gov.au/keys/show/3854">https://keybase.rbg.vic.gov.au/keys/show/3854</a></li>
+<li><a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/jepson-brassicaceae-subkeys.tsv">Jepson Flora – Key to the genera of Brassicaceae</a>, <a href="https://keybase.rbg.vic.gov.au/keys/show/10032">https://keybase.rbg.vic.gov.au/keys/show/10032</a></li>
+<li><a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/horticultural-flora-of-southeastern-australia-species-of-eucalyptus-subkeys.tsv">Horticultural Flora of South-eastern Australia: Key to the species of Eucalyptus</a>, <a href="https://keybase.rbg.vic.gov.au/keys/show/7394">https://keybase.rbg.vic.gov.au/keys/show/7394</a></li>
+<li><a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/eucalypts-of-north-coast-new-south-wales-species-of-eucaluptus-subkeys.tsv">Eucalypts of North Coast New South Wales: Key to the species of Eucalyptus</a>, <a href="https://keybase.rbg.vic.gov.au/keys/show/13167">https://keybase.rbg.vic.gov.au/keys/show/13167</a></li>
+</ul>
+<h4><a id="content-unreachable-subkeys" href="#content-unreachable-subkeys" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Unreachable subkeys <span class="badge 
+    badge-outline 
+    badge-error" aria-hidden="true" aria-label="debug level: error">Error</span></h4>
+<p>If there are subkeys in a key, there should also be a test for subkeys that do
+not key out in the main key:</p>
+<pre><code class="language-php">$unreachableSubkeys = $subkeys-&gt;diff($to);
+</code></pre>
+<p>The inverse situation, <em>i.e.</em>, subkeys that key out in the main key but that
+are not there, is theoretically possible but will not be recognised, as these
+subkeys will be considered items.</p>
+<h3><a id="content-shortcuts" href="#content-shortcuts" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Shortcuts <span class="badge 
+    badge-outline 
+    badge-info" aria-hidden="true" aria-label="debug level: info">Info</span></h3>
+<p>Sometimes, an item that keys out only has a single member (in the project), so
+there will not be a key for this item. However, this member itself can have
+multiple members, so can have a key to its members. In order to still be able to
+link this key to the present key, KeyBase has a data structure we call a
+‘shortcut’ (from now on). A shortcut is a lead with an item. The parent of the
+shortcut is the lead with the keyed-out item (<strong>figure 16</strong>).</p>
+<p><img src="../../assets/images/keybase/couplets-shortcut.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 16.</strong> Couplet with keyed out item <em>Senegalia</em> and a shortcut to
+<em>Senegalia greggii</em> in <strong>KeyBase (2025)</strong>, <em>Vascular plants of California:
+Jepson Herbarium, UC Berkeley: Fabaceae Group 1</em>.
+&lt;<a href="https://keybase.rbg.vic.gov.au/keys/show/10038">https://keybase.rbg.vic.gov.au/keys/show/10038</a>&gt;
+[Seen: 26-05-2025].</p>
+</figcaption><p>Shortcuts can currently be provided in the input file by appending a colon (’:’)
+and an item name, optionally separated by a space, <em>e.g.</em> <code>:Senegalia greggii</code>,
+or by appending an item enclosed in braces (’{’ and ‘}’), <em>e.g.</em> <code>{Senegalia greggii}</code>. In the new version, now that we can have column headers, it can be
+delivered in a <code>shortcut</code> column. We’ll have to see if we still need to support
+the old constructs.</p>
+<p>To check if there are any shortcuts in a provided key, you can run:</p>
+<pre><code class="language-php">// $shortcuts = $toItems-&gt;filter(fn ($value) =&gt; substr_count($value, ':'))
+//     -&gt;map(fn ($value) =&gt; preg_split('/ ?: ?/', $value)[1]);
+
+$shortcuts = $inKey-&gt;filter(fn ($lead) =&gt; $lead['shortcut'])-&gt;map(fn ($lead) =&gt; $lead['shortcut']);
+</code></pre>
+<p>And for a single lead:</p>
+<pre><code class="language-php">// $hasShortcut = $substr_count($inKey[$i]['to'], ':') &gt; 0;
+
+$hasShortcut = !empty($inKey[$i]['shortcut']);
+</code></pre>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li><a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/flora-of-victoria-families-of-monocotyledons-shortcut.tsv">Flora of Victoria: Key to the families of Monocotyledons</a>, <a href="https://keybase.rbg.vic.gov.au/keys/show/1906">https://keybase.rbg.vic.gov.au/keys/show/1906</a></li>
+<li><a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/flora-of-victoria-genera-of-aizoaceae-shortcut.tsv">Flora of Victoria: Key to the genera of Aizoaceae</a>, <a href="https://keybase.rbg.vic.gov.au/keys/show/2185">https://keybase.rbg.vic.gov.au/keys/show/2185</a></li>
+</ul>
+<h4><a id="content-shortcuts-already-in-key" href="#content-shortcuts-already-in-key" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Shortcuts already in key <span class="badge 
+    badge-outline 
+    badge-error" aria-hidden="true" aria-label="debug level: error">Error</span></h4>
+<p>Shortcuts to items that are already keyed out in the key will cause problems
+later, as they will create a loop, so need to be caught before the key is
+uploaded.</p>
+<p>To find any spurious shortcuts in a key:</p>
+<pre><code class="language-php">$spuriousShortcuts = $shortcuts-&gt;filter(fn ($shortcut) =&gt; $toItems-&gt;contains($shortcut));
+</code></pre>
+<p>For a single lead with index <code>$i</code>:</p>
+<pre><code class="language-php">$hasSpuriousShortcut = $hasShortcut &amp;&amp; $toItems-&gt;contains(preg_split('/ ?: ?/', $inKey[$i]['to'])[1]);
+</code></pre>
+<h4><a id="content-chained-shortcuts" href="#content-chained-shortcuts" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Chained shortcuts <span class="badge 
+    badge-outline 
+    badge-error" aria-hidden="true" aria-label="debug level: error">Error</span></h4>
+<p>There are a few instances in KeyBase where people have tried to chain shortcuts.
+While chained shortcuts do not break anything, KeyBase does not treat them as
+shortcuts but will export and display them as extra leads (which is what they
+are), which is not what the author of the key intended and will confuse other
+users. Also, shortcuts are meant to connect keys, not link extra items to keys
+(I did call them linked items before, which might have given people that idea).</p>
+<p>So, from now on, we will report chained shortcuts as errors.</p>
+<div class="alert alert-info">
+    <div class="alert-header">
+        Note
+    </div>
+    <div class="alert-body">
+        This should not be an issue anymore once we have a separate column for 
+shortcuts.
+    </div>
+</div><p>To find chained shortcuts in a provided key, you can run:</p>
+<pre><code class="language-php">// $chainedShortcuts = $toItems-&gt;filter(fn ($value) =&gt; substr_count($value, ':') &gt; 1)-&gt;all();
+</code></pre>
+<p>And for a single lead:</p>
+<pre><code class="language-php">// $hasChainedShortcut = substr_count($lead['to'], ':') &gt; 1 ? true : false;
+</code></pre>
+<h4><a id="content-multi-item-shortcuts" href="#content-multi-item-shortcuts" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Multi-item shortcuts <span class="badge 
+    badge-outline 
+    badge-warning" aria-hidden="true" aria-label="debug level: warning">Warning</span></h4>
+<p>Some keys in KeyBase have shortcuts with what are meant to be multiple items.
+This may look like <code>Campanulaceae: Githopsis, Heterocodon, Triodanis</code>. KeyBase
+has never been able to process this properly and we are not going to change
+that, as it is inappropriate use of shortcuts. We are not even going to have a
+warning for it, <em>i.e.</em> we are going to treat it as a shortcut with a single
+item, but we will put something in the documentation.</p>
+<div class="alert alert-info">
+    <div class="alert-header">
+        Note
+    </div>
+    <div class="alert-body">
+        This should not be an issue anymore once we have a separate column for 
+shortcuts.
+    </div>
+</div><h3><a id="content-multi-item-leads" href="#content-multi-item-leads" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Multi-item leads <span class="badge 
+    badge-outline 
+    badge-warning" aria-hidden="true" aria-label="debug level: warning">Warning</span></h3>
+<p>The new version of KeyBase will support unfinished keys. Multiple item labels,
+separated by the pipe (’<code>|</code>’) character, <em>e.g.</em> <code>Corymbia|Blakella</code>, added in
+the same cell in the ‘to’ column in an import file, will be interpreted and
+treated as multiple items coming from the same lead (<strong>figure 17</strong>).</p>
+<p><img src="../../assets/images/keybase/unfinished-key.drawio.svg" alt="" /></p>
+<figcaption>
+<p><strong>Figure 17.</strong> Key that is not fully resolved: lead <code>6</code> leads to more than one
+item.</p>
+</figcaption><p>To find multi-items in a key:</p>
+<pre><code class="language-bash">&gt; $multiItems = $toItems-&gt;filter(fn ($value) =&gt; count(preg_split('/ ?\| ?/', $value)) &gt; 1)-&gt;all();
+= [
+    11 =&gt; &quot;Corymbia|Blakella&quot;
+  ]
+</code></pre>
+<p>To check if a lead has a multi-item:</p>
+<pre><code class="language-php">$hasMultiItem = count(preg_split('/ ?\| ?/', $inKey[$i]['to']) &gt; 1;
+</code></pre>
+<p>Once KeyBase has its own key editor, it will be possible to assign items to a
+key that do not key out at all. This cannot be done with CSV key imports, of
+course.</p>
+<p><strong>Note</strong> that the old plugin that KeyBase will keep supporting does not support
+multiple items keying out in the same place, so for the old API we need to merge
+them into a single item.</p>
+<p><strong>Examples</strong></p>
+<ul>
+<li><a href="https://github.com/rbgvictoria/keybase_model/tree/main/docs/examples/act-flora-genera-of-faboideae-incomplete.tsv">ACT Flora: Key to the genera of Faboideae</a></li>
+</ul>
+<h2><a id="content-processing-key-files" href="#content-processing-key-files" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Processing key files</h2>
+<p>Processing of uploaded key files takes three steps:</p>
+<ul>
+<li>
+<p><strong>Processing the uploaded CSV file</strong></p>
+<p>This involves detecting the delimiter and the header. I found a nice method
+for detecting CSV delimiters on Stack Overflow, which I have turned into a
+<a href="../app/Actions/GetCsvDelimiter.php">class</a>. Take it or leave it.</p>
+</li>
+<li>
+<p><strong>Validating the key</strong></p>
+<p>This involves doing all the tests discussed above. The script that does it now
+can be found at
+<a href="https://github.com/rbgvictoria/keybase/blob/master/libraries/ErrorCheckService.php">ErrorCheckService</a>.
+I think it would be nice to have classes for each of the types of
+errors/features, but I will leave that to you.</p>
+</li>
+<li>
+<p><strong>Uploading the key</strong></p>
+<p>I still kind of like how it is done now:
+<a href="https://github.com/rbgvictoria/keybase-ws/blob/master/libraries/KeyUploadService.php">KeyUploadService</a>,
+so I will have a look at modernising this script.</p>
+</li>
+</ul>
+        </div>
+    </div>
+</section>
+        </main>
+
+        <script src="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/js/main.js?id=b1638e402a69888a8049ba7bc86aab86"></script>
+
+        <script>
+    const navMenu = {
+        toggle() {
+            const menu = document.getElementById('js-nav-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('lg:block');
+            document.getElementById('js-nav-menu-hide').classList.toggle('hidden');
+            document.getElementById('js-nav-menu-show').classList.toggle('hidden');
+        },
+    }
+</script>
+
+        <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
+            <ul class="flex flex-col md:flex-row justify-center">
+                <li class="md:mr-2">
+                    &copy; <a href="https://tighten.co" title="Tighten website">Tighten</a> 2025.
+                </li>
+
+                <li>
+                    Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten">Jigsaw</a>
+                    and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework">Tailwind CSS</a>.
+                </li>
+            </ul>
+        </footer>
+    </body>
+</html>

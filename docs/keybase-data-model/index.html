@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="Describes the KeyBase data model and its implementation">
+
+        <meta property="og:site_name" content="KeyBase redevelopment"/>
+        <meta property="og:title" content="KeyBase data model | KeyBase redevelopment"/>
+        <meta property="og:description" content="Describes the KeyBase data model and its implementation"/>
+        <meta property="og:url" content="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-data-model"/>
+        <meta property="og:image" content="https://rbgvictoria.github.io/keybase-redevelopment/assets/img/keybase.png"/>
+        <meta property="og:type" content="website"/>
+
+        <meta name="twitter:image:alt" content="KeyBase redevelopment">
+        <meta name="twitter:card" content="summary_large_image">
+
+        
+        <title>KeyBase redevelopment | KeyBase data model</title>
+
+        <link rel="home" href="https://rbgvictoria.github.io/keybase-redevelopment">
+        <link rel="icon" href="/favicon.ico">
+
+        
+                    <!-- Insert analytics code here -->
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
+        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=148dcaaa6e9627933193c44262957701">
+
+
+            </head>
+
+    <body class="flex flex-col justify-between min-h-screen bg-gray-50 text-gray-800 leading-normal font-sans">
+        <header class="flex items-center shadow bg-sky-600 border-b h-24 mb-8 py-4" role="banner">
+            <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center">
+                    <a href="" title="KeyBase redevelopment home" class="inline-flex items-center">
+                        <img class="h-8 md:h-10 mr-3" src="/assets/img/keybase-logo-80.png" alt="KeyBase redevelopment logo" />
+
+                        <h1 class="text-lg md:text-2xl text-white font-semibold hover:text-gray-200 my-0 pr-4">KeyBase redevelopment</h1>
+                    </a>
+                </div>
+
+                <div class="flex flex-1 justify-end items-center text-right md:pl-10">
+                                    </div>
+            </div>
+
+                <button class="flex justify-center items-center bg-gray-50 border bg-gray-50 h-10 mr-4 px-5 rounded-full lg:hidden focus:outline-none"
+    onclick="navMenu.toggle()"
+    aria-label="nav menu"
+>
+    <svg id="js-nav-menu-show" xmlns="http://www.w3.org/2000/svg"
+        class="fill-current text-sky-700 h-9 w-4" viewBox="0 0 32 32"
+    >
+        <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"/>
+    </svg>
+
+    <svg id="js-nav-menu-hide" xmlns="http://www.w3.org/2000/svg"
+        class="hidden fill-current text-white h-9 w-4" viewBox="0 0 36 30"
+    >
+        <polygon points="32.8,4.4 28.6,0.2 18,10.8 7.4,0.2 3.2,4.4 13.8,15 3.2,25.6 7.4,29.8 18,19.2 28.6,29.8 32.8,25.6 22.2,15 "/>
+    </svg>
+</button>
+
+        </header>
+
+        <main role="main" class="w-full flex-auto">
+            <section class="container max-w-8xl mx-auto px-6 md:px-8 py-4">
+    <div class="flex flex-col lg:flex-row">
+        <nav id="js-nav-menu" class="nav-menu hidden lg:block">
+            <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-data-model"
+            class="lvl0  active font-semibold text-sky-700 nav-menu__item hover:text-blue-500"
+        >
+            KeyBase data model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-organisational-model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            KeyBase organisational model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/processing-keys"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Processing keys
+        </a>
+    
+    </li>
+    </ul>
+        </nav>
+
+        <div class="docsearch-content w-full lg:w-3/5 break-words pb-16 lg:pl-4" v-pre>
+            <h1>KeyBase data model</h1>
+<ul class="table-of-contents">
+<li><a href="#content-key">Key</a></li>
+<li><a href="#content-extra-key-metadata">Extra key metadata</a></li>
+<li><a href="#content-organisation">Organisation</a></li>
+<li><a href="#content-filters">Filters</a></li>
+<li><a href="#content-entire-schema">Entire schema</a></li>
+</ul>
+<h2 id="key"><a id="content-key" href="#content-key" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Key</h2>
+<p>Keys are the core of KeyBase. To make keys work, we need three types of
+resources (tables), <strong>keys</strong>, <strong>leads</strong> and <strong>items</strong>.</p>
+<p><img src="../../assets/images/keybase/keys-leads-items.svg" alt="" /></p>
+<p>A key is a graph of leads, so the <strong>leads</strong> table contains an adjacency list
+made up by the <code>id</code> and <code>parent_id</code> fields. The lead itself is in the
+<code>statement</code> field.</p>
+<p>In most cases the graph will be a tree, <em>i.e.</em> a graph with no cycles. KeyBase
+enforces this. In KeyBase, the branches of the tree are <strong>leads</strong> and the leaves
+are <strong>items</strong>. In principle, a <strong>lead</strong> can only lead to a single <strong>item</strong> and
+the old version of KeyBase enforced a many-to-one relationship between <strong>leads</strong>
+and <strong>items</strong>. The new version of KeyBase supports a many-to-many relationship
+between <strong>leads</strong> and <strong>items</strong>, so that it can store <strong>keys</strong> with parts that
+are not fully resolved, <em>i.e.</em> where a <strong>lead</strong> can lead to multiple <strong>items</strong>.</p>
+<p>The data model also has a many-to-many relationship between <strong>keys</strong> and
+<strong>items</strong>. This is done with an eye on the future, when KeyBase will have its
+own key editor, so that <strong>items</strong> that cannot be keyed out yet (are not assigned
+to a <strong>lead</strong>) can be assigned to a <strong>key</strong>.</p>
+<p>An <strong>Item</strong> can be the root of another <strong>Key</strong>. This is done in KeyBase
+through the <code>item_id</code> and <code>root_id</code> fields in the <strong>keys</strong>
+table. The <code>item_id</code> field links to the <strong>items</strong> table and the
+<code>root_id</code> field to the <strong>leads</strong> table.</p>
+<p>There are two types of situations where the tree structure breaks down, or where
+there are other types of leaves:</p>
+<ol>
+<li>
+<p><strong>Sub-keys:</strong> Large keys are often broken down into smaller sub-keys, <em>e.g.</em>
+<a href="https://keybase.rbg.vic.gov.au/keys/show/3854">https://keybase.rbg.vic.gov.au/keys/show/3854</a>. In the KeyBase data model we
+have the <code>subkey_id</code> field in the <strong>leads</strong> table to deal with this. When
+using this, we basically skip the <strong>Item</strong> and go straight to the <strong>Key</strong>.</p>
+<p>The KeyBase plugin currently does not support sub-keys, so until now people
+have had to make up items and have the sub-key as a key with a taxonomic
+scope (<code>item_id</code>), but we can support it in the data model and provide a
+custom API endpoint for use with the KeyBase plugin until the plugin has
+been updated.</p>
+</li>
+<li>
+<p><strong>Reticulations:</strong> Sometimes multiple leads lead to the same couplet,
+causing a cycle (or ‘reticulation’) in the graph. The KeyBase plugin does
+not support reticulations, so when a new key is loaded into the database
+KeyBase will just pretend they are not there and duplicate a branch as many
+times as is needed (which is what a recursive query with <code>UNION ALL</code> would
+do). It is possible to repair the tree structure without repeating branches
+by starting a new graph at a reticulation, but this will cause issues down
+the track. Also, reticulations are not things we like to see in keys, so it
+seems best not to make a feature of it. Most, if not all, reticulations in
+KeyBase are caused by merging sub-keys into the main key, which is not
+necessary anymore when KeyBase can handle sub-keys.</p>
+</li>
+</ol>
+<p>There are also scenarios where an <strong>Item</strong> is not a leaf but a branch (or a
+branch as well as a leaf):</p>
+<ol>
+<li>
+<p><strong>Missing intermediate keys:</strong> An item that keys out in a key might have
+only a single immediately subordinate item, so there will not be a key for
+that item. This single subordinate item, however, might have multiple
+subordinates of its own, so it might have a key. This creates a gap in the
+key hierarchy, which becomes a problem when people want to create a filter
+(see <a href="#filters">Filters</a> section), as keys will not link up anymore.</p>
+<p>There are two ways this situation can be resolved. The first is to create a
+key with a single lead for the item. The second is to add this lead to the
+key the item keys out in. KeyBase supports both these solutions. For the
+latter solution KeyBase allows the construction <code>&lt;item&gt;:&lt;subordinate item&gt;</code>,
+e.g. ‘Ginkgoaceae:Ginkgo biloba’ (which skips two keys), in the ‘to’ column
+of the input file. We now call this construction a ‘shortcut’.</p>
+</li>
+<li>
+<p><strong>References to items in other keys:</strong> When KeyBase allowed people to add
+additional items in the ‘to’ column, people were quick to work out that this
+could be used for other things as well. So, if an item keyed out in more
+than one place in a key, people would add the subordinate item(s) that would
+really key out in that particular spot. This broke KeyBase, which is why I
+came up with the extra lead idea, rather than trying to deal with it in the
+item, like I did before.</p>
+<p>While shortcuts can be used for this purpose, it is not their intended use and chaining shortcuts to link more items to a key will throw an error. Also, when a tree of keys in a project is created, a key will be placed below the first key its item keys out in, which has had people confused.</p>
+<p>In theory it is possible for leads to have an item and the key to continue,
+which is something you sometimes see in printed keys, e.g. ‘…<strong>2 (sect.
+Camptocheate)</strong>…<strong>5 (sect. Thamniella)</strong>’, but I am not sure whether
+someone has tried that in KeyBase or what KeyBase would do with it if
+someone tried. The better practice here is to add the item name to the
+<code>lead_text</code>, especially since there is generally no link on these items and
+there will also be no keys to the members of these items, so there is no
+reason to have the item in KeyBase.</p>
+</li>
+</ol>
+<h2 id="extra-key-metadata"><a id="content-extra-key-metadata" href="#content-extra-key-metadata" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Extra key metadata</h2>
+<p>There are some extra tables with metadata for keys that are required for
+attribution and change management, but that have no effect on how keys work.</p>
+<p><img src="../../assets/images/keybase/key-metadata.svg" alt="" /></p>
+<p>The <strong>sources</strong> table is used for metadata of the publication if the key was
+published somewhere else.</p>
+<p>The <strong>change_notes</strong> table is used for notes about changes that were made when
+people upload a new version of the key (so, a new CSV file). These change notes
+are comparable to commit messages in version management systems. The change
+notes actually apply to a version of the key, so there is a <code>version</code> column in
+both the <strong>keys</strong> and <strong>change_notes</strong> tables, but I do not want composite keys,
+so we have to add a business rule when the records are created, so that the
+versions line up.</p>
+<p>The <strong>keys</strong> table, and every other table that is not merely a pivot table, has
+<code>created_by_id</code> and <code>updated_by_id</code> columns that are foreign keys to the
+<strong>agents</strong> table. These indicate who created and who last updated the key. Each
+table also has <code>created_at</code> and <code>updated_at</code> columns to indicate when records
+were created and last modified.</p>
+<h2 id="organisation"><a id="content-organisation" href="#content-organisation" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Organisation</h2>
+<p>KeyBase manages keys for several different projects and keys and items (and also
+filters) are managed at the project level. Also authorisation for data
+manipulation actions is managed at the project level.</p>
+<p><img src="../../assets/images/keybase/organisation.svg" alt="" /></p>
+<p>This provides a level of encapsulation that makes that projects can trust that
+KeyBase handles their keys well and that users from outside can not make changes
+to their keys. If people want to use a key from another project in their own
+project, they can just export that key and import it in their project, analogous
+to forking a repository in GitHub. KeyBase does not have a mechanism for that,
+so people need to do that manually and manage attribution etc. themselves.
+People are also free to create projects outside KeyBase in which they bring
+together keys from different projects, provided they provide the necessary
+attribution (not to KeyBase but to the makers of the key).</p>
+<p>There is an <strong>agents</strong> table in the data model which has a record for every
+user. The <strong>agents</strong> table is linked to from every other table that is not
+merely a pivot table through the <code>created_by_id</code> and <code>updated_by_id</code> fields.
+This provides the blamable. The advantage of having an <strong>agents</strong> table are
+mainly looking into the future, as it separates the blamable from the
+authorisation and people’s user accounts can be deleted without affecting
+anything else in KeyBase (except the <strong>agents</strong> table itself, which we have to
+do something about). The <strong>agents</strong> table can also be used to store extra
+metadata about agents, such as people’s ORCIDs (for attribution rather than
+authentication purposes).</p>
+<h2 id="filters"><a id="content-filters" href="#content-filters" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Filters</h2>
+<p>The filters in KeyBase are a feature that I really hate and regret I ever
+implemented, but that KeyBase users really like, so unfortunately we cannot do
+away with it. From a software persepective it is also a pretty nice feature.</p>
+<p>KeyBase has two types of filters, local filters and global filters. The local
+filters are entirely handled within the KeyBase plugin and are ephemeral, so
+they do not feature in the data model.</p>
+<p>The global filters are in the data model, where we just call them <strong>filters</strong>.</p>
+<p><img src="../../assets/images/keybase/keys-leads-items-filters.svg" alt="" /></p>
+<p>Filters are created by uploading a list of item names. We just have people enter
+them in a text area, separated by line breaks. Nothing more fancy is needed.
+KeyBase tries to match the names to items in KeyBase and then stores these items
+(or their IDs). Names that cannot be matched to items in KeyBase are listed in
+the <code>items_not_found</code> field (which is just a string). This way, when the item is
+added to a key the filter can be updated and one does not have to upload a new
+list of names.</p>
+<p>KeyBase only stores the items in the filter and not the keys that are needed to
+key out all these items or what items are in what keys (I tried all that; much
+too hard to maintain). Filters link to <strong>keys</strong> via the <strong>items</strong> and <strong>leads</strong>
+tables, so one step too much for a simple many-to-many relationship, but
+<strong>keys</strong> can be accessed directly from the <strong>filters</strong> in the ORM. Not sure if
+we can do everything we need to make filters work in the ORM, so we’ll have to
+see how useful this is.</p>
+<p>Filters can be applied and turned off on the <strong>Project</strong> page. When a filter is
+applied only the keys that are necessary to key out the items in the filter are
+displayed. Also, when a filter is on, the <strong>Key</strong> page will only show the items
+that are in the filter or are necessary to get to the keys that have items that
+are in the filter. This can be overridden in the local filter dialogue, but when
+people then navigate to another key that key will only have the filtered items
+unless or until the filter is turned off (which I think can be done on the
+<strong>Key</strong> page). This is the “global” aspect of the filters. They are global in
+the sense that they affect the entire application; they are not global in the
+sense that they can contain keys and items from anywhere in KeyBase, as they can
+only contain items from a single project.</p>
+<p>There are two types of global filters in KeyBase: project filters and user
+filters. Project filters can be created by project managers—by checking the
+<code>is_project_filter</code> check box—and are accessible to all users (logged in or
+not). User filters can be created by all logged in users and are only visible by
+those users themselves.</p>
+<h2 id="entire-schema"><a id="content-entire-schema" href="#content-entire-schema" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Entire schema</h2>
+<p><img src="../../assets/images/keybase/entire-schema.svg" alt="" /></p>
+        </div>
+    </div>
+</section>
+        </main>
+
+        <script src="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/js/main.js?id=b1638e402a69888a8049ba7bc86aab86"></script>
+
+        <script>
+    const navMenu = {
+        toggle() {
+            const menu = document.getElementById('js-nav-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('lg:block');
+            document.getElementById('js-nav-menu-hide').classList.toggle('hidden');
+            document.getElementById('js-nav-menu-show').classList.toggle('hidden');
+        },
+    }
+</script>
+
+        <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
+            <ul class="flex flex-col md:flex-row justify-center">
+                <li class="md:mr-2">
+                    &copy; <a href="https://tighten.co" title="Tighten website">Tighten</a> 2025.
+                </li>
+
+                <li>
+                    Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten">Jigsaw</a>
+                    and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework">Tailwind CSS</a>.
+                </li>
+            </ul>
+        </footer>
+    </body>
+</html>
