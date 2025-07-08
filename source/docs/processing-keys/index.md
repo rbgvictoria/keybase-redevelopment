@@ -7,6 +7,8 @@ section: content
 
 # Processing keys
 
+__TOC__
+
 ## Anatomy of an identification key
 
 The pathway keys—or dichotomous keys—that are managed in KeyBase, and have been

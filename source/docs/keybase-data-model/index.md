@@ -7,6 +7,8 @@ section: content
 
 # KeyBase data model
 
+__TOC__
+
 ## Key {#key}
 
 Keys are the core of KeyBase. To make keys work, we need three types of

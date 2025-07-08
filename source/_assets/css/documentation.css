@@ -49,6 +49,36 @@
         @apply -mt-4;
     }
 
+    .table-of-contents {
+        margin: 0.5rem 1.25rem;
+
+        &::before {
+            display: block;
+            content: "Table of contents";
+            margin-left: -1.25rem;
+            /* font-size: 0.875rem; */
+            font-weight: bold;
+            color: #374151;
+        }
+    }
+
+    h2, h3, h4, h5, h6 {
+        .heading-permalink {
+            display: inline-block;
+            margin-left: -1.5rem;
+            width: 1.5rem;
+            padding-right: .5rem;
+            scroll-margin: 2rem;
+        }
+
+        &:hover {
+            a.heading-permalink {
+                content: url(../../img/link.svg);
+                opacity: .5;
+            }
+        }
+    }
+
     .badge {
         @apply border;
         @apply rounded-full;
