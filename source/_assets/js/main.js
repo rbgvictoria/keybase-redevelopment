@@ -21,3 +21,7 @@ hljs.registerLanguage('turtle', require('./highlightjs/languages/turtle'));
 document.querySelectorAll('pre code').forEach((block) => {
     hljs.highlightBlock(block);
 });
+
+document.querySelectorAll('.docsearch-content a[href^=http]').forEach((link) => {
+    link.setAttribute('target', '_blank');
+});

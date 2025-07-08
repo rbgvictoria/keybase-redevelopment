@@ -15,6 +15,12 @@
     a {
         @apply font-normal;
         @apply text-sky-700;
+
+        &[target=_blank]::after {
+            display: inline-block;
+            content: url(../../img/external-link-icon.svg);
+            padding: 0 .1rem;
+        }
     }
 
     table {
@@ -41,12 +47,12 @@
         @apply text-sm;
     }
 
-    .tablecaption {
-        @apply -mb-4;
+    .caption {
+        @apply mb-2;
     }
 
     .table-footnote {
-        @apply -mt-4;
+        @apply mt-1;
     }
 
     .table-of-contents {
