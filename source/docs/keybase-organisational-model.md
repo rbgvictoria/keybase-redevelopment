@@ -28,4 +28,4 @@ Resources in KeyBase are scoped at one of three organisational levels:
     modified by that **User** can stay, as they are linked to the **Agent**, not
     the **User**.
    
-&emsp;![organisational model](assets/images/keybase/keybase-organisational-model.drawio.svg)
+&emsp;![organisational model](../../assets/images/keybase/keybase-organisational-model.drawio.svg)

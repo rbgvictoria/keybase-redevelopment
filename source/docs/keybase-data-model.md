@@ -12,7 +12,7 @@ section: content
 Keys are the core of KeyBase. To make keys work, we need three types of
 resources (tables), **keys**, **leads** and **items**.
 
-![](assets/images/keybase/keys-leads-items.svg)
+![](../../assets/images/keybase/keys-leads-items.svg)
 
 A key is a graph of leads, so the **leads** table contains an adjacency list
 made up by the `id` and `parent_id` fields. The lead itself is in the
@@ -104,7 +104,7 @@ branch as well as a leaf):
 There are some extra tables with metadata for keys that are required for
 attribution and change management, but that have no effect on how keys work.
 
-![](assets/images/keybase/key-metadata.svg)
+![](../../assets/images/keybase/key-metadata.svg)
 
 The **sources** table is used for metadata of the publication if the key was
 published somewhere else.
@@ -129,7 +129,7 @@ KeyBase manages keys for several different projects and keys and items (and also
 filters) are managed at the project level. Also authorisation for data
 manipulation actions is managed at the project level.
 
-![](assets/images/keybase/organisation.svg)
+![](../../assets/images/keybase/organisation.svg)
 
 This provides a level of encapsulation that makes that projects can trust that
 KeyBase handles their keys well and that users from outside can not make changes
@@ -164,7 +164,7 @@ they do not feature in the data model.
 
 The global filters are in the data model, where we just call them **filters**.
 
-![](assets/images/keybase/keys-leads-items-filters.svg)
+![](../../assets/images/keybase/keys-leads-items-filters.svg)
 
 Filters are created by uploading a list of item names. We just have people enter
 them in a text area, separated by line breaks. Nothing more fancy is needed.
@@ -202,5 +202,5 @@ those users themselves.
 
 ## Entire schema {#entire-schema}
 
-![](assets/images/keybase/entire-schema.svg)
+![](../../assets/images/keybase/entire-schema.svg)
 
