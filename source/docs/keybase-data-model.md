@@ -7,7 +7,7 @@ section: content
 
 # KeyBase data model
 
-## Key
+## Key {#key}
 
 Keys are the core of KeyBase. To make keys work, we need three types of
 resources (tables), **keys**, **leads** and **items**.
@@ -99,7 +99,7 @@ branch as well as a leaf):
     reason to have the item in KeyBase.
 
 
-## Extra key metadata
+## Extra key metadata {#extra-key-metadata}
 
 There are some extra tables with metadata for keys that are required for
 attribution and change management, but that have no effect on how keys work.
@@ -123,7 +123,7 @@ The **keys** table, and every other table that is not merely a pivot table, has
 table also has `created_at` and `updated_at` columns to indicate when records
 were created and last modified.
 
-## Organisation
+## Organisation {#organisation}
 
 KeyBase manages keys for several different projects and keys and items (and also
 filters) are managed at the project level. Also authorisation for data
@@ -152,8 +152,7 @@ do something about). The **agents** table can also be used to store extra
 metadata about agents, such as people's ORCIDs (for attribution rather than
 authentication purposes).
 
-<a id="filters"></a>
-## Filters
+## Filters {#filters}
 
 The filters in KeyBase are a feature that I really hate and regret I ever
 implemented, but that KeyBase users really like, so unfortunately we cannot do
@@ -201,7 +200,7 @@ filters. Project filters can be created by project managers—by checking the
 not). User filters can be created by all logged in users and are only visible by
 those users themselves.
 
-## Entire schema
+## Entire schema {#entire-schema}
 
 ![](assets/images/keybase/entire-schema.svg)
 
