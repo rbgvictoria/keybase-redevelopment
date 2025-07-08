@@ -1,7 +1,9 @@
 <?php
 
 use App\Listeners\GenerateSitemap;
+use App\Markdown\CustomParser;
 use TightenCo\Jigsaw\Jigsaw;
+use TightenCo\Jigsaw\Parsers\MarkdownParserContract;
 
 /** @var $container \Illuminate\Container\Container */
 /** @var $events \TightenCo\Jigsaw\Events\EventBus */
@@ -16,6 +18,8 @@ use TightenCo\Jigsaw\Jigsaw;
  *     // Your code here
  * });
  */
+
+$container->bind(MarkdownParserContract::class, CustomParser::class);
 
 $events->afterBuild(GenerateSitemap::class);
 

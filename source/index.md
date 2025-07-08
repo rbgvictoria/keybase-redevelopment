@@ -51,7 +51,7 @@ The code for the KeyBase plugin, which is the only bit I had thought we'd leave
 intact for now, is at
 https://github.com/rbgvictoria/keybase/blob/master/js/jquery.keybase.key.js.
 This needs to be changed to vanilla Javascript though before we do the
-redevelopment of VicFlora next (financial) year. @twocngdagz, please make a
+redevelopment of VicFlora next (financial) year. &commat;twocngdagz, please make a
 judgement whether we should replace it as part of this project, or whether we
 should postpone it. If we are going to do it now, there are some changes I would
 like to make.
