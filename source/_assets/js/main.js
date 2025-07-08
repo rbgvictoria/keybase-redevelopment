@@ -12,6 +12,8 @@ hljs.registerLanguage('php', require('highlight.js/lib/languages/php'));
 hljs.registerLanguage('scss', require('highlight.js/lib/languages/scss'));
 hljs.registerLanguage('yaml', require('highlight.js/lib/languages/yaml'));
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'));
+hljs.registerLanguage('sql', require('highlight.js/lib/languages/sql'));
+
 hljs.registerLanguage('turtle', require('./highlightjs/languages/turtle'));
 
 
