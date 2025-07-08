@@ -5,6 +5,7 @@ namespace App\Markdown;
 use Illuminate\Support\Arr;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Attributes\AttributesExtension;
+use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
 use League\CommonMark\Extension\Mention\MentionExtension;
@@ -56,6 +57,7 @@ class CustomParser implements MarkdownParserContract
             new SmartPunctExtension,
             new StrikethroughExtension,
             new TableExtension,
+            new AutolinkExtension,
             new HeadingPermalinkExtension,
             new TableOfContentsExtension,
         ]))->map(fn ($extension) => $environment->addExtension($extension));

@@ -26,9 +26,9 @@ result of the identification.
 
 <x-figcaption>
 
-**Figure 1.** Bracketed key from **KeyBase (2025)**. _Flora of 
-Victoria: Key to Acaulon species_. &lt;[https://keybase.rbg.vic.gov.au/keys/show/12181](https://keybase.rbg.vic.gov.au/keys/show/12181)&gt; [Seen: 24-05-2025]. 
-[https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed](https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed)</a>
+**Figure 1.** Bracketed key from **KeyBase (2025)**. _Flora of Victoria: Key to
+Acaulon species_. &lt;<https://keybase.rbg.vic.gov.au/keys/show/12181>&gt; [Seen:
+24-05-2025]. https://keybase.rbg.vic.gov.au/keys/show/12181?mode=bracketed
 
 </x-figcaption>
 
@@ -47,7 +47,7 @@ numbers. Therefore, for larger keys the bracketed format is the better format
 <x-figcaption>
 
 **Figure 2.** Same key as in figure 1 displayed as an indented key.
-[https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented](https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented)
+https://keybase.rbg.vic.gov.au/keys/show/12181?mode=indented
 
 </x-figcaption>
 
@@ -710,7 +710,7 @@ shortcut is the lead with the keyed-out item (**figure 16**).
 **Figure 16.** Couplet with keyed out item _Senegalia_ and a shortcut to
 _Senegalia greggii_ in **KeyBase (2025)**, _Vascular plants of California:
 Jepson Herbarium, UC Berkeley: Fabaceae Group 1_.
-&lt;[https://keybase.rbg.vic.gov.au/keys/show/10038](https://keybase.rbg.vic.gov.au/keys/show/10038)&gt;
+&lt;<https://keybase.rbg.vic.gov.au/keys/show/10038>&gt;
 [Seen: 26-05-2025].
 
 </x-figcaption>
