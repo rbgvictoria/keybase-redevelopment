@@ -44,8 +44,8 @@
         <header class="flex items-center shadow bg-sky-600 border-b h-24 mb-8 py-4" role="banner">
             <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
                 <div class="flex items-center">
-                    <a href="{{ $page->siteUrl }}" title="{{ $page->siteName }} home" class="inline-flex items-center">
-                        <img class="h-8 md:h-10 mr-3" src="{{ $page->siteUrl }}/assets/img/keybase-logo-80.png" alt="{{ $page->siteName }} logo" />
+                    <a href="{{ $page->baseUrl }}" title="{{ $page->siteName }} home" class="inline-flex items-center">
+                        <img class="h-8 md:h-10 mr-3" src="{{ $page->baseUrl }}/assets/img/keybase-logo-80.png" alt="{{ $page->siteName }} logo" />
                         <h1 class="text-lg md:text-2xl text-white font-semibold hover:text-gray-200 my-0 pr-4">{{ $page->siteName }}</h1>
                     </a>
                 </div>
