@@ -8,5 +8,6 @@
 @import 'navigation';
 @import 'documentation';
 @import 'search';
+@import 'hljs-turtle';
 
 @import 'tailwindcss/utilities';
