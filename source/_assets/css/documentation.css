@@ -55,19 +55,6 @@
         @apply mt-1;
     }
 
-    .table-of-contents {
-        margin: 0.5rem 1.25rem;
-
-        &::before {
-            display: block;
-            content: "Table of contents";
-            margin-left: -1.25rem;
-            /* font-size: 0.875rem; */
-            font-weight: bold;
-            color: #374151;
-        }
-    }
-
     h2, h3, h4, h5, h6 {
         .heading-permalink {
             display: inline-block;
@@ -171,4 +158,42 @@
     .hljs-title {
         color: #005875;
     }
+}
+
+.toc {
+    @apply fixed;
+    @apply my-1;
+    @apply mx-8;
+    @apply text-base;
+
+    &>div {
+        @apply font-bold;
+    }
+
+    &>ul {
+        @apply mt-1;
+
+        li a {
+            @apply text-sky-700;
+
+            &:hover {
+                @apply text-gray-800;
+            }
+        }
+
+        &>li>ul>li {
+            a {
+                @apply font-normal;
+            }
+            
+            &>ul>li {
+                a {
+                    @apply text-sm;
+                }
+            }
+
+        }
+    }
+
+
 }

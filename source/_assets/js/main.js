@@ -22,6 +22,29 @@ document.querySelectorAll('pre code').forEach((block) => {
     hljs.highlightBlock(block);
 });
 
+// Make external links open in new tab
 document.querySelectorAll('.docsearch-content a[href^=http]').forEach((link) => {
     link.setAttribute('target', '_blank');
 });
+
+
+// Move able of contents to left navigation
+const toc = document.querySelector('.docsearch-content .table-of-contents');
+toc.classList.remove('table-of-contents');
+
+const rightNav = document.createElement('nav');
+
+
+const tocContainer = document.createElement('div');
+tocContainer.id = 'table-of-contents';
+tocContainer.classList.add('toc');
+
+const tocHeader = document.createElement('div');
+tocHeader.innerHTML = 'Table of contents';
+tocContainer.appendChild(tocHeader);
+
+tocContainer.appendChild(toc);
+rightNav.appendChild(tocContainer);
+
+const content = document.querySelector('.docsearch-content');
+content.after(rightNav);
