@@ -124,6 +124,7 @@
             .alert-header {
                 @apply text-red-600;
             }
+
         }
 
         &.alert-warning {
@@ -149,6 +150,15 @@
             @apply pb-4;
             @apply font-bold;
         }
+
+
+        .alert-body {
+            p:first-child {
+                @apply mt-0;
+            }
+            
+        }
+
     } 
 
     .hljs-number, .hljs-literal, .hljs-params {
