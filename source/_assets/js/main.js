@@ -39,9 +39,9 @@ const tocContainer = document.createElement('div');
 tocContainer.id = 'table-of-contents';
 tocContainer.classList.add('toc');
 
-// const tocHeader = document.createElement('div');
-// tocHeader.innerHTML = 'Table of contents';
-// tocContainer.appendChild(tocHeader);
+const tocHeader = document.createElement('div');
+tocHeader.innerHTML = 'On this page';
+tocContainer.appendChild(tocHeader);
 
 tocContainer.appendChild(toc);
 rightNav.appendChild(tocContainer);

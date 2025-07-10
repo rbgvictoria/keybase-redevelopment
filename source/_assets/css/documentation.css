@@ -168,6 +168,8 @@
 
     &>div {
         @apply font-bold;
+        @apply border-b;
+        @apply border-b-gray-800; 
     }
 
     &>ul {
