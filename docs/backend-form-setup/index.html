@@ -4,12 +4,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="Describes the KeyBase organisational model">
+        <meta name="description" content="Beautiful docs powered by Jigsaw">
 
         <meta property="og:site_name" content="KeyBase redevelopment"/>
-        <meta property="og:title" content="KeyBase organisational model | KeyBase redevelopment"/>
-        <meta property="og:description" content="Describes the KeyBase organisational model"/>
-        <meta property="og:url" content="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-organisational-model"/>
+        <meta property="og:title" content="Back-end form setup | KeyBase redevelopment"/>
+        <meta property="og:description" content="Beautiful docs powered by Jigsaw"/>
+        <meta property="og:url" content="https://rbgvictoria.github.io/keybase-redevelopment/docs/backend-form-setup"/>
         <meta property="og:image" content="https://rbgvictoria.github.io/keybase-redevelopment/assets/img/keybase.png"/>
         <meta property="og:type" content="website"/>
 
@@ -17,7 +17,7 @@
         <meta name="twitter:card" content="summary_large_image">
 
         
-        <title>KeyBase redevelopment | KeyBase organisational model</title>
+        <title>KeyBase redevelopment | Back-end form setup</title>
 
         <link rel="home" href="https://rbgvictoria.github.io/keybase-redevelopment">
         <link rel="icon" href="/favicon.ico">
@@ -81,7 +81,7 @@
             <li class="pl-4">
             
         <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-organisational-model"
-            class="lvl0  active font-semibold text-sky-700 nav-menu__item hover:text-blue-500"
+            class="lvl0   nav-menu__item hover:text-blue-500"
         >
             KeyBase organisational model
         </a>
@@ -99,7 +99,7 @@
             <li class="pl-4">
             
         <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/backend-form-setup"
-            class="lvl0   nav-menu__item hover:text-blue-500"
+            class="lvl0  active font-semibold text-sky-700 nav-menu__item hover:text-blue-500"
         >
             Back-end form setup
         </a>
@@ -109,34 +109,60 @@
         </nav>
 
         <div class="docsearch-content w-full lg:w-3/5 break-words pb-16 lg:pl-4" v-pre>
-            <h1>KeyBase organisational model</h1>
-<p>Resources in KeyBase are scoped at one of three organisational levels:
-<strong>KeyBase</strong> (global), <strong>Project</strong>, or <strong>Key</strong>.</p>
-<ul>
-<li>
-<p>The most important organisational level in KeyBase is the <strong>Project</strong>.
-<strong>Keys</strong>, <strong>Items</strong>, <strong>Sources</strong> and <strong>Filters</strong> are all at the <strong>Project</strong>
-level and are not shared between Projects.</p>
-</li>
-<li>
-<p><strong>Leads</strong> and <strong>Change Notes</strong> belong to a <strong>Key</strong>. Unlike resources at the
-<strong>Project</strong> level, like <strong>Keys</strong> and <strong>Items</strong>, which make sense outside of
-a <strong>Project</strong>’s context, <strong>Leads</strong> and <strong>Change Notes</strong> can only be
-understood within the context of a <strong>Key</strong>.</p>
-</li>
-<li>
-<p><strong>Users</strong> and <strong>Agents</strong> have global scope. They are both handled in the
-user profile. <strong>Agents</strong> in KeyBase are very tightly linked to <strong>Users</strong>.
-They are only used as object of the <code>createdBy</code> and <code>updatedBy</code> properties
-on all KeyBase resources and not for, <em>e.g.</em>, authors of Keys and Sources
-(for which we use literals). The reason KeyBase has <strong>Agents</strong> is so that,
-if a <strong>User</strong> account is deleted, all the resources that are created or
-modified by that <strong>User</strong> can stay, as they are linked to the <strong>Agent</strong>, not
-the <strong>User</strong>.</p>
-</li>
+            <h1>Back-end form setup</h1>
+<p>Below I have sketched the high-level setup of the back-end that I think will work best. I will add the details for each form later.</p>
+<ul class="table-of-contents">
+<li><a href="#content-the-dashboard">The dashboard</a></li>
+<li><a href="#content-inside-a-project">Inside a project</a></li>
+<li><a href="#content-key">Key</a></li>
 </ul>
-<p> <img src="../../assets/images/keybase/keybase-organisational-model.drawio.svg" alt="organisational model" /></p>
-        </div>
+<h2><a id="content-the-dashboard" href="#content-the-dashboard" class="heading-permalink" aria-hidden="true" title="Permalink"></a>The dashboard</h2>
+<p>As everything in KeyBase is organised in projects, I think it is best to have a different dashboard for different projects, so nothing can leak from one project into another.</p>
+<p>In my proposal, in the main pane of the dashboard (or dashboard home page), you have the user account managament as well as the projects. In fact, what is under the account management box might be the same as what is under the account icon in the top-right corner of the page, so we might be able to remove that box as well.</p>
+<p>Unless, @twocngdagzyou have any plans for the menu, the information in the left pane is only accessible to Admin users, so we might
+be able to leave out the sidepane altogether.(I haven’t put all this in the sketches yet, as I do not want to make them again).</p>
+<p><img src="../../assets/images/keybase/keybase-dashboard-1.excalidraw.svg" alt="" /></p>
+<h2><a id="content-inside-a-project" href="#content-inside-a-project" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Inside a project</h2>
+<p>Once inside a project, a user has access to all the resources that are scoped to
+the project. They are listed in the sidepane. We have to experiment with where
+the project header (here ‘Project 1’) goes. Here, the project header needs to
+have a link under it, otherwise there is no way to get back to the Project form
+while staying inside the project. Another way we can do it is by moving the
+project header to the sidepane and add the project title to the breadcrumbs,
+<em>e.g.</em>, <code>Project 1 &gt; Keys &gt; List</code>, but then we have to find a place for the
+‘Dashboard’ link.</p>
+<p><img src="../../assets/images/keybase/keybase-dashboard-2.excalidraw.svg" alt="" /></p>
+<p>As you can see, I left the lists of keys, items, filters and sources out of the
+Project form. I did not like that when you click on an item in these lists, the
+form opens in a modal, rather than in the Dashboard. As these subforms just
+repeat what is in the sidepane, I think we might as well leave them out rather
+than try to change how they work.</p>
+<p>When clicking on an item in a list that is opened from the sidepane, the form
+opens in the dashboard.</p>
+<p><img src="../../assets/images/keybase/keybase-dashboard-3.excalidraw.svg" alt="" /></p>
+<h2><a id="content-key" href="#content-key" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Key</h2>
+<p>No specific changes to the key form, other than the changes that apply to all
+forms. The only thing is that I have added an ‘Import key’ button. We will have
+to see what we do about that in light of the comment I will make at the end.</p>
+<p>Note that the form is not complete. The author and the source are missing.</p>
+<p><img src="../../assets/images/keybase/keybase-dashboard-4.excalidraw.svg" alt="" /></p>
+<p>In the Key form I do like the lists of leads, items and imports, as the leads do
+not make sense outside the context of the key, and items and imports do not link
+to anything else.</p>
+<p><img src="../../assets/images/keybase/keybase-dashboard-5.excalidraw.svg" alt="" /></p>
+<div class="alert alert-warning">
+    <div class="alert-header">
+        Note
+    </div>
+    <div class="alert-body">
+        <p>@twocngdagz, I had noticed that you added a <code>KeyInput</code> model to the data
+model. I understood what it was for, but did not immediately grasp all its
+implications. I think now that we can remove the <code>ChangeNote</code> model and have a
+<code>changeNote</code> property (corresponding to
+<a href="https://www.w3.org/TR/2009/REC-skos-reference-20090818/#notes"><code>skos:changeNote</code></a>)
+on the <code>KeyInput</code> resource.</p>
+    </div>
+</div>        </div>
     </div>
 </section>
         </main>
