@@ -715,6 +715,13 @@ greggii}`. In the new version, now that we can have column headers, it can be
 delivered in a `shortcut` column. We'll have to see if we still need to support
 the old constructs.
 
+<x-alert type="warning" title="Note">
+
+We have now decided to only use the 'shortcut' column and not support the
+constructs with the colon or the braces in the 'to' column anymore.
+
+</x-alert>
+
 To check if there are any shortcuts in a provided key, you can run:
 
 ```php
