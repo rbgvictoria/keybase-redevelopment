@@ -673,7 +673,15 @@ and an item name, optionally separated by a space, <em>e.g.</em> <code>:Senegali
 or by appending an item enclosed in braces (’{’ and ‘}’), <em>e.g.</em> <code>{Senegalia greggii}</code>. In the new version, now that we can have column headers, it can be
 delivered in a <code>shortcut</code> column. We’ll have to see if we still need to support
 the old constructs.</p>
-<p>To check if there are any shortcuts in a provided key, you can run:</p>
+<div class="alert alert-warning">
+    <div class="alert-header">
+        Note
+    </div>
+    <div class="alert-body">
+        <p>We have now decided to only use the ‘shortcut’ column and not support the
+constructs with the colon or the braces in the ‘to’ column anymore.</p>
+    </div>
+</div><p>To check if there are any shortcuts in a provided key, you can run:</p>
 <pre><code class="language-php">// $shortcuts = $toItems-&gt;filter(fn ($value) =&gt; substr_count($value, ':'))
 //     -&gt;map(fn ($value) =&gt; preg_split('/ ?: ?/', $value)[1]);
 
