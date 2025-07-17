@@ -542,11 +542,10 @@ either have an item or are the parent of another set of leads.
 </x-figcaption>
 
 
-Reticulations when dealt with this way will cause problems later on, as keys
-with reticulations cannot be displayed as indented keys and for that reason will
-also not be able to be edited when KeyBase gets a key editor. For this reason,
-we will not treat reticulations as a feature and will keep ironing out
-reticulations and warn people about them like KeyBase has always done. 
+The new version of KeyBase will treat reticulations as the root of a new graph.
+This will lead to some challenges downstream that we have to deal with, but some
+people on the reference group see reticulations as a feature, and they can be
+incredibly hard to find back once they have been ironed out.
 
 This will find reticulations in a key:
 
