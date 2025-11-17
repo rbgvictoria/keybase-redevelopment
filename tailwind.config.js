@@ -4,6 +4,7 @@ module.exports = {
       'source/**/*.html',
       'source/**/*.md',
       'source/**/*.js',
+      'source/**/*.blade.php',
       'source/**/*.php',
       'source/**/*.vue',
   ]),
