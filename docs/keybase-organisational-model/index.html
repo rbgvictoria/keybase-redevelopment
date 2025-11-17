@@ -26,7 +26,7 @@
                     <!-- Insert analytics code here -->
         
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
-        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=4c03cfaaf236b98b67868de114e9be9e">
+        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=8d82d2e2b1f7a21126ef12ac2d68af61">
 
 
             </head>
@@ -67,6 +67,37 @@
         <main role="main" class="w-full flex-auto">
             <section class="container max-w-8xl mx-auto px-6 md:px-8 py-4">
     <div class="flex flex-col lg:flex-row">
+
+        <div class="docsearch-content w-full lg:w-3/4 break-words pb-16" v-pre>
+            <h1>KeyBase organisational model</h1>
+<p>Resources in KeyBase are scoped at one of three organisational levels:
+<strong>KeyBase</strong> (global), <strong>Project</strong>, or <strong>Key</strong>.</p>
+<ul>
+<li>
+<p>The most important organisational level in KeyBase is the <strong>Project</strong>.
+<strong>Keys</strong>, <strong>Items</strong>, <strong>Sources</strong> and <strong>Filters</strong> are all at the <strong>Project</strong>
+level and are not shared between Projects.</p>
+</li>
+<li>
+<p><strong>Leads</strong> and <strong>Change Notes</strong> belong to a <strong>Key</strong>. Unlike resources at the
+<strong>Project</strong> level, like <strong>Keys</strong> and <strong>Items</strong>, which make sense outside of
+a <strong>Project</strong>’s context, <strong>Leads</strong> and <strong>Change Notes</strong> can only be
+understood within the context of a <strong>Key</strong>.</p>
+</li>
+<li>
+<p><strong>Users</strong> and <strong>Agents</strong> have global scope. They are both handled in the
+user profile. <strong>Agents</strong> in KeyBase are very tightly linked to <strong>Users</strong>.
+They are only used as object of the <code>createdBy</code> and <code>updatedBy</code> properties
+on all KeyBase resources and not for, <em>e.g.</em>, authors of Keys and Sources
+(for which we use literals). The reason KeyBase has <strong>Agents</strong> is so that,
+if a <strong>User</strong> account is deleted, all the resources that are created or
+modified by that <strong>User</strong> can stay, as they are linked to the <strong>Agent</strong>, not
+the <strong>User</strong>.</p>
+</li>
+</ul>
+<p> <img src="../../assets/images/keybase/keybase-organisational-model.drawio.svg" alt="organisational model" /></p>
+        </div>
+
         <nav id="js-nav-menu" class="nav-menu hidden lg:block">
             <ul class="my-0">
             <li class="pl-4">
@@ -107,36 +138,6 @@
     </li>
     </ul>
         </nav>
-
-        <div class="docsearch-content w-full lg:w-3/5 break-words pb-16 lg:pl-4" v-pre>
-            <h1>KeyBase organisational model</h1>
-<p>Resources in KeyBase are scoped at one of three organisational levels:
-<strong>KeyBase</strong> (global), <strong>Project</strong>, or <strong>Key</strong>.</p>
-<ul>
-<li>
-<p>The most important organisational level in KeyBase is the <strong>Project</strong>.
-<strong>Keys</strong>, <strong>Items</strong>, <strong>Sources</strong> and <strong>Filters</strong> are all at the <strong>Project</strong>
-level and are not shared between Projects.</p>
-</li>
-<li>
-<p><strong>Leads</strong> and <strong>Change Notes</strong> belong to a <strong>Key</strong>. Unlike resources at the
-<strong>Project</strong> level, like <strong>Keys</strong> and <strong>Items</strong>, which make sense outside of
-a <strong>Project</strong>’s context, <strong>Leads</strong> and <strong>Change Notes</strong> can only be
-understood within the context of a <strong>Key</strong>.</p>
-</li>
-<li>
-<p><strong>Users</strong> and <strong>Agents</strong> have global scope. They are both handled in the
-user profile. <strong>Agents</strong> in KeyBase are very tightly linked to <strong>Users</strong>.
-They are only used as object of the <code>createdBy</code> and <code>updatedBy</code> properties
-on all KeyBase resources and not for, <em>e.g.</em>, authors of Keys and Sources
-(for which we use literals). The reason KeyBase has <strong>Agents</strong> is so that,
-if a <strong>User</strong> account is deleted, all the resources that are created or
-modified by that <strong>User</strong> can stay, as they are linked to the <strong>Agent</strong>, not
-the <strong>User</strong>.</p>
-</li>
-</ul>
-<p> <img src="../../assets/images/keybase/keybase-organisational-model.drawio.svg" alt="organisational model" /></p>
-        </div>
     </div>
 </section>
         </main>

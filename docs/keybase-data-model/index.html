@@ -26,7 +26,7 @@
                     <!-- Insert analytics code here -->
         
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
-        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=4c03cfaaf236b98b67868de114e9be9e">
+        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=8d82d2e2b1f7a21126ef12ac2d68af61">
 
 
             </head>
@@ -67,48 +67,8 @@
         <main role="main" class="w-full flex-auto">
             <section class="container max-w-8xl mx-auto px-6 md:px-8 py-4">
     <div class="flex flex-col lg:flex-row">
-        <nav id="js-nav-menu" class="nav-menu hidden lg:block">
-            <ul class="my-0">
-            <li class="pl-4">
-            
-        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-data-model"
-            class="lvl0  active font-semibold text-sky-700 nav-menu__item hover:text-blue-500"
-        >
-            KeyBase data model
-        </a>
-    
-    </li>
-            <li class="pl-4">
-            
-        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-organisational-model"
-            class="lvl0   nav-menu__item hover:text-blue-500"
-        >
-            KeyBase organisational model
-        </a>
-    
-    </li>
-            <li class="pl-4">
-            
-        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/processing-keys"
-            class="lvl0   nav-menu__item hover:text-blue-500"
-        >
-            Processing keys
-        </a>
-    
-    </li>
-            <li class="pl-4">
-            
-        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/backend-form-setup"
-            class="lvl0   nav-menu__item hover:text-blue-500"
-        >
-            Back-end form setup
-        </a>
-    
-    </li>
-    </ul>
-        </nav>
 
-        <div class="docsearch-content w-full lg:w-3/5 break-words pb-16 lg:pl-4" v-pre>
+        <div class="docsearch-content w-full lg:w-3/4 break-words pb-16" v-pre>
             <h1>KeyBase data model</h1>
 <ul class="table-of-contents">
 <li><a href="#content-key">Key</a></li>
@@ -117,7 +77,7 @@
 <li><a href="#content-filters">Filters</a></li>
 <li><a href="#content-entire-schema">Entire schema</a></li>
 </ul>
-<h2 id="key"><a id="content-key" href="#content-key" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Key</h2>
+<h2><a id="content-key" href="#content-key" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Key</h2>
 <p>Keys are the core of KeyBase. To make keys work, we need three types of
 resources (tables), <strong>keys</strong>, <strong>leads</strong> and <strong>items</strong>.</p>
 <p><img src="../../assets/images/keybase/keys-leads-items.svg" alt="" /></p>
@@ -203,7 +163,7 @@ there will also be no keys to the members of these items, so there is no
 reason to have the item in KeyBase.</p>
 </li>
 </ol>
-<h2 id="extra-key-metadata"><a id="content-extra-key-metadata" href="#content-extra-key-metadata" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Extra key metadata</h2>
+<h2><a id="content-extra-key-metadata" href="#content-extra-key-metadata" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Extra key metadata</h2>
 <p>There are some extra tables with metadata for keys that are required for
 attribution and change management, but that have no effect on how keys work.</p>
 <p><img src="../../assets/images/keybase/key-metadata.svg" alt="" /></p>
@@ -221,7 +181,7 @@ versions line up.</p>
 <strong>agents</strong> table. These indicate who created and who last updated the key. Each
 table also has <code>created_at</code> and <code>updated_at</code> columns to indicate when records
 were created and last modified.</p>
-<h2 id="organisation"><a id="content-organisation" href="#content-organisation" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Organisation</h2>
+<h2><a id="content-organisation" href="#content-organisation" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Organisation</h2>
 <p>KeyBase manages keys for several different projects and keys and items (and also
 filters) are managed at the project level. Also authorisation for data
 manipulation actions is managed at the project level.</p>
@@ -245,7 +205,7 @@ anything else in KeyBase (except the <strong>agents</strong> table itself, which
 do something about). The <strong>agents</strong> table can also be used to store extra
 metadata about agents, such as people’s ORCIDs (for attribution rather than
 authentication purposes).</p>
-<h2 id="filters"><a id="content-filters" href="#content-filters" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Filters</h2>
+<h2><a id="content-filters" href="#content-filters" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Filters</h2>
 <p>The filters in KeyBase are a feature that I really hate and regret I ever
 implemented, but that KeyBase users really like, so unfortunately we cannot do
 away with it. From a software persepective it is also a pretty nice feature.</p>
@@ -284,9 +244,50 @@ filters. Project filters can be created by project managers—by checking the
 <code>is_project_filter</code> check box—and are accessible to all users (logged in or
 not). User filters can be created by all logged in users and are only visible by
 those users themselves.</p>
-<h2 id="entire-schema"><a id="content-entire-schema" href="#content-entire-schema" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Entire schema</h2>
+<h2><a id="content-entire-schema" href="#content-entire-schema" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Entire schema</h2>
 <p><img src="../../assets/images/keybase/entire-schema.svg" alt="" /></p>
         </div>
+
+        <nav id="js-nav-menu" class="nav-menu hidden lg:block">
+            <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-data-model"
+            class="lvl0  active font-semibold text-sky-700 nav-menu__item hover:text-blue-500"
+        >
+            KeyBase data model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-organisational-model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            KeyBase organisational model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/processing-keys"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Processing keys
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/backend-form-setup"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Back-end form setup
+        </a>
+    
+    </li>
+    </ul>
+        </nav>
     </div>
 </section>
         </main>
