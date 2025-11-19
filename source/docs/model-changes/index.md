@@ -21,6 +21,8 @@ Schema::table('leads', function (Blueprint $table) {
 });
 ```
 
+__TOC__
+
 ### Model changes
 
 #### Lead::item
@@ -198,5 +200,61 @@ public function keysIn(): Attribute
         return $leadsItemKeysOutFrom->map(fn ($lead) => $lead->key)
             ->unique();
     });
+}
+```
+
+## Rename `item_id` field in `keys` and `projects` tables to `taxonomic_scope_id` [tbc]
+
+This change still needs to be made.
+
+### Schema changes
+
+```php
+Schema::table('keys', function (Blueprint $table) {
+    $table->dropForeign(['item_id']);
+    $table->dropIndex(['item_id']);
+    $table->renameColumn('item_id', 'taxonomic_scope_id');
+});
+
+Schema::table('keys', function (Blueprint $table) {
+    $table->bigInteger('taxonomic_scope_id')->unsigned()->nullable()->index()->change();
+    $table->foreign('taxonomic_scope_id')->references('id')->on('items')->onDelete('set null');
+});
+
+Schema::table('projects', function (Blueprint $table) {
+    $table->dropForeign(['item_id']);
+    $table->dropIndex(['item_id']);
+    $table->renameColumn('item_id', 'taxonomic_scope_id');
+});
+
+Schema::table('projects', function (Blueprint $table) {
+    $table->index('taxonomic_scope_id');
+    $table->foreign('taxonomic_scope_id')->references('id')->on('items')->onDelete('set null');
+});
+```
+
+Note that we also make `taxonomic_scope_id`in the `keys` table nullable and that
+the value of `taxonomic_scope_id` in both the `keys` and `projects` table is set
+to NULL if the Item is deleted. 
+
+### Model changes
+
+#### Key::item to Key::taxonomicScope
+
+Before:
+
+```php
+public function item(): BelongsTo
+{
+    return $this->belongsTo(Item::class, 'item_id');
+}
+```
+
+After:
+
+```php
+public function taxonomicScope(): BelongsTo
+{
+    return $this->belongsTo(Item::class, 'taxonomic_scope_id');
 }
 ```
