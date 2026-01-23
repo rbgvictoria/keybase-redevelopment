@@ -1,3 +1,10 @@
+---
+title: Creating the Key Tree with Google Gemini
+description: Creating the Key Tree with Google Gemini
+extends: _layouts.documentation
+section: content
+---
+
 # Creating the Key Tree with Google Gemini
 
 This accounts for 
