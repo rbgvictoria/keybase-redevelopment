@@ -1,3 +1,0 @@
-<figcaption>
-{{ $slot }}
-</figcaption>
