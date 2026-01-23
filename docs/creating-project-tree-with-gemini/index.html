@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="Creating Project resources with Gemini">
+
+        <meta property="og:site_name" content="KeyBase redevelopment"/>
+        <meta property="og:title" content="Creating Project resources with Gemini | KeyBase redevelopment"/>
+        <meta property="og:description" content="Creating Project resources with Gemini"/>
+        <meta property="og:url" content="https://rbgvictoria.github.io/keybase-redevelopment/docs/creating-project-tree-with-gemini"/>
+        <meta property="og:image" content="https://rbgvictoria.github.io/keybase-redevelopment/assets/img/keybase.png"/>
+        <meta property="og:type" content="website"/>
+
+        <meta name="twitter:image:alt" content="KeyBase redevelopment">
+        <meta name="twitter:card" content="summary_large_image">
+
+        
+        <title>KeyBase redevelopment | Creating Project resources with Gemini</title>
+
+        <link rel="home" href="https://rbgvictoria.github.io/keybase-redevelopment">
+        <link rel="icon" href="/favicon.ico">
+
+        
+                    <!-- Insert analytics code here -->
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
+        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=d9b301feb7d055053773e8b533f66267">
+
+
+            </head>
+
+    <body class="flex flex-col justify-between min-h-screen bg-gray-50 text-gray-800 leading-normal font-sans">
+        <header class="flex items-center shadow bg-sky-600 border-b h-24 mb-8 py-4" role="banner">
+            <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center">
+                    <a href="https://rbgvictoria.github.io/keybase-redevelopment" title="KeyBase redevelopment home" class="inline-flex items-center">
+                        <img class="h-8 md:h-10 mr-3" src="https://rbgvictoria.github.io/keybase-redevelopment/assets/img/keybase-logo-80.png" alt="KeyBase redevelopment logo" />
+                        <h1 class="text-lg md:text-2xl text-white font-semibold hover:text-gray-200 my-0 pr-4">KeyBase redevelopment</h1>
+                    </a>
+                </div>
+
+                <div class="flex flex-1 justify-end items-center text-right md:pl-10">
+                                    </div>
+            </div>
+
+                <button class="flex justify-center items-center bg-gray-50 border bg-gray-50 h-10 mr-4 px-5 rounded-full lg:hidden focus:outline-none"
+    onclick="navMenu.toggle()"
+    aria-label="nav menu"
+>
+    <svg id="js-nav-menu-show" xmlns="http://www.w3.org/2000/svg"
+        class="fill-current text-sky-700 h-9 w-4" viewBox="0 0 32 32"
+    >
+        <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"/>
+    </svg>
+
+    <svg id="js-nav-menu-hide" xmlns="http://www.w3.org/2000/svg"
+        class="hidden fill-current text-white h-9 w-4" viewBox="0 0 36 30"
+    >
+        <polygon points="32.8,4.4 28.6,0.2 18,10.8 7.4,0.2 3.2,4.4 13.8,15 3.2,25.6 7.4,29.8 18,19.2 28.6,29.8 32.8,25.6 22.2,15 "/>
+    </svg>
+</button>
+
+        </header>
+
+        <main role="main" class="w-full flex-auto">
+            <section class="container max-w-8xl mx-auto px-6 md:px-8 py-4">
+    <div class="flex flex-col lg:flex-row">
+
+        <div class="docsearch-content w-full lg:w-3/4 break-words pb-16" v-pre>
+            <p><a href="../creating-key-tree-with-gemini/">Continued from…</a></p>
+<blockquote>
+<p>Create a ProjectResource that includes a list of keys. Subkeys should not be included in this list. Item counts for keys should include items in subkeys.</p>
+</blockquote>
+<p>To create the <code>ProjectResource</code>, we need to filter the <code>keys</code> collection to exclude subkeys and calculate the item counts. Since your logic allows subkeys to contain items, the count must be recursive or aggregate all items across the subkey hierarchy.</p>
+<h3><a id="content-1-the-projectresource" href="#content-1-the-projectresource" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. The ProjectResource</h3>
+<p>This resource lists the main keys of a project and provides an aggregate count of all unique items reachable within each key’s specific tree (including those found in nested subkeys).</p>
+<pre><code class="language-php">namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ProjectResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' =&gt; $this-&gt;id,
+            'title' =&gt; $this-&gt;title,
+            // Filter keys to exclude those that are children of another key
+            'keys' =&gt; $this-&gt;keys
+                -&gt;whereNull('parent_key_id')
+                -&gt;map(fn($key) =&gt; [
+                    'id' =&gt; $key-&gt;id,
+                    'title' =&gt; $key-&gt;title,
+                    // Aggregate items from the key and all its descendants
+                    'item_count' =&gt; $this-&gt;getTotalItemCount($key),
+                ]),
+        ];
+    }
+
+    /**
+     * Calculates the total unique items in a key and its subkey hierarchy.
+     */
+    private function getTotalItemCount($key): int
+    {
+        // Get items directly keyed out in this key
+        $itemIds = $key-&gt;keyedOutItems()-&gt;pluck('items.id');
+
+        // Recursively gather items from all subkeys
+        foreach ($key-&gt;subkeys as $subkey) {
+            $itemIds = $itemIds-&gt;merge(
+                $this-&gt;getRecursiveItemIds($subkey)
+            );
+        }
+
+        return $itemIds-&gt;unique()-&gt;count();
+    }
+
+    /**
+     * Helper to crawl the subkey tree for item IDs.
+     */
+    private function getRecursiveItemIds($key): \Illuminate\Support\Collection
+    {
+        $ids = $key-&gt;keyedOutItems()-&gt;pluck('items.id');
+
+        foreach ($key-&gt;subkeys as $subkey) {
+            $ids = $ids-&gt;merge($this-&gt;getRecursiveItemIds($subkey));
+        }
+
+        return $ids;
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-2-implementation-logic" href="#content-2-implementation-logic" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. Implementation Logic</h3>
+<ul>
+<li><strong>Subkey Exclusion</strong>: We use <code>whereNull('parent_key_id')</code> on the project’s keys collection. This ensures that only “Top-Level” keys appear in the primary list, while subkeys are treated as internal components of those keys.</li>
+<li><strong>Recursive Counting</strong>: Because a subkey is itself a <code>Key</code> model, we use a recursive helper <code>getRecursiveItemIds</code>. This traverses the <code>subkeys</code> relationship infinitely deep to ensure every item in the hierarchy is accounted for.</li>
+<li><strong>Uniqueness</strong>: We use <code>.unique()</code> before counting. This prevents double-counting an item if it is keyed out in both a parent key and one of its subkeys.</li>
+</ul>
+<h3><a id="content-3-optimization-tip" href="#content-3-optimization-tip" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. Optimization Tip</h3>
+<p>In your Controller, you should eager-load the relationships to avoid the  problem during the recursive count:</p>
+<pre><code class="language-php">public function show(Project $project)
+{
+    $project-&gt;load([
+        'keys.keyedOutItems', 
+        'keys.subkeys.keyedOutItems'
+    ]);
+    
+    return new ProjectResource($project);
+}
+
+</code></pre>
+<p>Would you like me to show how to implement this item counting logic using a <strong>database view</strong> or a <strong>recursive CTE</strong> for better performance on very large trees?</p>
+<hr />
+<hr />
+<blockquote>
+<p>Yes please</p>
+</blockquote>
+<p>To optimize the item counting, we can use a <strong>Recursive Common Table Expression (CTE)</strong>. This offloads the hierarchy traversal to the database, which is significantly faster than recursive PHP calls and avoids memory issues with large trees.</p>
+<h3><a id="content-1-the-projectresource-with-optimized-counting" href="#content-1-the-projectresource-with-optimized-counting" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. The ProjectResource with Optimized Counting</h3>
+<p>We will update the resource to expect the count to be pre-calculated by the database via a subquery or a scope.</p>
+<pre><code class="language-php">namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ProjectResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' =&gt; $this-&gt;id,
+            'title' =&gt; $this-&gt;title,
+            // Only top-level keys
+            'keys' =&gt; $this-&gt;keys
+                -&gt;whereNull('parent_key_id')
+                -&gt;map(fn($key) =&gt; [
+                    'id' =&gt; $key-&gt;id,
+                    'title' =&gt; $key-&gt;title,
+                    // The count is loaded via a subquery in the controller
+                    'item_count' =&gt; (int) ($key-&gt;total_item_count ?? 0),
+                ]),
+        ];
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-2-the-controller-with-recursive-cte" href="#content-2-the-controller-with-recursive-cte" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. The Controller with Recursive CTE</h3>
+<p>In your controller, you can use a subquery to calculate the unique items across the entire subkey hierarchy for each top-level key.</p>
+<pre><code class="language-php">public function index(Project $project)
+{
+    $keys = $project-&gt;keys()
+        -&gt;whereNull('parent_key_id')
+        -&gt;addSelect(['total_item_count' =&gt; function ($query) {
+            $query-&gt;selectRaw('count(distinct item_id)')
+                -&gt;from('leads')
+                -&gt;whereIn('key_id', function ($subquery) {
+                    // Recursive CTE to find all descendant subkey IDs
+                    $subquery-&gt;select('id')
+                        -&gt;from('key_hierarchy');
+                })
+                -&gt;whereNotNull('item_id');
+        }])
+        -&gt;withExpression('key_hierarchy', '
+            SELECT id, parent_key_id FROM keys WHERE id = keys.id
+            UNION ALL
+            SELECT k.id, k.parent_key_id 
+            FROM keys k 
+            INNER JOIN key_hierarchy kh ON k.parent_key_id = kh.id
+        ')
+        -&gt;get();
+
+    return new ProjectResource($project-&gt;setRelation('keys', $keys));
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-3-comparison-of-methods" href="#content-3-comparison-of-methods" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. Comparison of Methods</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>PHP Recursion</th>
+<th>Recursive CTE (Database)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Performance</strong></td>
+<td>Slower (N+1 risk)</td>
+<td>Fast (Single Query)</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>High (Hydrates many models)</td>
+<td>Low (Aggregates in DB)</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>Simple to write</td>
+<td>Requires advanced SQL/Eloquent</td>
+</tr>
+<tr>
+<td><strong>Scalability</strong></td>
+<td>Struggles with deep trees</td>
+<td>Handles deep trees easily</td>
+</tr>
+</tbody>
+</table>
+<h3><a id="content-why-use-the-cte" href="#content-why-use-the-cte" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Why use the CTE?</h3>
+<p>When you have a key that leads to a subkey, which leads to another subkey, the PHP approach has to fetch every <code>Key</code> model and every <code>Lead</code> collection into memory. The CTE approach simply builds a list of IDs in the database engine and performs a single <code>COUNT(DISTINCT item_id)</code> across all of them at once.</p>
+<p>Would you like me to help you create a <strong>Global Scope</strong> on your Key model so this <code>total_item_count</code> is available automatically whenever you query keys?</p>
+<hr />
+<hr />
+<blockquote>
+<p>Do I still need an external package for recursive querying?</p>
+</blockquote>
+<p>Actually, no—as of <strong>Laravel 8.x and higher</strong>, you do not strictly need an external package to perform recursive queries. Laravel’s Eloquent builder now supports the <code>withExpression()</code> method, which allows you to define <strong>Common Table Expressions (CTEs)</strong> natively.</p>
+<p>While packages like <code>staudenmeir/laravel-adjacency-list</code> are great for providing a more “Eloquent-like” syntax (adding relationships like <code>ancestors</code> or <code>descendants</code> automatically), you can achieve the same result using core Laravel features.</p>
+<h3><a id="content-1-the-native-laravel-approach-cte" href="#content-1-the-native-laravel-approach-cte" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. The Native Laravel Approach (CTE)</h3>
+<p>Here is how you would implement the “Item Count” logic using only native Laravel methods. This uses a recursive CTE to find all subkey IDs and then counts the unique items within them.</p>
+<pre><code class="language-php">use App\Models\Key;
+use Illuminate\Support\Facades\DB;
+
+$topLevelKeys = Key::whereNull('parent_key_id')
+    -&gt;withExpression('descendants', DB::table('keys')
+        -&gt;select('id', 'parent_key_id')
+        -&gt;whereColumn('id', 'keys.id') // Start with the current key
+        -&gt;unionAll(
+            DB::table('keys')
+                -&gt;select('keys.id', 'keys.parent_key_id')
+                -&gt;join('descendants', 'descendants.id', '=', 'keys.parent_key_id')
+        )
+    )
+    -&gt;select('keys.*')
+    -&gt;addSelect(['total_items' =&gt; function ($query) {
+        $query-&gt;selectRaw('count(distinct item_id)')
+            -&gt;from('leads')
+            -&gt;whereIn('key_id', DB::table('descendants')-&gt;select('id'));
+    }])
+    -&gt;get();
+
+</code></pre>
+<hr />
+<h3><a id="content-2-when-should-you-use-an-external-package" href="#content-2-when-should-you-use-an-external-package" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. When SHOULD you use an external package?</h3>
+<p>While the native way works, there are three scenarios where a package like <code>staudenmeir/laravel-adjacency-list</code> is still worth considering:</p>
+<ul>
+<li><strong>Cleaner Syntax:</strong> Instead of writing complex SQL strings or query builder chains, you can just call <code>$key-&gt;descendants()-&gt;get()</code>.</li>
+<li><strong>Relationship Support:</strong> It allows you to use standard Eloquent features (like <code>withCount()</code> or <code>has()</code>) directly on the recursive relationship.</li>
+<li><strong>Eager Loading:</strong> Native CTEs can be difficult to eager-load across a collection (the N+1 problem can creep back in if you aren’t careful with the <code>withExpression</code> placement).</li>
+</ul>
+<hr />
+<h3><a id="content-3-summary-of-options" href="#content-3-summary-of-options" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. Summary of Options</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Extra Package?</th>
+<th>Effort</th>
+<th>Performance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PHP Recursion</strong></td>
+<td>No</td>
+<td>Low</td>
+<td><strong>Poor</strong> (Slow for deep trees)</td>
+</tr>
+<tr>
+<td><strong>Native CTE</strong></td>
+<td>No</td>
+<td>Medium</td>
+<td><strong>Excellent</strong></td>
+</tr>
+<tr>
+<td><strong>Adjacency List Package</strong></td>
+<td>Yes</td>
+<td>Low</td>
+<td><strong>Excellent</strong></td>
+</tr>
+</tbody>
+</table>
+<h3><a id="content-verdict" href="#content-verdict" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Verdict</h3>
+<p>If this is the only recursive query in your project, <strong>don’t add a package</strong>. Use the native <code>withExpression</code> method. If your project is heavily based on trees (like a nested file system or complex taxonomies), the package will save you significant boilerplate code.</p>
+<p>Would you like me to help you refactor the <strong>ProjectResource</strong> to use this native <code>withExpression</code> approach so it’s ready for production?</p>
+<hr />
+<hr />
+<blockquote>
+<p>Create a ProjectController that uses the ProjectResource.</p>
+</blockquote>
+<p>Since we are opting for a native Laravel approach without external packages, the <code>ProjectController</code> will use the <code>withExpression</code> method to handle the recursive item counting.</p>
+<p>This ensures that when <code>ProjectResource</code> maps over the keys, the <code>total_item_count</code> is already available as a property on the model, preventing any  issues during the transformation.</p>
+<h3><a id="content-1-the-projectcontroller" href="#content-1-the-projectcontroller" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. The ProjectController</h3>
+<pre><code class="language-php">namespace App\Http\Controllers;
+
+use App\Models\Project;
+use App\Http\Resources\ProjectResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class ProjectController extends Controller
+{
+    /**
+     * Display the project dashboard with top-level keys and aggregate item counts.
+     */
+    public function show(Project $project): Response
+    {
+        // Define the recursive CTE to find all subkeys for each top-level key.
+        // This query starts at each key and traverses down its children.
+        $keys = $project-&gt;keys()
+            -&gt;whereNull('parent_key_id')
+            -&gt;withExpression('key_hierarchy', 
+                DB::table('keys as k1')
+                    -&gt;select('k1.id', 'k1.parent_key_id')
+                    // Anchor: Start with the top-level keys from the outer query
+                    -&gt;whereColumn('k1.id', 'keys.id')
+                    -&gt;unionAll(
+                        DB::table('keys as k2')
+                            -&gt;select('k2.id', 'k2.parent_key_id')
+                            -&gt;join('key_hierarchy', 'key_hierarchy.id', '=', 'k2.parent_key_id')
+                    )
+            )
+            -&gt;addSelect([
+                // Subquery to count unique items within the hierarchy generated above
+                'total_item_count' =&gt; function ($query) {
+                    $query-&gt;selectRaw('count(distinct item_id)')
+                        -&gt;from('leads')
+                        -&gt;whereIn('key_id', DB::table('key_hierarchy')-&gt;select('id'))
+                        -&gt;whereNotNull('item_id');
+                }
+            ])
+            -&gt;get();
+
+        // Attach the calculated keys to the project instance
+        $project-&gt;setRelation('keys', $keys);
+
+        return Inertia::render('Projects/Show', [
+            'project' =&gt; new ProjectResource($project)
+        ]);
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-2-how-the-logic-flows" href="#content-2-how-the-logic-flows" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. How the Logic Flows</h3>
+<ul>
+<li><strong>The Anchor</strong>: Inside the <code>withExpression</code>, we use <code>whereColumn('k1.id', 'keys.id')</code>. This binds the recursive CTE to each specific row in the outer <code>keys</code> query.</li>
+<li><strong>The Recursion</strong>: The <code>unionAll</code> joins the <code>keys</code> table back to the <code>key_hierarchy</code> on the <code>parent_key_id</code> to find every level of subkey.</li>
+<li><strong>The Aggregation</strong>: The <code>addSelect</code> performs a single <code>count(distinct item_id)</code> across all <code>key_ids</code> found in that hierarchy.</li>
+<li><strong>The Resource</strong>: <code>ProjectResource</code> then simply reads <code>$key-&gt;total_item_count</code>. Because we cast it to an integer in the resource, the frontend receives a clean number.</li>
+</ul>
+<hr />
+<h3><a id="content-3-benefits-of-this-controller-setup" href="#content-3-benefits-of-this-controller-setup" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. Benefits of this Controller Setup</h3>
+<table>
+<thead>
+<tr>
+<th>Benefit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scalability</strong></td>
+<td>It doesn’t matter if a key has 2 subkeys or 200; the database handles the traversal.</td>
+</tr>
+<tr>
+<td><strong>Single Query</strong></td>
+<td>All keys and their recursive counts are fetched in one SQL execution.</td>
+</tr>
+<tr>
+<td><strong>Clean Resource</strong></td>
+<td>The <code>ProjectResource</code> stays focused on formatting rather than heavy calculation.</td>
+</tr>
+</tbody>
+</table>
+<h3><a id="content-4-routing-requirement" href="#content-4-routing-requirement" class="heading-permalink" aria-hidden="true" title="Permalink"></a>4. Routing Requirement</h3>
+<p>Ensure your route is set up to accept the <code>Project</code> model:</p>
+<pre><code class="language-php">Route::get('/projects/{project}', [ProjectController::class, 'show'])-&gt;name('projects.show');
+
+</code></pre>
+<p>Would you like me to show you how to add a <strong>search or filter</strong> to this controller so users can find specific keys within the project?</p>
+<hr />
+<hr />
+<blockquote>
+<p>Now create a tree of keys in the ProjectResource. Keyed out items in the parent key are the scope of the child keys. If there is a key of which the scope is the same as the scope of the project, that key is the root key. There will be keys that cannot be linked to a parent.</p>
+</blockquote>
+<p>To implement a tree of keys within the <code>ProjectResource</code>, we need to establish the “Scope” relationship between keys. In your model, the hierarchy is defined by an <code>Item</code> acting as the bridge: <strong>Parent Key</strong>  <strong>Keyed Out Item</strong>  <strong>Child Key’s Scope Item</strong>.</p>
+<h3><a id="content-1-updated-projectresource" href="#content-1-updated-projectresource" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. Updated ProjectResource</h3>
+<p>This resource will now recursively build a tree of keys based on the “linked keys” logic we established earlier.</p>
+<pre><code class="language-php">namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Key;
+use Illuminate\Support\Collection;
+
+class ProjectResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        // 1. Fetch all keys in the project to build the map in memory.
+        $allKeys = $this-&gt;keys()-&gt;with(['subkeys', 'keyedOutItems'])-&gt;get();
+        
+        // 2. Identify the Root Key:
+        // A key is the root if its scope_id matches the project's scope_id.
+        $rootKey = $allKeys-&gt;firstWhere('scope_id', $this-&gt;scope_id);
+
+        // 3. Identify Orphan Keys:
+        // These are keys that are not the root and whose scope_id does not 
+        // appear in any other key's keyed-out items.
+        $allKeyedOutItemIds = $allKeys-&gt;flatMap-&gt;keyedOutItems-&gt;pluck('id')-&gt;unique();
+        
+        $orphans = $allKeys-&gt;filter(function ($key) use ($rootKey, $allKeyedOutItemIds) {
+            return $key-&gt;id !== $rootKey?-&gt;id &amp;&amp; 
+                   !$allKeyedOutItemIds-&gt;contains($key-&gt;scope_id);
+        });
+
+        return [
+            'id' =&gt; $this-&gt;id,
+            'title' =&gt; $this-&gt;title,
+            'root_key' =&gt; $rootKey ? $this-&gt;buildKeyNode($rootKey, $allKeys) : null,
+            'orphan_keys' =&gt; $orphans-&gt;map(fn($key) =&gt; $this-&gt;buildKeyNode($key, $allKeys))-&gt;values(),
+        ];
+    }
+
+    /**
+     * Recursively builds the tree of keys.
+     */
+    private function buildKeyNode(Key $currentKey, Collection $allKeys): array
+    {
+        // Find children: Keys whose scope_id is one of this key's keyed-out items.
+        $keyedOutIds = $currentKey-&gt;keyedOutItems-&gt;pluck('id');
+        
+        $children = $allKeys-&gt;filter(function ($key) use ($keyedOutIds) {
+            return $keyedOutIds-&gt;contains($key-&gt;scope_id);
+        });
+
+        return [
+            'id' =&gt; $currentKey-&gt;id,
+            'title' =&gt; $currentKey-&gt;title,
+            'scope_id' =&gt; $currentKey-&gt;scope_id,
+            // Recursive item count including subkeys (as defined previously)
+            'total_item_count' =&gt; (int) ($currentKey-&gt;total_item_count ?? 0),
+            'children' =&gt; $children-&gt;map(fn($child) =&gt; $this-&gt;buildKeyNode($child, $allKeys))-&gt;values(),
+        ];
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-2-logic-definitions" href="#content-2-logic-definitions" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. Logic Definitions</h3>
+<ul>
+<li><strong>Root Key</strong>: Determined by comparing <code>Key-&gt;scope_id</code> with <code>Project-&gt;scope_id</code>. This is the entry point of your identification system.</li>
+<li><strong>Linked Child Keys</strong>: A key is a child of another if its <code>scope_id</code> is an item resulting from the parent key’s leads.</li>
+<li><strong>Orphan Keys</strong>: These are “islands” in your data. They aren’t the starting point (Root), and no other key leads to them via an item. They are rendered separately to ensure no data is lost in the UI.</li>
+</ul>
+<h3><a id="content-3-controller-optimization" href="#content-3-controller-optimization" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. Controller Optimization</h3>
+<p>To make this work efficiently without the N+1 problem, ensure you eager load the relationships in your <code>ProjectController</code>:</p>
+<pre><code class="language-php">public function show(Project $project)
+{
+    // Eager load keyedOutItems to facilitate the scope matching in the resource
+    $project-&gt;load(['keys.keyedOutItems', 'keys.subkeys']);
+    
+    return new ProjectResource($project);
+}
+
+</code></pre>
+<h3><a id="content-4-comparison-of-key-types" href="#content-4-comparison-of-key-types" class="heading-permalink" aria-hidden="true" title="Permalink"></a>4. Comparison of Key Types</h3>
+<table>
+<thead>
+<tr>
+<th>Key Category</th>
+<th>Condition</th>
+<th>Role in UI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Root Key</strong></td>
+<td><code>scope_id == project-&gt;scope_id</code></td>
+<td>The main starting point of the tree.</td>
+</tr>
+<tr>
+<td><strong>Linked Key</strong></td>
+<td><code>scope_id</code> in <code>parent-&gt;keyedOutItems</code></td>
+<td>A nested level of identification.</td>
+</tr>
+<tr>
+<td><strong>Orphan Key</strong></td>
+<td>No parent leads to this <code>scope_id</code></td>
+<td>Secondary or experimental entry points.</td>
+</tr>
+</tbody>
+</table>
+<p>Would you like me to add a <strong>circular reference check</strong> to the <code>buildKeyNode</code> method to prevent infinite loops if two keys point to each other’s scopes?</p>
+<hr />
+<hr />
+<blockquote>
+<p>Update the ProjectController, so that its response includes both the list of keys and the tree.</p>
+</blockquote>
+<p>To accommodate both a flat list of all keys (with their recursive item counts) and the hierarchical tree structure, we will update the <code>ProjectController</code>.</p>
+<p>We will use a <strong>Recursive CTE</strong> to ensure the <code>total_item_count</code> is calculated efficiently for every key in the project, then pass that data into the <code>ProjectResource</code> to be structured into the tree.</p>
+<h3><a id="content-1-updated-projectcontroller" href="#content-1-updated-projectcontroller" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. Updated ProjectController</h3>
+<p>This controller now fetches all keys belonging to the project and calculates their recursive item counts (including items in subkeys) in a single database pass.</p>
+<pre><code class="language-php">namespace App\Http\Controllers;
+
+use App\Models\Project;
+use App\Http\Resources\ProjectResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class ProjectController extends Controller
+{
+    public function show(Project $project): Response
+    {
+        // Fetch ALL keys for the project with recursive item counts.
+        // The CTE handles the subkey hierarchy for EVERY key at once.
+        $keys = $project-&gt;keys()
+            -&gt;withExpression('key_hierarchy', 
+                DB::table('keys as k1')
+                    -&gt;select('k1.id', 'k1.parent_key_id')
+                    -&gt;whereColumn('k1.id', 'keys.id')
+                    -&gt;unionAll(
+                        DB::table('keys as k2')
+                            -&gt;select('k2.id', 'k2.parent_key_id')
+                            -&gt;join('key_hierarchy', 'key_hierarchy.id', '=', 'k2.parent_key_id')
+                    )
+            )
+            -&gt;addSelect([
+                'total_item_count' =&gt; function ($query) {
+                    $query-&gt;selectRaw('count(distinct item_id)')
+                        -&gt;from('leads')
+                        -&gt;whereIn('key_id', DB::table('key_hierarchy')-&gt;select('id'))
+                        -&gt;whereNotNull('item_id');
+                }
+            ])
+            // Eager load keyedOutItems for tree building in the resource
+            -&gt;with(['keyedOutItems'])
+            -&gt;get();
+
+        // Attach the keys to the project so the Resource can access them
+        $project-&gt;setRelation('keys', $keys);
+
+        return Inertia::render('Projects/Show', [
+            'project' =&gt; new ProjectResource($project)
+        ]);
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-2-updated-projectresource" href="#content-2-updated-projectresource" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. Updated ProjectResource</h3>
+<p>We will update the <code>toArray</code> method to return both the <code>tree</code> (root + orphans) and the flat <code>list</code> of keys.</p>
+<pre><code class="language-php">namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
+
+class ProjectResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        $allKeys = $this-&gt;keys; // Already loaded by controller
+
+        // 1. Root Key Identification
+        $rootKey = $allKeys-&gt;firstWhere('scope_id', $this-&gt;scope_id);
+
+        // 2. Orphan Identification
+        $allKeyedOutItemIds = $allKeys-&gt;flatMap-&gt;keyedOutItems-&gt;pluck('id')-&gt;unique();
+        $orphans = $allKeys-&gt;filter(function ($key) use ($rootKey, $allKeyedOutItemIds) {
+            return $key-&gt;id !== $rootKey?-&gt;id &amp;&amp; 
+                   !$allKeyedOutItemIds-&gt;contains($key-&gt;scope_id);
+        });
+
+        return [
+            'id' =&gt; $this-&gt;id,
+            'title' =&gt; $this-&gt;title,
+            
+            // The Tree Structure
+            'tree' =&gt; [
+                'root' =&gt; $rootKey ? $this-&gt;buildKeyNode($rootKey, $allKeys) : null,
+                'orphans' =&gt; $orphans-&gt;map(fn($k) =&gt; $this-&gt;buildKeyNode($k, $allKeys))-&gt;values(),
+            ],
+
+            // The Flat List (useful for table views or dropdowns)
+            'list' =&gt; $allKeys-&gt;map(fn($key) =&gt; [
+                'id' =&gt; $key-&gt;id,
+                'title' =&gt; $key-&gt;title,
+                'scope_id' =&gt; $key-&gt;scope_id,
+                'total_item_count' =&gt; (int) $key-&gt;total_item_count,
+            ])-&gt;values(),
+        ];
+    }
+
+    private function buildKeyNode($currentKey, Collection $allKeys): array
+    {
+        $keyedOutIds = $currentKey-&gt;keyedOutItems-&gt;pluck('id');
+        $children = $allKeys-&gt;filter(fn($k) =&gt; $keyedOutIds-&gt;contains($k-&gt;scope_id));
+
+        return [
+            'id' =&gt; $currentKey-&gt;id,
+            'title' =&gt; $currentKey-&gt;title,
+            'total_item_count' =&gt; (int) $currentKey-&gt;total_item_count,
+            'children' =&gt; $children-&gt;map(fn($c) =&gt; $this-&gt;buildKeyNode($c, $allKeys))-&gt;values(),
+        ];
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-3-key-improvements" href="#content-3-key-improvements" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. Key Improvements</h3>
+<ul>
+<li><strong>Efficiency</strong>: The recursive item count for every single key is performed in the database in a single query.</li>
+<li><strong>Data Integrity</strong>: By providing the <code>list</code>, the UI can show all keys even if the tree logic (linking via <code>scope_id</code>) is broken or incomplete in the data.</li>
+<li><strong>Performance</strong>: The <code>buildKeyNode</code> method performs no additional database queries; it simply filters the <code>$allKeys</code> collection already in memory.</li>
+</ul>
+<p>Would you like me to add <strong>depth levels</strong> to the tree nodes so you can easily indent them in your React/Vue frontend?</p>
+<hr />
+<hr />
+<blockquote>
+<p>I also want to filter keys in a project based on a supplied list of items to include.</p>
+<ul>
+<li>The set of filtered keys should include the keys that key out the filter items, as well as the keys that key out the scope of these keys and so on recursively.</li>
+<li>The returned keys should include the filtered items and items counts</li>
+</ul>
+</blockquote>
+<p>To implement this, we will update the <code>ProjectController</code> to handle the filtering logic. The goal is to perform a <strong>bottom-up traversal</strong>: start with the items, find the keys that produce them, then find the keys that produce those keys’ scopes, and so on, until we reach the root.</p>
+<h3><a id="content-1-the-filtering-strategy" href="#content-1-the-filtering-strategy" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. The Filtering Strategy</h3>
+<ol>
+<li><strong>Initial Keys</strong>: Find all keys where at least one lead points to an item in your filter list.</li>
+<li><strong>Recursive Ancestors</strong>: Use a Recursive CTE to find the “lineage” of keys by matching a child key’s <code>scope_id</code> to a parent key’s keyed-out items.</li>
+<li><strong>Aggregated Counts</strong>: Calculate the item counts only considering the intersection of the key’s descendants and your filter list.</li>
+</ol>
+<h3><a id="content-2-updated-projectcontroller" href="#content-2-updated-projectcontroller" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. Updated ProjectController</h3>
+<pre><code class="language-php">namespace App\Http\Controllers;
+
+use App\Models\Project;
+use App\Http\Resources\ProjectResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
+
+class ProjectController extends Controller
+{
+    public function show(Project $project, Request $request)
+    {
+        $filterItemIds = $request-&gt;input('item_ids', []);
+        $isFiltering = !empty($filterItemIds);
+
+        // Define the Recursive CTE to find the 'Path to Root'
+        $query = $project-&gt;keys()
+            -&gt;withExpression('filtered_hierarchy', function ($query) use ($filterItemIds, $isFiltering) {
+                // ANCHOR: Start with keys that directly key out the target items
+                $anchor = DB::table('keys')
+                    -&gt;select('keys.id', 'keys.scope_id')
+                    -&gt;join('leads', 'leads.key_id', '=', 'keys.id')
+                    -&gt;whereIn('leads.item_id', $filterItemIds)
+                    -&gt;distinct();
+
+                if (!$isFiltering) {
+                    $anchor = DB::table('keys')-&gt;select('id', 'scope_id');
+                }
+
+                $query-&gt;from('anchor_set')
+                    -&gt;withRecursiveExpression('anchor_set', $anchor-&gt;unionAll(
+                        // RECURSION: Find parents whose leads point to the scope_id of the current keys
+                        DB::table('keys')
+                            -&gt;select('keys.id', 'keys.scope_id')
+                            -&gt;join('leads', 'leads.key_id', '=', 'keys.id')
+                            -&gt;join('anchor_set', 'anchor_set.scope_id', '=', 'leads.item_id')
+                    ))
+                    -&gt;select('id')-&gt;distinct();
+            });
+
+        // Fetch the keys and calculate counts based ONLY on the filtered items
+        $keys = $query-&gt;whereIn('keys.id', function($q) {
+                $q-&gt;select('id')-&gt;from('filtered_hierarchy');
+            })
+            -&gt;addSelect([
+                'total_item_count' =&gt; function ($q) use ($filterItemIds, $isFiltering) {
+                    $subquery = DB::table('leads')
+                        -&gt;whereIn('key_id', function($sq) {
+                            // Sub-CTE for descendant items (as previously established)
+                            $sq-&gt;select('id')-&gt;from('descendant_hierarchy');
+                        })
+                        -&gt;whereNotNull('item_id');
+
+                    if ($isFiltering) {
+                        $subquery-&gt;whereIn('item_id', $filterItemIds);
+                    }
+
+                    $q-&gt;selectRaw('count(distinct item_id)')
+                        -&gt;fromSub($subquery, 'filtered_leads');
+                }
+            ])
+            -&gt;with(['keyedOutItems' =&gt; function($q) use ($filterItemIds, $isFiltering) {
+                if ($isFiltering) {
+                    $q-&gt;whereIn('items.id', $filterItemIds);
+                }
+            }])
+            -&gt;get();
+
+        $project-&gt;setRelation('keys', $keys);
+
+        return Inertia::render('Projects/Show', [
+            'project' =&gt; new ProjectResource($project),
+            'filters' =&gt; ['item_ids' =&gt; $filterItemIds]
+        ]);
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-3-logic-breakdown" href="#content-3-logic-breakdown" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. Logic Breakdown</h3>
+<ul>
+<li><strong>Bottom-Up Logic</strong>: The first CTE (<code>filtered_hierarchy</code>) identifies which keys are “relevant.” If you want Item X, it finds the key that identifies Item X, then finds the key that identifies the <em>scope</em> of that key, repeating until no more parents exist.</li>
+<li><strong>Filtered Counts</strong>: The <code>total_item_count</code> is now conditional. If you are filtering for 5 specific items, the count will only reflect how many of <em>those 5</em> are reachable from that key.</li>
+<li><strong>Filtered Items</strong>: The <code>keyedOutItems</code> relationship is scoped in the controller so the <code>ProjectResource</code> only sees and renders items that are part of your filter set.</li>
+</ul>
+<hr />
+<h3><a id="content-4-resulting-data-structure" href="#content-4-resulting-data-structure" class="heading-permalink" aria-hidden="true" title="Permalink"></a>4. Resulting Data Structure</h3>
+<p>The <code>ProjectResource</code> (from the previous step) will automatically respect this filtered collection:</p>
+<ul>
+<li><strong>The Tree</strong>: Will only show paths that eventually lead to your filtered items.</li>
+<li><strong>Orphans</strong>: Will only show orphans that contain or lead to your filtered items.</li>
+<li><strong>List</strong>: A flat list of only the “active” keys in the current filtered context.</li>
+</ul>
+<p>Would you like me to add a <strong>“Clear Filters”</strong> helper to the resource to return the total project item count alongside the filtered count?</p>
+<hr />
+<hr />
+<blockquote>
+<p>Can you update the ProjectResource, so that it only includes the items for the keys in the response if there is a filter?</p>
+</blockquote>
+<p>I have updated the <code>ProjectResource</code> to conditionally include the <code>items</code> list for each key. Per your requirements, if a filter is active (<code>item_ids</code> is present in the request), the resource will include the specific items keyed out by that key. If no filter is active, the items list is omitted to keep the response lightweight, while still providing the <code>total_item_count</code>.</p>
+<h3><a id="content-updated-projectresource" href="#content-updated-projectresource" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Updated ProjectResource</h3>
+<pre><code class="language-php">namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
+
+class ProjectResource extends JsonResource
+{
+    /**
+     * Transform the project into a tree and list structure.
+     */
+    public function toArray(Request $request): array
+    {
+        $allKeys = $this-&gt;keys;
+        $includedItemIds = $request-&gt;input('item_ids');
+        $isFiltering = !empty($includedItemIds) &amp;&amp; is_array($includedItemIds);
+
+        // 1. Identify the Root Key based on Project Scope
+        $rootKey = $allKeys-&gt;firstWhere('scope_id', $this-&gt;scope_id);
+
+        // 2. Identify Orphan Keys (Keys not reachable from Root via items)
+        $allKeyedOutItemIds = $allKeys-&gt;flatMap-&gt;keyedOutItems-&gt;pluck('id')-&gt;unique();
+        $orphans = $allKeys-&gt;filter(function ($key) use ($rootKey, $allKeyedOutItemIds) {
+            return $key-&gt;id !== $rootKey?-&gt;id &amp;&amp; 
+                   !$allKeyedOutItemIds-&gt;contains($key-&gt;scope_id);
+        });
+
+        return [
+            'id' =&gt; $this-&gt;id,
+            'title' =&gt; $this-&gt;title,
+            'is_filtered' =&gt; $isFiltering,
+            
+            // The Tree Structure (Root + Orphans)
+            'tree' =&gt; [
+                'root' =&gt; $rootKey 
+                    ? $this-&gt;buildKeyNode($rootKey, $allKeys, $isFiltering) 
+                    : null,
+                'orphans' =&gt; $orphans-&gt;map(
+                    fn($k) =&gt; $this-&gt;buildKeyNode($k, $allKeys, $isFiltering)
+                )-&gt;values(),
+            ],
+
+            // Flat list of all relevant keys
+            'list' =&gt; $allKeys-&gt;map(fn($key) =&gt; $this-&gt;formatKey(
+                $key, 
+                $isFiltering
+            ))-&gt;values(),
+        ];
+    }
+
+    /**
+     * Recursively builds nodes for the key tree.
+     */
+    private function buildKeyNode($currentKey, Collection $allKeys, bool $isFiltering): array
+    {
+        $keyedOutIds = $currentKey-&gt;keyedOutItems-&gt;pluck('id');
+        
+        // Find children keys whose scope is keyed out by this key
+        $children = $allKeys-&gt;filter(fn($k) =&gt; $keyedOutIds-&gt;contains($k-&gt;scope_id));
+
+        $node = $this-&gt;formatKey($currentKey, $isFiltering);
+        $node['children'] = $children-&gt;map(
+            fn($c) =&gt; $this-&gt;buildKeyNode($c, $allKeys, $isFiltering)
+        )-&gt;values();
+
+        return $node;
+    }
+
+    /**
+     * Formats a single key, conditionally including the items list.
+     */
+    private function formatKey($key, bool $isFiltering): array
+    {
+        $data = [
+            'id' =&gt; $key-&gt;id,
+            'title' =&gt; $key-&gt;title,
+            'scope_id' =&gt; $key-&gt;scope_id,
+            'total_item_count' =&gt; (int) $key-&gt;total_item_count,
+        ];
+
+        // Only include the items list if a filter is active
+        if ($isFiltering) {
+            $data['items'] = $key-&gt;keyedOutItems-&gt;map(fn($item) =&gt; [
+                'id' =&gt; $item-&gt;id,
+                'name' =&gt; $item-&gt;name,
+            ])-&gt;values();
+        }
+
+        return $data;
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-logic-summary" href="#content-logic-summary" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Logic Summary</h3>
+<ul>
+<li><strong>Conditional <code>items</code> attribute</strong>: Within the <code>formatKey</code> helper, we check <code>$isFiltering</code>. If true, the <code>keyedOutItems</code> (which were already filtered in the Controller) are mapped and attached.</li>
+<li><strong>Tree &amp; List Sync</strong>: Both the hierarchical tree and the flat list use the same <code>formatKey</code> logic, ensuring consistency across the response.</li>
+<li><strong>Performance</strong>: Since the <code>ProjectController</code> eager-loads <code>keyedOutItems</code>, checking for them here is a memory-only operation.</li>
+<li><strong>Data Minimization</strong>: When a user is just browsing the project (no filter), they see the structure and counts. When they search for items, the specific matching items are “injected” into the keys that produce them.</li>
+</ul>
+<h3><a id="content-controller-reminder" href="#content-controller-reminder" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Controller Reminder</h3>
+<p>Ensure your <code>ProjectController</code> is passing the filtered items via the relationship, as we set up previously:</p>
+<pre><code class="language-php">$keys = $query-&gt;with(['keyedOutItems' =&gt; function($q) use ($filterItemIds, $isFiltering) {
+    if ($isFiltering) {
+        $q-&gt;whereIn('items.id', $filterItemIds);
+    }
+}])-&gt;get();
+
+</code></pre>
+<p>Would you like me to add a <strong>“path_to_root”</strong> attribute to the keys in the list so the frontend can show the breadcrumbs for filtered results?</p>
+<hr />
+<hr />
+<blockquote>
+<p>Now assume that we have stored filters. A Filter resource has id, name and items properties. Please update the code for the request to include a filter_id, rather than a list of items.</p>
+</blockquote>
+<p>To transition from a list of IDs to a stored filter, we will update the <code>ProjectController</code> to resolve the <code>Filter</code> model first. This keeps the request clean (e.g., <code>?filter_id=5</code>) and allows the database to handle the item lookup internally.</p>
+<h3><a id="content-1-the-projectcontroller-update" href="#content-1-the-projectcontroller-update" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. The ProjectController Update</h3>
+<p>We will fetch the <code>Filter</code> and its associated items, then pass those IDs into the recursive CTE logic we established.</p>
+<pre><code class="language-php">namespace App\Http\Controllers;
+
+use App\Models\Project;
+use App\Models\Filter;
+use App\Http\Resources\ProjectResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
+
+class ProjectController extends Controller
+{
+    public function show(Project $project, Request $request)
+    {
+        // 1. Resolve the stored filter if a filter_id is provided
+        $filter = null;
+        $filterItemIds = [];
+        
+        if ($request-&gt;has('filter_id')) {
+            $filter = Filter::with('items:id')-&gt;findOrFail($request-&gt;filter_id);
+            $filterItemIds = $filter-&gt;items-&gt;pluck('id')-&gt;toArray();
+        }
+
+        $isFiltering = !empty($filterItemIds);
+
+        // 2. Recursive CTE to find the 'Path to Root'
+        $query = $project-&gt;keys()
+            -&gt;withExpression('filtered_hierarchy', function ($query) use ($filterItemIds, $isFiltering) {
+                // ANCHOR: Keys that directly output the filter's items
+                $anchor = DB::table('keys')
+                    -&gt;select('keys.id', 'keys.scope_id')
+                    -&gt;join('leads', 'leads.key_id', '=', 'keys.id')
+                    -&gt;whereIn('leads.item_id', $filterItemIds)
+                    -&gt;distinct();
+
+                if (!$isFiltering) {
+                    $anchor = DB::table('keys')-&gt;select('id', 'scope_id');
+                }
+
+                $query-&gt;from('anchor_set')
+                    -&gt;withRecursiveExpression('anchor_set', $anchor-&gt;unionAll(
+                        // RECURSION: Find parents identifying the scope of current keys
+                        DB::table('keys')
+                            -&gt;select('keys.id', 'keys.scope_id')
+                            -&gt;join('leads', 'leads.key_id', '=', 'keys.id')
+                            -&gt;join('anchor_set', 'anchor_set.scope_id', '=', 'leads.item_id')
+                    ))
+                    -&gt;select('id')-&gt;distinct();
+            });
+
+        // 3. Fetch keys and calculate counts scoped to the filter items
+        $keys = $query-&gt;whereIn('keys.id', function($q) {
+                $q-&gt;select('id')-&gt;from('filtered_hierarchy');
+            })
+            -&gt;addSelect([
+                'total_item_count' =&gt; function ($q) use ($filterItemIds, $isFiltering) {
+                    $subquery = DB::table('leads')
+                        -&gt;whereIn('key_id', function($sq) {
+                            $sq-&gt;select('id')-&gt;from('descendant_hierarchy');
+                        })
+                        -&gt;whereNotNull('item_id');
+
+                    if ($isFiltering) {
+                        $subquery-&gt;whereIn('item_id', $filterItemIds);
+                    }
+
+                    $q-&gt;selectRaw('count(distinct item_id)')
+                        -&gt;fromSub($subquery, 'filtered_leads');
+                }
+            ])
+            -&gt;with(['keyedOutItems' =&gt; function($q) use ($filterItemIds, $isFiltering) {
+                if ($isFiltering) {
+                    $q-&gt;whereIn('items.id', $filterItemIds);
+                }
+            }])
+            -&gt;get();
+
+        $project-&gt;setRelation('keys', $keys);
+
+        return Inertia::render('Projects/Show', [
+            'project' =&gt; new ProjectResource($project),
+            // Pass the filter info so the UI knows which filter is active
+            'active_filter' =&gt; $filter ? [
+                'id' =&gt; $filter-&gt;id,
+                'name' =&gt; $filter-&gt;name
+            ] : null
+        ]);
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-2-the-filterresource" href="#content-2-the-filterresource" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. The FilterResource</h3>
+<p>While the controller handles the heavy lifting, you’ll likely want a <code>FilterResource</code> for managing the stored filters themselves (e.g., in a sidebar).</p>
+<pre><code class="language-php">namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class FilterResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' =&gt; $this-&gt;id,
+            'name' =&gt; $this-&gt;name,
+            // Include items only if specifically requested or for the edit view
+            'items' =&gt; ItemResource::collection($this-&gt;whenLoaded('items')),
+            'item_count' =&gt; $this-&gt;items_count ?? $this-&gt;items-&gt;count(),
+        ];
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-3-key-behavioral-changes" href="#content-3-key-behavioral-changes" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. Key Behavioral Changes</h3>
+<ul>
+<li><strong>Validation</strong>: The controller now uses <code>findOrFail</code>. If an invalid <code>filter_id</code> is passed, it returns a 404.</li>
+<li><strong>Consistency</strong>: By fetching the item IDs from the database <code>Filter</code> model, you ensure the user cannot “spoof” a filter by sending manual item IDs that don’t belong to a stored set.</li>
+<li><strong>UI Integration</strong>: In your Inertia frontend, you can now simply use a dropdown to select a filter:
+<code>router.get(route('projects.show', project.id), { filter_id: selectedFilterId })</code></li>
+</ul>
+<p>Would you like me to create a <strong>FilterController</strong> that allows users to save their current selection of items as a named filter?</p>
+<hr />
+<hr />
+<blockquote>
+<p>Is it possible to also use this filter_id on the keys requests. For the keys we will need to check if the key keys out any of the items in the filter, or the scope of the keys that key out these items, and so on recursively.</p>
+</blockquote>
+<p>Yes, it is absolutely possible. To make this work, we will apply the same “Path to Root” logic to the <code>KeyController</code>.</p>
+<p>When viewing a specific <strong>Key</strong>, we now only want to show the leads and branches that eventually lead to the items contained in the <code>filter_id</code>. This means the tree will be pruned to show only the “relevant” pathways.</p>
+<h3><a id="content-1-the-keycontroller-update" href="#content-1-the-keycontroller-update" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. The KeyController Update</h3>
+<p>We will resolve the <code>Filter</code> items and pass them into the <code>KeyResource</code>. The resource is already built to handle pruning if <code>item_ids</code> are provided.</p>
+<pre><code class="language-php">namespace App\Http\Controllers;
+
+use App\Models\Key;
+use App\Models\Filter;
+use App\Models\Project;
+use App\Http\Resources\KeyResource;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+
+class KeyController extends Controller
+{
+    public function show(Project $project, Key $key, Request $request)
+    {
+        abort_unless($key-&gt;project_id === $project-&gt;id, 404);
+
+        // 1. Resolve stored filter items
+        $filterItemIds = null;
+        if ($request-&gt;has('filter_id')) {
+            $filter = Filter::with('items:id')-&gt;findOrFail($request-&gt;filter_id);
+            $filterItemIds = $filter-&gt;items-&gt;pluck('id')-&gt;toArray();
+        }
+
+        return Inertia::render('Keys/Show', [
+            'project' =&gt; $project-&gt;only('id', 'title'),
+            'key_data' =&gt; $key-&gt;only('id', 'title'),
+            // 2. The Resource handles the recursive pruning automatically 
+            // if we pass the filterItemIds into the toArray method
+            'tree' =&gt; (new KeyResource($key))-&gt;toArray($request, $filterItemIds)['tree'],
+            'active_filter_id' =&gt; $request-&gt;filter_id
+        ]);
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-2-updating-keyresource-to-accept-external-ids" href="#content-2-updating-keyresource-to-accept-external-ids" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. Updating KeyResource to Accept External IDs</h3>
+<p>We need to tweak the <code>KeyResource</code> slightly so it can accept the IDs we’ve already fetched in the Controller, rather than always looking at the Request itself.</p>
+<pre><code class="language-php">namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class KeyResource extends JsonResource
+{
+    protected array $visited = [];
+
+    /**
+     * @param Request $request
+     * @param array|null $manualFilterIds Pass IDs directly from the Controller
+     */
+    public function toArray(Request $request, ?array $manualFilterIds = null): array
+    {
+        $allLeads = $this-&gt;prepareLeads();
+        $leadMap = $allLeads-&gt;keyBy('id');
+        $this-&gt;visited = [];
+
+        // Use manual IDs if provided (from Filter), otherwise fallback to request
+        $filterIds = $manualFilterIds ?? $request-&gt;input('item_ids');
+        $isFiltering = !empty($filterIds) &amp;&amp; is_array($filterIds);
+
+        return [
+            'id' =&gt; $this-&gt;id,
+            'title' =&gt; $this-&gt;title,
+            'tree' =&gt; $this-&gt;root 
+                ? $this-&gt;buildNode($this-&gt;root, $leadMap, $isFiltering ? $filterIds : null) 
+                : null,
+        ];
+    }
+    
+    // ... buildNode and resolveChildren remain the same as previously defined ...
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-3-how-the-recursive-scope-logic-is-satisfied" href="#content-3-how-the-recursive-scope-logic-is-satisfied" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. How the “Recursive Scope” logic is satisfied</h3>
+<p>You mentioned checking if a key keys out an item or the <strong>scope of keys</strong> that key out those items. This is handled by the relationship between your two resources:</p>
+<ol>
+<li><strong>The Project Level</strong>: The <code>ProjectController</code> uses the Recursive CTE to find the “Ancestry” of keys. It ensures that if you are looking for <em>Item X</em>, the UI shows the root key, the intermediate keys, and the final key.</li>
+<li><strong>The Key Level</strong>: Once you click into one of those keys, the <code>KeyResource</code> uses <strong>Bottom-Up Pruning</strong>.</li>
+</ol>
+<ul>
+<li>If a Lead points to a <code>subkey_id</code>, the <code>buildNode</code> method recurses into that subkey.</li>
+<li>If that subkey contains the target items, the branch is kept.</li>
+<li>If that subkey (and all its branches) contains none of the filtered items, the branch is pruned (returns <code>null</code>).</li>
+</ul>
+<h3><a id="content-4-implementation-note" href="#content-4-implementation-note" class="heading-permalink" aria-hidden="true" title="Permalink"></a>4. Implementation Note</h3>
+<p>By using <code>filter_id</code> consistently across both <code>ProjectController</code> and <code>KeyController</code>, your users get a seamless experience:</p>
+<ul>
+<li>In the <strong>Project View</strong>, they see which “Path of Keys” they need to follow.</li>
+<li>In the <strong>Key View</strong>, the specific identification tree is “cleaned up” to only show choices that lead to the items in their saved filter.</li>
+</ul>
+<p>Would you like me to show how to update the <code>KeyResource</code> to highlight the “Recommended Path” within a filtered tree?</p>
+<hr />
+<hr />
+<blockquote>
+<p>Yes please</p>
+</blockquote>
+<p>To highlight the <strong>“Recommended Path”</strong> (the leads that directly result in the filtered items or their scopes), we can add a <code>is_on_path</code> boolean to the <code>KeyResource</code>. This allows your frontend to visually distinguish between the “correct” branch and other branches that might still be visible.</p>
+<h3><a id="content-1-updated-keyresource-with-path-highlighting" href="#content-1-updated-keyresource-with-path-highlighting" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. Updated KeyResource with Path Highlighting</h3>
+<p>We add logic to flag nodes that are part of the successful “trail” to your target items.</p>
+<pre><code class="language-php">namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class KeyResource extends JsonResource
+{
+    protected array $visited = [];
+
+    public function toArray(Request $request, ?array $manualFilterIds = null): array
+    {
+        $allLeads = Lead::where('key_id', $this-&gt;id)
+            -&gt;orWhereIn('key_id', $this-&gt;subkeys-&gt;pluck('id'))
+            -&gt;with(['subkey.root'])
+            -&gt;get();
+
+        $leadMap = $allLeads-&gt;keyBy('id');
+        $this-&gt;visited = [];
+
+        $filterIds = $manualFilterIds ?? $request-&gt;input('item_ids');
+        $isFiltering = !empty($filterIds) &amp;&amp; is_array($filterIds);
+
+        return [
+            'id' =&gt; $this-&gt;id,
+            'title' =&gt; $this-&gt;title,
+            'tree' =&gt; $this-&gt;root 
+                ? $this-&gt;buildNode($this-&gt;root, $leadMap, $isFiltering ? $filterIds : null) 
+                : null,
+        ];
+    }
+
+    private function buildNode($lead, $leadMap, ?array $filterIds, array $skipped = []): ?array
+    {
+        if (in_array($lead-&gt;id, $this-&gt;visited)) {
+            return $filterIds ? null : ['id' =&gt; $lead-&gt;id, 'is_cycle' =&gt; true];
+        }
+        $this-&gt;visited[] = $lead-&gt;id;
+
+        $children = $this-&gt;resolveChildren($lead, $leadMap);
+
+        // Recursive call: children return null if they don't lead to a target
+        $nodes = $children
+            -&gt;map(fn($child) =&gt; $this-&gt;buildNode($child, $leadMap, $filterIds))
+            -&gt;filter()
+            -&gt;values();
+
+        $isTargetItem = false;
+        $hasValidDescendants = $nodes-&gt;isNotEmpty();
+
+        if ($filterIds !== null) {
+            $isTargetItem = $lead-&gt;item_id !== null &amp;&amp; in_array($lead-&gt;item_id, $filterIds);
+
+            // Prune: if this lead doesn't have a target item AND no children lead to one
+            if (!$isTargetItem &amp;&amp; !$hasValidDescendants) {
+                return null;
+            }
+        }
+
+        // Skip Logic: Bypass non-item nodes with exactly one valid child
+        if ($nodes-&gt;count() === 1 &amp;&amp; $lead-&gt;item_id === null) {
+            $skipped[] = ['id' =&gt; $lead-&gt;id, 'statement' =&gt; $lead-&gt;statement];
+            $childNode = $nodes-&gt;first();
+            $childNode['skipped_leads'] = array_merge($skipped, $childNode['skipped_leads'] ?? []);
+            return $childNode;
+        }
+
+        return [
+            'id' =&gt; $lead-&gt;id,
+            'statement' =&gt; $lead-&gt;statement,
+            'item_id' =&gt; $lead-&gt;item_id,
+            // PATH HIGHLIGHTING: 
+            // A node is &quot;on the path&quot; if it IS a target or leads to one.
+            'is_on_path' =&gt; $filterIds !== null &amp;&amp; ($isTargetItem || $hasValidDescendants),
+            'skipped_leads' =&gt; $skipped,
+            'children' =&gt; $nodes-&gt;toArray(),
+        ];
+    }
+
+    private function resolveChildren($lead, $leadMap)
+    {
+        if ($lead-&gt;reticulation_id !== null) {
+            $target = $leadMap-&gt;get($lead-&gt;reticulation_id);
+            return $target ? $leadMap-&gt;where('parent_id', $target-&gt;id) : collect();
+        }
+        if ($lead-&gt;subkey_id !== null &amp;&amp; $lead-&gt;subkey?-&gt;root) {
+            return $leadMap-&gt;where('parent_id', $lead-&gt;subkey-&gt;root-&gt;id);
+        }
+        return $leadMap-&gt;where('parent_id', $lead-&gt;id);
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-2-frontend-implementation-tip" href="#content-2-frontend-implementation-tip" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. Frontend Implementation Tip</h3>
+<p>In your React or Vue component, you can use the <code>is_on_path</code> property to change the CSS of the lead:</p>
+<pre><code class="language-javascript">// Example React Logic
+const LeadComponent = ({ node }) =&gt; (
+  &lt;div className={node.is_on_path ? 'border-blue-500 font-bold' : 'border-gray-200'}&gt;
+    &lt;p&gt;{node.statement}&lt;/p&gt;
+    {node.children.map(child =&gt; &lt;LeadComponent key={child.id} node={child} /&gt;)}
+  &lt;/div&gt;
+);
+
+</code></pre>
+<h3><a id="content-3-why-this-works-for-recursive-scopes" href="#content-3-why-this-works-for-recursive-scopes" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. Why this works for “Recursive Scopes”</h3>
+<p>Because the <code>filter_id</code> contains the ultimate “Target Items” (e.g., Species level), and your <code>KeyResource</code> recurses through <code>subkey_id</code> links, the logic naturally bridges the gap between keys.</p>
+<ul>
+<li>If <strong>Key A</strong> (Genus level) has a lead that goes to <strong>Key B</strong> (Species level), and <strong>Key B</strong> contains a target item, the lead in <strong>Key A</strong> will return <code>is_on_path: true</code>.</li>
+<li>The entire breadcrumb trail from the very first Key in the Project down to the specific lead that identifies the item will be flagged.</li>
+</ul>
+<hr />
+<h3><a id="content-next-step" href="#content-next-step" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Next Step</h3>
+<p>Would you like me to create a <strong>“Filter Summary”</strong> component for the response that lists exactly which target items are currently reachable within the specific Key you are viewing?</p>
+<hr />
+<hr />
+<blockquote>
+<p>Add a “path_to_root” attribute to the keys in the list in the ProjectResource.</p>
+</blockquote>
+<p>To add a <strong><code>path_to_root</code></strong> attribute to the flat list of keys, we need to capture the lineage during the tree-building process. Since a key’s “parent” in this context is defined by which key identifies its <code>scope_id</code>, we can pass the names/IDs of parent keys down as we recurse.</p>
+<p>I have updated the <code>ProjectResource</code> to track this breadcrumb trail.</p>
+<h3><a id="content-updated-projectresource-1" href="#content-updated-projectresource-1" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Updated ProjectResource</h3>
+<pre><code class="language-php">namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
+
+class ProjectResource extends JsonResource
+{
+    /** @var Collection Stores flattened keys with their paths */
+    protected Collection $flattenedList;
+
+    public function toArray(Request $request): array
+    {
+        $allKeys = $this-&gt;keys;
+        $includedItemIds = $request-&gt;input('item_ids');
+        
+        // Check for filter_id or raw item_ids
+        $isFiltering = $request-&gt;has('filter_id') || 
+                      (!empty($includedItemIds) &amp;&amp; is_array($includedItemIds));
+
+        $this-&gt;flattenedList = collect();
+
+        // 1. Root Key Identification
+        $rootKey = $allKeys-&gt;firstWhere('scope_id', $this-&gt;scope_id);
+
+        // 2. Identify Orphan Keys
+        $allKeyedOutItemIds = $allKeys-&gt;flatMap-&gt;keyedOutItems-&gt;pluck('id')-&gt;unique();
+        $orphans = $allKeys-&gt;filter(function ($key) use ($rootKey, $allKeyedOutItemIds) {
+            return $key-&gt;id !== $rootKey?-&gt;id &amp;&amp; 
+                   !$allKeyedOutItemIds-&gt;contains($key-&gt;scope_id);
+        });
+
+        // 3. Build Tree and simultaneously populate the flattenedList with paths
+        $tree = [
+            'root' =&gt; $rootKey 
+                ? $this-&gt;buildKeyNode($rootKey, $allKeys, $isFiltering, []) 
+                : null,
+            'orphans' =&gt; $orphans-&gt;map(
+                fn($k) =&gt; $this-&gt;buildKeyNode($k, $allKeys, $isFiltering, [])
+            )-&gt;values(),
+        ];
+
+        return [
+            'id' =&gt; $this-&gt;id,
+            'title' =&gt; $this-&gt;title,
+            'is_filtered' =&gt; $isFiltering,
+            'tree' =&gt; $tree,
+            // The list now contains the keys with their calculated path_to_root
+            'list' =&gt; $this-&gt;flattenedList-&gt;values(),
+        ];
+    }
+
+    /**
+     * @param array $path An array of titles representing the breadcrumb trail.
+     */
+    private function buildKeyNode($currentKey, Collection $allKeys, bool $isFiltering, array $path): array
+    {
+        // 1. Current Path: Add the current key to the path for its children
+        $currentPath = array_merge($path, [$currentKey-&gt;title]);
+
+        // 2. Format the key for the list (with path_to_root)
+        $formattedKey = $this-&gt;formatKey($currentKey, $isFiltering, $path);
+        
+        // Store in the shared collection for the 'list' output
+        $this-&gt;flattenedList-&gt;push($formattedKey);
+
+        // 3. Find children keys
+        $keyedOutIds = $currentKey-&gt;keyedOutItems-&gt;pluck('id');
+        $children = $allKeys-&gt;filter(fn($k) =&gt; $keyedOutIds-&gt;contains($k-&gt;scope_id));
+
+        // 4. Recurse
+        $node = $formattedKey;
+        $node['children'] = $children-&gt;map(
+            fn($c) =&gt; $this-&gt;buildKeyNode($c, $allKeys, $isFiltering, $currentPath)
+        )-&gt;values();
+
+        return $node;
+    }
+
+    private function formatKey($key, bool $isFiltering, array $path): array
+    {
+        $data = [
+            'id' =&gt; $key-&gt;id,
+            'title' =&gt; $key-&gt;title,
+            'scope_id' =&gt; $key-&gt;scope_id,
+            'total_item_count' =&gt; (int) $key-&gt;total_item_count,
+            // 'path_to_root' is an array of parent titles
+            'path_to_root' =&gt; $path, 
+        ];
+
+        if ($isFiltering) {
+            $data['items'] = $key-&gt;keyedOutItems-&gt;map(fn($item) =&gt; [
+                'id' =&gt; $item-&gt;id,
+                'name' =&gt; $item-&gt;name,
+            ])-&gt;values();
+        }
+
+        return $data;
+    }
+}
+
+</code></pre>
+<hr />
+<h3><a id="content-key-changes" href="#content-key-changes" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Key Changes</h3>
+<ul>
+<li><strong>Path Accumulation</strong>: The <code>buildKeyNode</code> now accepts a <code>$path</code> array. Every time we move down a level, we append the parent’s title to that array.</li>
+<li><strong>Flattened Collection</strong>: I added a <code>$flattenedList</code> property to the class. As the tree is built recursively, each key is formatted and “pushed” into this collection. This ensures that the <code>list</code> and the <code>tree</code> contain the exact same data and logic.</li>
+<li><strong>Frontend Usage</strong>: Your frontend can now render the list like this:</li>
+</ul>
+<blockquote>
+<p><strong>Species Identification Key</strong> &gt; <em>Path: Project Root &gt; Mammals &gt; Felidae</em></p>
+</blockquote>
+<h3><a id="content-implementation-note-on-orphans" href="#content-implementation-note-on-orphans" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Implementation Note on Orphans</h3>
+<p>For <strong>Orphan Keys</strong>, the <code>path_to_root</code> will return an empty array <code>[]</code> because they have no parents within the project’s scope. This is a helpful visual cue for the user that these keys represent alternative starting points.</p>
+<p>Would you like me to join the <code>path_to_root</code> into a <strong>single string</strong> (e.g., <code>&quot;Root &gt; Level 1 &gt; Level 2&quot;</code>) or keep it as an array for more flexible frontend rendering?</p>
+        </div>
+
+        <nav id="js-nav-menu" class="nav-menu hidden lg:block">
+            <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-data-model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            KeyBase data model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-organisational-model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            KeyBase organisational model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/processing-keys"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Processing keys
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/backend-form-setup"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Back-end form setup
+        </a>
+    
+    </li>
+    </ul>
+        </nav>
+    </div>
+</section>
+        </main>
+
+        <script src="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/js/main.js?id=392f1ff6d6270841cecb523b36b99dda"></script>
+
+        <script>
+    const navMenu = {
+        toggle() {
+            const menu = document.getElementById('js-nav-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('lg:block');
+            document.getElementById('js-nav-menu-hide').classList.toggle('hidden');
+            document.getElementById('js-nav-menu-show').classList.toggle('hidden');
+        },
+    }
+</script>
+
+        <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
+            <ul class="flex flex-col md:flex-row justify-center">
+                <li class="md:mr-2">
+                    &copy; <a href="https://tighten.co" title="Tighten website">Tighten</a> 2026.
+                </li>
+
+                <li>
+                    Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten">Jigsaw</a>
+                    and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework">Tailwind CSS</a>.
+                </li>
+            </ul>
+        </footer>
+    </body>
+</html>
