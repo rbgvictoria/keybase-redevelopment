@@ -7,9 +7,6 @@ section: content
 
 # Creating the Key Tree with Google Gemini
 
-This accounts for 
-
-
 ## 1. Project Stack Context
 - **Backend:** Laravel 11+ (PHP 8.3)
 - **Frontend:** React with TypeScript
