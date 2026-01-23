@@ -1853,3 +1853,752 @@ Gemini got trippeed up by the term 'shortcut' and uses the term for
 all leads to an item.
 
 </x-alert>
+
+---
+---
+
+>
+> Can we move the logic from the FilterKeyService into the KeyResource?
+>
+
+Yes, we can merge the filtering logic into the `KeyResource`. This is a clean approach that allows the Resource to handle both the "full tree" and the "filtered tree" based on whether a filter is present in the request.
+
+By using **optional parameters** in our recursive method, we can keep the code DRY (Don't Repeat Yourself).
+
+### 1. The Unified KeyResource
+
+This version handles:
+
+1. **Full Tree Generation** (if no items are provided).
+2. **Bottom-Up Pruning** (if items are provided).
+3. **Shortcut Awareness** (items with children are not auto-pruned).
+4. **Strict Skip Logic** (never skipping items).
+
+```php
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Lead;
+use Illuminate\Support\Collection;
+
+class KeyResource extends JsonResource
+{
+    protected array $visited = [];
+
+    public function toArray(Request $request): array
+    {
+        // 1. Fetch all relevant leads for the memory map
+        $allLeads = Lead::where('key_id', $this->id)
+            ->orWhereIn('key_id', $this->subkeys->pluck('id'))
+            ->with(['subkey.root'])
+            ->get();
+
+        $leadMap = $allLeads->keyBy('id');
+        $this->visited = [];
+
+        // 2. Check for filters in the request
+        $includedItemIds = $request->input('item_ids');
+        $isFiltering = !empty($includedItemIds) && is_array($includedItemIds);
+
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'is_filtered' => $isFiltering,
+            'tree' => $this->root 
+                ? $this->buildNode($this->root, $leadMap, $isFiltering ? $includedItemIds : null) 
+                : null,
+        ];
+    }
+
+    /**
+     * @param Lead $lead
+     * @param Collection $leadMap
+     * @param array|null $filterIds If null, no pruning occurs. If array, pruning logic is active.
+     * @param array $skippedAccumulator
+     */
+    private function buildNode(Lead $lead, Collection $leadMap, ?array $filterIds = null, array $skippedAccumulator = []): ?array
+    {
+        // 1. Detect infinite loops
+        if (in_array($lead->id, $this->visited)) {
+            return $filterIds ? null : [
+                'id' => $lead->id,
+                'statement' => $lead->statement . ' (Cycle Detected)',
+                'is_cycle' => true,
+                'skipped_leads' => $skippedAccumulator,
+                'children' => []
+            ];
+        }
+
+        $this->visited[] = $lead->id;
+
+        // 2. Identify children based on relationship exceptions
+        $childrenCollection = $this->resolveChildren($lead, $leadMap);
+
+        // 3. Recursive Step
+        // Map children to nodes. If filtering, this will return null for invalid branches.
+        $nodes = $childrenCollection
+            ->map(fn($child) => $this->buildNode($child, $leadMap, $filterIds))
+            ->filter()
+            ->values();
+
+        // 4. Pruning Logic (Only if filtering)
+        if ($filterIds !== null) {
+            $isTargetItem = $lead->item_id !== null && in_array($lead->item_id, $filterIds);
+            $hasValidDescendants = $nodes->isNotEmpty();
+
+            // If this path doesn't lead to a target, prune it
+            if (!$isTargetItem && !$hasValidDescendants) {
+                return null;
+            }
+        }
+
+        // 5. Skip Logic (Strict: Never skip leads with items)
+        if ($nodes->count() === 1 && $lead->item_id === null) {
+            $skippedAccumulator[] = [
+                'id' => $lead->id,
+                'statement' => $lead->statement
+            ];
+
+            $childNode = $nodes->first();
+            $childNode['skipped_leads'] = array_merge($skippedAccumulator, $childNode['skipped_leads'] ?? []);
+            return $childNode;
+        }
+
+        // 6. Return standard node
+        return [
+            'id' => $lead->id,
+            'statement' => $lead->statement,
+            'item_id' => $lead->item_id,
+            'skipped_leads' => $skippedAccumulator,
+            'children' => $nodes->toArray(),
+        ];
+    }
+
+    private function resolveChildren(Lead $lead, Collection $leadMap): Collection
+    {
+        if ($lead->reticulation_id !== null) {
+            $target = $leadMap->get($lead->reticulation_id);
+            return $target ? $leadMap->where('parent_id', $target->id) : collect();
+        }
+
+        if ($lead->subkey_id !== null && $lead->subkey?->root) {
+            return $leadMap->where('parent_id', $lead->subkey->root->id);
+        }
+
+        return $leadMap->where('parent_id', $lead->id);
+    }
+}
+
+```
+
+---
+
+### 2. Simplified Controller
+
+Now your controller becomes extremely thin, as the Resource handles all the logic internally based on the `Request` state.
+
+```php
+public function show(Project $project, Key $key, Request $request): Response
+{
+    abort_unless($key->project_id === $project->id, 404);
+
+    return Inertia::render('KeyPage', [
+        'project' => $project->only('id', 'title'),
+        'key' => $key->only('id', 'title'),
+        'items' => $project->items()->select('id', 'name')->get(),
+        // The Resource automatically detects 'item_ids' from the $request
+        'tree' => (new KeyResource($key))->toArray($request)['tree'],
+        'filters' => [
+            'item_ids' => $request->input('item_ids', [])
+        ]
+    ]);
+}
+
+```
+
+### 3. Benefits of this consolidation
+
+* **Single Source of Truth**: The rules for reticulations, subkeys, shortcuts, and skipping are all defined in one place.
+* **Consistent Response Shape**: Whether the tree is filtered or full, the JSON structure remains identical for your React components.
+* **Automatic Triggering**: If you use Inertia's `router.get` to update the URL with `?item_ids[]=1`, the Resource will automatically pivot to "filter mode."
+
+---
+---
+
+>
+> Can you put comments with the conditions in the resolveChildren method?
+>
+
+Certainly. I have updated the `resolveChildren` method within the `KeyResource` to include clear comments explaining the logic for standard branching, reticulations, and subkeys as defined in your requirements.
+
+```php
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Lead;
+use Illuminate\Support\Collection;
+
+class KeyResource extends JsonResource
+{
+    protected array $visited = [];
+
+    public function toArray(Request $request): array
+    {
+        $allLeads = Lead::where('key_id', $this->id)
+            ->orWhereIn('key_id', $this->subkeys->pluck('id'))
+            ->with(['subkey.root'])
+            ->get();
+
+        $leadMap = $allLeads->keyBy('id');
+        $this->visited = [];
+
+        $includedItemIds = $request->input('item_ids');
+        $isFiltering = !empty($includedItemIds) && is_array($includedItemIds);
+
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'is_filtered' => $isFiltering,
+            'tree' => $this->root 
+                ? $this->buildNode($this->root, $leadMap, $isFiltering ? $includedItemIds : null) 
+                : null,
+        ];
+    }
+
+    /**
+     * Standard recursive builder with pruning and skip logic.
+     */
+    private function buildNode(Lead $lead, Collection $leadMap, ?array $filterIds = null, array $skippedAccumulator = []): ?array
+    {
+        if (in_array($lead->id, $this->visited)) {
+            return $filterIds ? null : [
+                'id' => $lead->id,
+                'statement' => $lead->statement . ' (Cycle Detected)',
+                'is_cycle' => true,
+                'skipped_leads' => $skippedAccumulator,
+                'children' => []
+            ];
+        }
+
+        $this->visited[] = $lead->id;
+
+        $childrenCollection = $this->resolveChildren($lead, $leadMap);
+
+        $nodes = $childrenCollection
+            ->map(fn($child) => $this->buildNode($child, $leadMap, $filterIds))
+            ->filter()
+            ->values();
+
+        if ($filterIds !== null) {
+            $isTargetItem = $lead->item_id !== null && in_array($lead->item_id, $filterIds);
+            $hasValidDescendants = $nodes->isNotEmpty();
+
+            if (!$isTargetItem && !$hasValidDescendants) {
+                return null;
+            }
+        }
+
+        if ($nodes->count() === 1 && $lead->item_id === null) {
+            $skippedAccumulator[] = [
+                'id' => $lead->id,
+                'statement' => $lead->statement
+            ];
+
+            $childNode = $nodes->first();
+            $childNode['skipped_leads'] = array_merge($skippedAccumulator, $childNode['skipped_leads'] ?? []);
+            return $childNode;
+        }
+
+        return [
+            'id' => $lead->id,
+            'statement' => $lead->statement,
+            'item_id' => $lead->item_id,
+            'skipped_leads' => $skippedAccumulator,
+            'children' => $nodes->toArray(),
+        ];
+    }
+
+    /**
+     * Resolves which leads should be considered children based on 
+     * reticulation and subkey exceptions.
+     */
+    private function resolveChildren(Lead $lead, Collection $leadMap): Collection
+    {
+        // Exception 1: Reticulation
+        // When the lead leads to a reticulation, the children of the lead 
+        // are the children of the lead to which it reticulates.
+        if ($lead->reticulation_id !== null) {
+            $target = $leadMap->get($lead->reticulation_id);
+            return $target ? $leadMap->where('parent_id', $target->id) : collect();
+        }
+
+        // Exception 2: Subkey
+        // When the lead leads to a subkey, the children of the lead 
+        // are the children of the root lead of that subkey.
+        if ($lead->subkey_id !== null && $lead->subkey?->root) {
+            return $leadMap->where('parent_id', $lead->subkey->root->id);
+        }
+
+        // General Case:
+        // The children of the lead are the leads of which the current lead is the parent.
+        // Note: Shortcuts are allowed (leads with item_id can still return children here).
+        return $leadMap->where('parent_id', $lead->id);
+    }
+}
+
+```
+
+### Key Logic Summary
+
+* **Reticulation**: Redirects child lookup to the children of the `reticulation_id` target.
+* **Subkey**: Redirects child lookup to the children of the `subkey->root`.
+* **Default**: Standard parent-child lookup in the memory map.
+* **Shortcut Support**: The condition preventing items from having children was removed as per your request, meaning a lead can return both an `item_id` and a collection of children simultaneously.
+
+---
+---
+
+>
+> Can you also put comments in the buildNode method?
+>
+
+I have added detailed comments to the `buildNode` method to explain the recursion logic, the pruning process used during filtering, and the specific rules for skipping nodes.
+
+```php
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Lead;
+use Illuminate\Support\Collection;
+
+class KeyResource extends JsonResource
+{
+    protected array $visited = [];
+
+    public function toArray(Request $request): array
+    {
+        $allLeads = Lead::where('key_id', $this->id)
+            ->orWhereIn('key_id', $this->subkeys->pluck('id'))
+            ->with(['subkey.root'])
+            ->get();
+
+        $leadMap = $allLeads->keyBy('id');
+        $this->visited = [];
+
+        $includedItemIds = $request->input('item_ids');
+        $isFiltering = !empty($includedItemIds) && is_array($includedItemIds);
+
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'is_filtered' => $isFiltering,
+            'tree' => $this->root 
+                ? $this->buildNode($this->root, $leadMap, $isFiltering ? $includedItemIds : null) 
+                : null,
+        ];
+    }
+
+    /**
+     * Recursively builds the tree node by node.
+     * * @param Lead $lead The current lead being processed.
+     * @param Collection $leadMap A pre-fetched map of all relevant leads for performance.
+     * @param array|null $filterIds An array of Item IDs to filter by. If null, returns the full tree.
+     * @param array $skippedAccumulator Stores leads that were bypassed by the skip logic.
+     */
+    private function buildNode(Lead $lead, Collection $leadMap, ?array $filterIds = null, array $skippedAccumulator = []): ?array
+    {
+        // 1. Recursion Protection
+        // If we encounter a lead we've already visited in this branch, we've hit a cycle.
+        // If filtering, we return null to prune the cycle; otherwise, we mark it as a cycle node.
+        if (in_array($lead->id, $this->visited)) {
+            return $filterIds ? null : [
+                'id' => $lead->id,
+                'statement' => $lead->statement . ' (Cycle Detected)',
+                'is_cycle' => true,
+                'skipped_leads' => $skippedAccumulator,
+                'children' => []
+            ];
+        }
+
+        $this->visited[] = $lead->id;
+
+        // 2. Resolve Logical Children
+        // This handles reticulations and subkeys as per the task requirements.
+        $childrenCollection = $this->resolveChildren($lead, $leadMap);
+
+        // 3. Recursive Descent
+        // We process all children first. The .filter() is crucial for the pruning logic;
+        // if a child returns null (because it doesn't lead to a target item), it is removed.
+        $nodes = $childrenCollection
+            ->map(fn($child) => $this->buildNode($child, $leadMap, $filterIds))
+            ->filter()
+            ->values();
+
+        // 4. Pruning Logic
+        // If we are in "filter mode", a node is only kept if it points to a requested item 
+        // OR if it has at least one valid child path leading to a requested item.
+        if ($filterIds !== null) {
+            $isTargetItem = $lead->item_id !== null && in_array($lead->item_id, $filterIds);
+            $hasValidDescendants = $nodes->isNotEmpty();
+
+            if (!$isTargetItem && !$hasValidDescendants) {
+                return null;
+            }
+        }
+
+        // 5. Skip Logic
+        // A node is "skipped" (hidden but its data preserved) if it has exactly one child 
+        // and is NOT an item. This creates a cleaner tree for "straight-line" logic.
+        if ($nodes->count() === 1 && $lead->item_id === null) {
+            $skippedAccumulator[] = [
+                'id' => $lead->id,
+                'statement' => $lead->statement
+            ];
+
+            $childNode = $nodes->first();
+            // Pass the accumulated leads down to the next visible node
+            $childNode['skipped_leads'] = array_merge($skippedAccumulator, $childNode['skipped_leads'] ?? []);
+            return $childNode;
+        }
+
+        // 6. Output Transformation
+        // Return the final data structure for the current node.
+        return [
+            'id' => $lead->id,
+            'statement' => $lead->statement,
+            'item_id' => $lead->item_id, // Present if the node is a terminal item OR a shortcut
+            'skipped_leads' => $skippedAccumulator,
+            'children' => $nodes->toArray(),
+        ];
+    }
+
+    /**
+     * Applies the logic rules from create-children-relationship.md to determine
+     * which leads should be treated as children of the current lead.
+     */
+    private function resolveChildren(Lead $lead, Collection $leadMap): Collection
+    {
+        // Exception: Reticulation
+        // The children are the children of the lead the reticulation points to.
+        if ($lead->reticulation_id !== null) {
+            $target = $leadMap->get($lead->reticulation_id);
+            return $target ? $leadMap->where('parent_id', $target->id) : collect();
+        }
+
+        // Exception: Subkey
+        // The children are the children of the root lead of the linked subkey.
+        if ($lead->subkey_id !== null && $lead->subkey?->root) {
+            return $leadMap->where('parent_id', $lead->subkey->root->id);
+        }
+
+        // General Case:
+        // Children are any leads where the 'parent_id' equals this lead's 'id'.
+        return $leadMap->where('parent_id', $lead->id);
+    }
+}
+
+```
+
+---
+---
+
+>
+> And the toArray method?
+>
+
+I have added detailed comments to the `toArray` method in the `KeyResource`. This method serves as the entry point, responsible for preparing the flat data map for memory-efficient processing and determining whether the tree should be built in "Full" mode or "Filtered" mode based on the current request.
+
+```php
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Lead;
+use Illuminate\Support\Collection;
+
+class KeyResource extends JsonResource
+{
+    /** @var array Track visited leads during recursion to prevent infinite loops */
+    protected array $visited = [];
+
+    /**
+     * Transform the Key model into a nested JSON tree structure.
+     */
+    public function toArray(Request $request): array
+    {
+        // 1. Efficiency: Fetch all leads for this Key and its Subkeys in one query.
+        // This prevents the "N+1" problem where the database is hit for every branch.
+        $allLeads = Lead::where('key_id', $this->id)
+            ->orWhereIn('key_id', $this->subkeys->pluck('id'))
+            ->with(['subkey.root'])
+            ->get();
+
+        // 2. Memory Mapping: Key the collection by ID.
+        // This allows buildNode to look up reticulation targets or subkey roots in O(1) time.
+        $leadMap = $allLeads->keyBy('id');
+
+        // 3. Reset State: Ensure the visited tracker is empty before starting recursion.
+        $this->visited = [];
+
+        // 4. Input Detection: Check if 'item_ids' are present in the request.
+        // If present, we switch to "Pruning/Filtering" logic inside buildNode.
+        $includedItemIds = $request->input('item_ids');
+        $isFiltering = !empty($includedItemIds) && is_array($includedItemIds);
+
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'is_filtered' => $isFiltering, // Useful for the frontend to show "filtered" state
+            
+            // 5. Start Recursion: Begin building the tree from the Key's root lead.
+            // If the key has no root, or filtering results in no valid paths, this returns null.
+            'tree' => $this->root 
+                ? $this->buildNode(
+                    $this->root, 
+                    $leadMap, 
+                    $isFiltering ? $includedItemIds : null
+                ) 
+                : null,
+        ];
+    }
+
+    /**
+     * Recursively builds the tree node by node with pruning and skip logic.
+     */
+    private function buildNode(Lead $lead, Collection $leadMap, ?array $filterIds = null, array $skippedAccumulator = []): ?array
+    {
+        // Cycle Detection
+        if (in_array($lead->id, $this->visited)) {
+            return $filterIds ? null : [
+                'id' => $lead->id,
+                'statement' => $lead->statement . ' (Cycle Detected)',
+                'is_cycle' => true,
+                'skipped_leads' => $skippedAccumulator,
+                'children' => []
+            ];
+        }
+
+        $this->visited[] = $lead->id;
+
+        // Resolve children based on Reticulations, Subkeys, or Standard parent_id
+        $childrenCollection = $this->resolveChildren($lead, $leadMap);
+
+        // Process children recursively
+        $nodes = $childrenCollection
+            ->map(fn($child) => $this->buildNode($child, $leadMap, $filterIds))
+            ->filter() // Removes nulls (branches that don't lead to filtered items)
+            ->values();
+
+        // Filtering Logic: Only keep node if it's a target item OR leads to one
+        if ($filterIds !== null) {
+            $isTargetItem = $lead->item_id !== null && in_array($lead->item_id, $filterIds);
+            $hasValidDescendants = $nodes->isNotEmpty();
+
+            if (!$isTargetItem && !$hasValidDescendants) {
+                return null;
+            }
+        }
+
+        // Skip Logic: Compress single-child paths that are NOT items
+        if ($nodes->count() === 1 && $lead->item_id === null) {
+            $skippedAccumulator[] = [
+                'id' => $lead->id,
+                'statement' => $lead->statement
+            ];
+
+            $childNode = $nodes->first();
+            $childNode['skipped_leads'] = array_merge($skippedAccumulator, $childNode['skipped_leads'] ?? []);
+            return $childNode;
+        }
+
+        return [
+            'id' => $lead->id,
+            'statement' => $lead->statement,
+            'item_id' => $lead->item_id, // Could be a terminal item or a "shortcut"
+            'skipped_leads' => $skippedAccumulator,
+            'children' => $nodes->toArray(),
+        ];
+    }
+
+    /**
+     * Resolves logical children based on task rules (Reticulations, Subkeys, Parents).
+     */
+    private function resolveChildren(Lead $lead, Collection $leadMap): Collection
+    {
+        // Case 1: Reticulation - Follow the link to a different part of the graph
+        if ($lead->reticulation_id !== null) {
+            $target = $leadMap->get($lead->reticulation_id);
+            return $target ? $leadMap->where('parent_id', $target->id) : collect();
+        }
+
+        // Case 2: Subkey - Jump to the root of a nested subkey
+        if ($lead->subkey_id !== null && $lead->subkey?->root) {
+            return $leadMap->where('parent_id', $lead->subkey->root->id);
+        }
+
+        // Case 3: Standard Branching - Current lead is the parent
+        return $leadMap->where('parent_id', $lead->id);
+    }
+}
+
+```
+
+---
+---
+
+>
+> Can you wrap lines at 80 characters?
+> 
+
+I have refactored the `KeyResource` code to wrap at 80 characters. I’ve also
+included the requested comments for `toArray`, `buildNode`, and
+`resolveChildren` to ensure the logic remains clear.
+
+```php
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Lead;
+use Illuminate\Support\Collection;
+
+class KeyResource extends JsonResource
+{
+    /** @var array Track visited leads to prevent infinite loops */
+    protected array $visited = [];
+
+    /**
+     * Transform the Key model into a nested JSON tree structure.
+     */
+    public function toArray(Request $request): array
+    {
+        // 1. Fetch all relevant leads for the memory map in one query.
+        // This prevents N+1 issues during recursion.
+        $allLeads = Lead::where('key_id', $this->id)
+            ->orWhereIn('key_id', $this->subkeys->pluck('id'))
+            ->with(['subkey.root'])
+            ->get();
+
+        // 2. Map leads by ID for O(1) lookups during tree construction.
+        $leadMap = $allLeads->keyBy('id');
+
+        // 3. Reset the visited tracker for this specific request.
+        $this->visited = [];
+
+        // 4. Detect if filtering is requested via 'item_ids'.
+        $includedItemIds = $request->input('item_ids');
+        $isFiltering = !empty($includedItemIds) && is_array($includedItemIds);
+
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'is_filtered' => $isFiltering,
+            'tree' => $this->root 
+                ? $this->buildNode(
+                    $this->root, 
+                    $leadMap, 
+                    $isFiltering ? $includedItemIds : null
+                ) 
+                : null,
+        ];
+    }
+
+    /**
+     * Recursively builds the tree node by node.
+     * * @param array|null $filterIds If set, pruning logic is activated.
+     * @param array $skippedAccumulator Stores bypassed single-child nodes.
+     */
+    private function buildNode(
+        Lead $lead, 
+        Collection $leadMap, 
+        ?array $filterIds = null, 
+        array $skippedAccumulator = []
+    ): ?array {
+        // 1. Recursion Protection: Stop if we hit a lead already in this branch.
+        if (in_array($lead->id, $this->visited)) {
+            return $filterIds ? null : [
+                'id' => $lead->id,
+                'statement' => $lead->statement . ' (Cycle Detected)',
+                'is_cycle' => true,
+                'skipped_leads' => $skippedAccumulator,
+                'children' => []
+            ];
+        }
+
+        $this->visited[] = $lead->id;
+
+        // 2. Resolve Children: Handles Reticulations and Subkeys.
+        $childrenCollection = $this->resolveChildren($lead, $leadMap);
+
+        // 3. Recursive Descent: Map and filter valid child paths.
+        $nodes = $childrenCollection
+            ->map(fn($child) => $this->buildNode($child, $leadMap, $filterIds))
+            ->filter()
+            ->values();
+
+        // 4. Pruning: If filtering, keep node only if it's a target or has path.
+        if ($filterIds !== null) {
+            $isTargetItem = $lead->item_id !== null 
+                && in_array($lead->item_id, $filterIds);
+            $hasValidDescendants = $nodes->isNotEmpty();
+
+            if (!$isTargetItem && !$hasValidDescendants) {
+                return null;
+            }
+        }
+
+        // 5. Skip Logic: Only skip if exactly 1 child AND lead has no item.
+        if ($nodes->count() === 1 && $lead->item_id === null) {
+            $skippedAccumulator[] = [
+                'id' => $lead->id,
+                'statement' => $lead->statement
+            ];
+
+            $childNode = $nodes->first();
+            $childNode['skipped_leads'] = array_merge(
+                $skippedAccumulator, 
+                $childNode['skipped_leads'] ?? []
+            );
+            return $childNode;
+        }
+
+        // 6. Output Node structure.
+        return [
+            'id' => $lead->id,
+            'statement' => $lead->statement,
+            'item_id' => $lead->item_id, // Present if terminal or shortcut
+            'skipped_leads' => $skippedAccumulator,
+            'children' => $nodes->toArray(),
+        ];
+    }
+
+    /**
+     * Resolves logical children based on task rules.
+     */
+    private function resolveChildren(Lead $lead, Collection $leadMap): Collection
+    {
+        // Exception 1: Reticulation
+        // Redirect children to the children of the reticulation target.
+        if ($lead->reticulation_id !== null) {
+            $target = $leadMap->get($lead->reticulation_id);
+            return $target 
+                ? $leadMap->where('parent_id', $target->id) 
+                : collect();
+        }
+
+        // Exception 2: Subkey
+        // Redirect children to the children of the subkey root lead.
+        if ($lead->subkey_id !== null && $lead->subkey?->root) {
+            return $leadMap->where('parent_id', $lead->subkey->root->id);
+        }
+
+        // General Case:
+        // Children are leads that have this lead as their parent.
+        return $leadMap->where('parent_id', $lead->id);
+    }
+}
+
+```
