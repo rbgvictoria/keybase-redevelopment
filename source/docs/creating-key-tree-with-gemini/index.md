@@ -151,6 +151,7 @@ class Project extends Model
         return $this->belongsTo(Project::class);
     }
 }
+```
 
 ## 2. The Task
 
@@ -176,8 +177,6 @@ There are two exceptions:
 > Please perform the task set out in the uploaded file and format the response 
 > as markdown.
 >
-
-> Please perform the task set out in the uploaded file and format the response as markdown.
 
 To implement the `children` relationship on the **Lead** model as described, we need to handle both standard Eloquent relationships and the conditional logic required for the "Reticulation" and "Subkey" exceptions.
 
