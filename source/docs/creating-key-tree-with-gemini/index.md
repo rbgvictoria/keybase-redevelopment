@@ -2600,5 +2600,6 @@ class KeyResource extends JsonResource
         return $leadMap->where('parent_id', $lead->id);
     }
 }
-
 ```
+
+[Chat continues here...](../creating-project-tree-with-gemini)
