@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="--">
+
+        <meta property="og:site_name" content="KeyBase redevelopment"/>
+        <meta property="og:title" content="Scope and extensibility | KeyBase redevelopment"/>
+        <meta property="og:description" content="--"/>
+        <meta property="og:url" content="https://rbgvictoria.github.io/keybase-redevelopment/docs/dwcdp"/>
+        <meta property="og:image" content="https://rbgvictoria.github.io/keybase-redevelopment/assets/img/keybase.png"/>
+        <meta property="og:type" content="website"/>
+
+        <meta name="twitter:image:alt" content="KeyBase redevelopment">
+        <meta name="twitter:card" content="summary_large_image">
+
+        
+        <title>KeyBase redevelopment | Scope and extensibility</title>
+
+        <link rel="home" href="https://rbgvictoria.github.io/keybase-redevelopment">
+        <link rel="icon" href="/favicon.ico">
+
+        
+                    <!-- Insert analytics code here -->
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
+        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=3ac898f01020ab7684ea243f37993c63">
+
+
+            </head>
+
+    <body class="flex flex-col justify-between min-h-screen bg-gray-50 text-gray-800 leading-normal font-sans">
+        <header class="flex items-center shadow bg-sky-600 border-b h-24 mb-8 py-4" role="banner">
+            <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center">
+                    <a href="https://rbgvictoria.github.io/keybase-redevelopment" title="KeyBase redevelopment home" class="inline-flex items-center">
+                        <img class="h-8 md:h-10 mr-3" src="https://rbgvictoria.github.io/keybase-redevelopment/assets/img/keybase-logo-80.png" alt="KeyBase redevelopment logo" />
+                        <h1 class="text-lg md:text-2xl text-white font-semibold hover:text-gray-200 my-0 pr-4">KeyBase redevelopment</h1>
+                    </a>
+                </div>
+
+                <div class="flex flex-1 justify-end items-center text-right md:pl-10">
+                                    </div>
+            </div>
+
+                <button class="flex justify-center items-center bg-gray-50 border bg-gray-50 h-10 mr-4 px-5 rounded-full lg:hidden focus:outline-none"
+    onclick="navMenu.toggle()"
+    aria-label="nav menu"
+>
+    <svg id="js-nav-menu-show" xmlns="http://www.w3.org/2000/svg"
+        class="fill-current text-sky-700 h-9 w-4" viewBox="0 0 32 32"
+    >
+        <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"/>
+    </svg>
+
+    <svg id="js-nav-menu-hide" xmlns="http://www.w3.org/2000/svg"
+        class="hidden fill-current text-white h-9 w-4" viewBox="0 0 36 30"
+    >
+        <polygon points="32.8,4.4 28.6,0.2 18,10.8 7.4,0.2 3.2,4.4 13.8,15 3.2,25.6 7.4,29.8 18,19.2 28.6,29.8 32.8,25.6 22.2,15 "/>
+    </svg>
+</button>
+
+        </header>
+
+        <main role="main" class="w-full flex-auto">
+            <section class="container max-w-8xl mx-auto px-6 md:px-8 py-4">
+    <div class="flex flex-col lg:flex-row">
+
+        <div class="docsearch-content w-full lg:w-3/4 break-words pb-16" v-pre>
+            <h1>Scope and extensibility</h1>
+<p>I am just going to treat this as a scientific article I am reviewing and pick
+the whole thing apart. Not really appropriate for a GitHub issue, but I hope
+people will not mind.</p>
+<p>When I look at the figure of the conceptual model, or the Quick Reference Guide,
+I see three things:</p>
+<ul>
+<li>An <strong>application profile</strong>, or a vehicle for Darwin Core: this is the Data
+Package</li>
+<li><strong>enhancement</strong> of Darwin Core: new entities to be added to Darwin Core (or
+official Darwin Core extensions)</li>
+<li><strong>extension</strong> of the Data Package with non-Darwin Core entities: this is (or
+should be) similar to the non-Darwin Core, or community, extensions to the
+Darwin Core Archive.</li>
+</ul>
+<p><img src="image.png" alt="alt text" /></p>
+<p>I think it is important to split this into three separate bodies of work for the
+following reasons. First, if you have a big job, you want to split it into
+smaller parts. Second, I think technically only the enhancement bit is governed
+under the Vocabulary Maintenance Standard, which means community consensus is
+needed for changes and additions, so you want to make that part as small as
+possible. Finally, and most importantly, you want to make sure that the Data
+Package works with just Darwin Core before starting to accessorise.</p>
+<h2><a id="content-application-profile" href="#content-application-profile" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Application profile</h2>
+<p>For me the two important test cases for a Darwin Core Data Package are:</p>
+<ol>
+<li>It should enable delivery of all data that we can currently deliver with the
+Darwin Core Archive (without non-Darwin Core extensions and excluding Taxon
+Core data sets)</li>
+<li>We should be able to do that without having to add new terms to glue Darwin
+Core entities together.</li>
+</ol>
+<p>When we look at how Darwin Core terms are distributed over the tables in the
+Darwin Core Data Package, we see the following:</p>
+<p><img src="./screenshot_2025-07-22_170710.png" alt="" /></p>
+<ul>
+<li>
+<p>With the exception of the Identification table, which is dangling, all other
+tables have foreign keys to the Event table, so the star model of the Darwin
+Core Archive is very much still there. In fact, the conceptual model is
+essentually the Event Core from the Darwin Core Archive with the Extended
+MeasurementOrFact extension. Even the direction of the relationships between
+the Event table and the other tables—they are all one-to-many—reflects the
+core–extension relationship, rather than the relationship between the entities
+in Darwin Core. For example, <code>dwc:GeologicalContext</code> is in the Event (or
+Occurrence) Core, so has a one-to-many relationship with <code>dwc:Event</code>, in the
+Darwin Core Archive, but the GeologicalContext table has a many-to-one
+relationship with the Event table in the Darwin Core Data Package. Combined
+with the fact that <code>geologicalContextID</code> is required and has to be unique,
+this will cause problems.</p>
+</li>
+<li>
+<p><code>dwc:MaterialSample</code> and <code>dwc:MaterialEntity</code> have been lumped into a Material
+table, which is not directly connected to the Occurrence table. This makes the
+Darwin Core Data Package unfit for purpose for collections data as well as
+for environmental DNA data.</p>
+</li>
+<li>
+<p>The Identification table is not linked to any other tables when using only
+Darwin Core terms. They are linked to the Occurrence and Material tables with
+<code>dwcdp:basedOnOccurrenceID</code> and <code>dwcdp:basedOnMaterialEntityID</code>.
+Identifications are annotations, so they need to have a target.
+<code>dwc:Identification</code>s are not stand-alone objects, they depend on
+<code>dwc:Occurrence</code> or <code>dwc:MaterialEntity</code> (or <code>dwc:Organism</code>). If the
+<code>dwc:Occurrence</code> or <code>dwc:MaterialEntity</code> is not there, there cannot be a
+<code>dwc:Identification</code> either. Therefore, <code>dwc:occurrenceID</code> and
+<code>dwc:materialEntityID</code> should be used instead. Identifications cannot be based
+on their target of course, as that would be circular.</p>
+</li>
+<li>
+<p>The Occurrence and Material table contain all the properties of the
+Identification table. The reason for this that was given to me is to support
+insufficiently structured databases. You cannot do this if you want to create
+a Darwin Core Data Package that can be used by everyone, as it favours some
+parts of the community over other parts. Herbarium databases typically have a
+one-to-many relationship between specimens and identifications, because we
+need to record the identification history, but a one-to-one-to-one
+relationship between specimens, occurrences and events (except that they do
+not have occurrences), so for herbaria it might be easier to have all the
+properties of the Occurrence and Event tables in the Material table. We do
+want to use the Darwin Core Data Package, however, to be able to resolve the
+many-to-one relationships between specimens and occurrences and between
+occurrences and events that we know exist in our data. The Darwin Core Data
+Package requiring a minimum of structure, even when people think they do not
+need that in their database, is not a bad thing. People can always use the
+Darwin Core Archive. If they want to use the Darwin Core Data Package, they
+have to go all in.</p>
+</li>
+<li>
+<p>Likewise, <code>dcterms:Location</code> is lumped with <code>dwc:Events</code> in the Event table.
+That is a lot of extra fields in the Event table. Is there a rational for
+splitting off <code>dwc:GeologicalContext</code> from the Event Core and not
+<code>dcterms:Location</code>? I think for many people having <code>dcterms:Location</code> in the
+Event table makes data delivery harder rather than easier. I can also imagine
+that, once there is an <code>eco:Survey</code>, a link to <code>dcterms:Location</code> might be
+needed from <code>eco:Survey</code>.</p>
+</li>
+</ul>
+<p>The figure below shows how Darwin Core entities hang together in my mind. I have
+divided the entity-relationship diagram in the top half of the figure into three
+zones: location, event and organism. I should say that, as a biologist, my
+expertise is very much at the organism end of the diagram, so I might not have
+hooked up everything correctly in the lefthand side of the diagram.</p>
+<p><img src="./dwc-diagram.drawio.svg" alt="" /></p>
+<p>The middle row in the entity-relationship diagram has the core classes of Darwin
+Core, <code>dcterms:Location</code>, <code>dwc:Event</code>, <code>dwc:Occurrence</code> and <code>dwc:Identification</code>
+that all Darwin Core data sets must have. The top and middle rows of the diagram
+contain classes that are optional but are important for different parts of the
+domain. One could visualise that one can squeeze the top and bottom rows into
+the middle row and end up with the Occurrence Core of the Darwin Core Archive.</p>
+<p>Additionally, the following may be noted:</p>
+<ul>
+<li>
+<p>I have split the Material table into <code>dwc:MaterialSample</code> and
+<code>dwc:MaterialEntity</code>. I do not know if it exactly corresponds with their
+meaning in Darwin Core, but I have loosely coupled <code>dwc:MaterialEntity</code> with
+‘specimen’ and <code>dwc:MaterialSample</code> with ‘sample’. The difference between
+those two is in how they relate to <code>dwc:Occurrence</code>, <em>i.e.</em>,
+<code>dwc:MaterialEntity</code> has a many-to-one relationship with <code>dwc:Occurrence</code> and
+<code>dwc:MaterialSample</code> a one-to-many relationship. This is also why
+<code>dwc:MaterialSample</code> is in the ‘event’ zone and <code>dwc:MaterialEntity</code> in the
+‘organism’ zone of the diagram. Some data sets I downloaded from the GBIF
+Oceania Metabarcoding Data Toolkit have the same <code>dwc:eventID</code> and
+<code>dwc:materialSampleID</code> and the data I deliver myself to ALA has the same
+values for <code>dwc:occurrenceID</code> and <code>dwc:materialEntityID</code>, so I got it right at
+least some of the time.</p>
+<p>It should be noted that in the <a href="https://dwcdp-ipt.gbif-test.org/resource?r=test_joerg">Herbarium
+Berolense</a> data set in
+the test IPT, the ‘MaterialSample’ that is given in the <code>materialEntityType</code>
+column in the Material table is the <code>ggbn:MaterialSample</code>, not the
+<code>dwc:MaterialSample</code> in the sense it is used here. The <code>ggbn:MaterialSample</code>
+(again, in the sense it is used in the data set) has a many-to-one
+relationship with <code>dwc:MaterialEntity</code>. In this data set, the data of the
+sample that is taken from the specimen (or which the specimen is a voucher
+for) is provided in the Material table and the specimen (or
+<code>dwc:MaterialEntity</code>) data is delivered in the Occurrence table. This is made
+to work by using the <code>dwc:catalogNumber</code> as the <code>dwc:eventID</code> in both the
+Occurrence and Material table (it is also used in <code>dwc:occurrenceRemarks</code> in
+the Occurrence table). The <code>dwcdp:eventCategory</code> is also given as ‘DNA
+extraction’, which might be some type of <code>dcterms:Event</code> but, at least in my
+mind, not a <code>dwc:Event</code>. The examples for <code>dwcdp:eventCategory</code> in the Quick
+Reference Guide include ‘nucleotide analysis’, which does the same thing, so
+it might be intended, but it makes the <code>dwc:Event</code> meaningless and breaks the
+chain of data from <code>dwc:Location</code> to <code>dwc:Identification</code>, so is not a good
+idea.</p>
+<p>I think the <code>dwcdp:derivedFromMaterialEntityID</code>, etc., might be intended to
+deal with this situation, but I think it is better to keep Darwin Core
+reasonably simple and use a GGBN extension to deal with the relationship
+between specimens and DNA sequences. So, use Darwin Core for what potentially
+highly disparate data sets have in common and community extensions for where
+they differ, rather than try to shoehorn everything into Darwin Core.</p>
+</li>
+<li>
+<p><code>dwcdp:Survey</code> and <code>dwcdp:SurveyTarget</code> have been left out, simply because
+they are not in Darwin Core yet. Therefore they are enhancements. Most of the
+properties of the Survey table are in the Humboldt Extension to Darwin Core,
+but the class itself has not been defined, so I am assuming the properties
+currently belong to the <code>dwc:Event</code>.</p>
+</li>
+<li>
+<p>It would be good to have an <code>OrganismInteraction</code> class in Darwin Core, but I
+think it can already be used in the Darwin Core Data Package, as it is
+essentially a <code>dwc:ResourceRelationship</code> and is the key–value list that is the
+object of <code>dwc:associatedOccurrences</code> in table form.</p>
+</li>
+</ul>
+<p>The lower half of the figure I have kept largely intact. The things on the
+lefthand side are strictly speaking extensions, but they are so common and used
+throughout the domain, even though they are not part of the domain, so they are
+probably best seen as part of the core. There are Dublin Core classes for Agent,
+Media and Reference that can be used, but there is nothing like that for
+Protocol, so that should be added to Darwin Core as an enhancement.</p>
+<p>For the Media, the pivot tables have a number of properties that belong in the
+Media table. As <code>mediaID</code> is required and has to be unique in the pivot tables,
+there is really no reason to have these properties in the pivot tables.</p>
+<p><code>dwc:MeasurementOrFact</code> and <code>dwc:ResourceRelationship</code> are Darwin Core’s native
+extension points, for scalar values and resources respectively. I do not
+understand why the Darwin Core class names are not being used. Especially the
+change from ‘MeasurementOrFact’ to ‘Assertion’ does not make sense.</p>
+<p>Just about the implementation in the IPT, I have created three data resources in
+the test IPT and had a hell of a time getting data sets published. Most of this
+was because I could not use a database connection, so I had to use CSV, but when
+I had those issues resolved, publication still failed because of data quality
+issues. Publication first failed on <code>coordinatePrecision</code> of ‘0’, which was my
+fault, so I fixed the function that creates those, but after that it also failed
+on a <code>minimumElevation</code> of 9000 (because someone had forgotten to enter the
+unit) and then on a negative <code>minimumDepth</code> (which was on the label).</p>
+<p>Now that I was doing manual publications (and was using only a small part of our
+data set), I could fix the data in the database and start over, but, if you have
+scheduled publications and have people (who make errors) entering and editing
+data between publications, this is going to be a major issue. Validation is
+great, but it should be restricted to errors that break the data set, such as
+missing keys or duplicate keys. Making data quality part of the validation
+places the responsibility for data quality in the hands of the wrong people and
+will seriously impact the usability of the Darwin Core Data Package.</p>
+<h2><a id="content-enhancement" href="#content-enhancement" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Enhancement</h2>
+<p><code>OrganismInteraction</code>, <code>Survey</code> and <code>SurveyTarget</code> can be quite easily added to
+Darwin Core, or the Humboldt Extension in case of the latter two.</p>
+<p>Adding <code>Protocol</code> will probably be a bit more work. I find it a bit suspect that
+there are no examples for <code>protocolTypeVocabulary</code>. You want some of those
+before creating the class.</p>
+<h2><a id="content-extension" href="#content-extension" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Extension</h2>
+<p>There should be an avenue for extending the Darwin Core Archive for particular
+use cases that are not entirely covered by Darwin Core. The current approach
+taken here seems to be to suck everything into Darwin Core, perhaps as official
+Darwin Core Extensions, and create a monolith, but I think their should be room
+for community extensions.</p>
+<p>Extensions should not change anything to the tables already in the Data Package
+(trying very hard to avoid the word ‘core’), so there should be no foreign keys
+to tables in the extension from tables in the core. In the current Data Package
+there are foreign keys from the Identification table to the NucleotideAnalysis
+and NucleotideSequence tables.</p>
+<p>With this rule in place, I think many extensions of the Darwin Core Archive can
+be made suitable for the Darwin Core Data Package by creating resource
+descriptions that can be stitched into the manifest of the Darwin Core Data
+Package. Because of the different structure of the Data Package, multiple
+extensions, <em>e.g.</em>, all the GGBN extensions or all the Germplasm extensions, in
+the Darwin Core Archive can be combined into a single extension for the Darwin
+Core Data Package. I myself would not mind an extension for collections data
+that has tables for preparations, acquisitions, loans and exchange and
+nomenclatural types. This might eventually turn into an official Darwin Core
+extension, but there will be a very long time that it is not.</p>
+<p>Another way to deal with community-specific data is to not have a single Darwin
+Core Data Package, but have different Data Packages for different communities
+that use the part of Darwin Core that they need—but at least the
+<code>dcterms:Location</code>, <code>dwc:Event</code>, <code>dwc:Occurrence</code> and <code>dwc:Identification</code>
+classes—together with tables for subdomain-specific data. I am a bit worried
+that people will think that the existence of the Darwin CoreData Package
+obviates the need for community Data Packages like CamTrapDP.</p>
+<p>The Herbarium Berolense test data resource I mentioned before has one-to-one
+relationships between the Event, Occurrence, Material, NucleotideAnalysis and
+NucleotideSequence tables. This indicates to me there is something wrong with
+the data model. Also, there will be stiff opposition to adding
+<code>PhylogeneticTree</code> and <code>PhylogeneticTreeTip</code> classes to Darwin Core from anyone
+who has the least bit of knowledge of phylogeny.</p>
+        </div>
+
+        <nav id="js-nav-menu" class="nav-menu hidden lg:block">
+            <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-data-model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            KeyBase data model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-organisational-model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            KeyBase organisational model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/processing-keys"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Processing keys
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/backend-form-setup"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Back-end form setup
+        </a>
+    
+    </li>
+    </ul>
+        </nav>
+    </div>
+</section>
+        </main>
+
+        <script src="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/js/main.js?id=392f1ff6d6270841cecb523b36b99dda"></script>
+
+        <script>
+    const navMenu = {
+        toggle() {
+            const menu = document.getElementById('js-nav-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('lg:block');
+            document.getElementById('js-nav-menu-hide').classList.toggle('hidden');
+            document.getElementById('js-nav-menu-show').classList.toggle('hidden');
+        },
+    }
+</script>
+
+        <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
+            <ul class="flex flex-col md:flex-row justify-center">
+                <li class="md:mr-2">
+                    &copy; <a href="https://tighten.co" title="Tighten website">Tighten</a> 2026.
+                </li>
+
+                <li>
+                    Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten">Jigsaw</a>
+                    and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework">Tailwind CSS</a>.
+                </li>
+            </ul>
+        </footer>
+    </body>
+</html>

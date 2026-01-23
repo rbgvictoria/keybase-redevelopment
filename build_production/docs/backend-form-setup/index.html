@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="Beautiful docs powered by Jigsaw">
+
+        <meta property="og:site_name" content="KeyBase redevelopment"/>
+        <meta property="og:title" content="Back-end form setup | KeyBase redevelopment"/>
+        <meta property="og:description" content="Beautiful docs powered by Jigsaw"/>
+        <meta property="og:url" content="https://rbgvictoria.github.io/keybase-redevelopment/docs/backend-form-setup"/>
+        <meta property="og:image" content="https://rbgvictoria.github.io/keybase-redevelopment/assets/img/keybase.png"/>
+        <meta property="og:type" content="website"/>
+
+        <meta name="twitter:image:alt" content="KeyBase redevelopment">
+        <meta name="twitter:card" content="summary_large_image">
+
+        
+        <title>KeyBase redevelopment | Back-end form setup</title>
+
+        <link rel="home" href="https://rbgvictoria.github.io/keybase-redevelopment">
+        <link rel="icon" href="/favicon.ico">
+
+        
+                    <!-- Insert analytics code here -->
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
+        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=3ac898f01020ab7684ea243f37993c63">
+
+
+            </head>
+
+    <body class="flex flex-col justify-between min-h-screen bg-gray-50 text-gray-800 leading-normal font-sans">
+        <header class="flex items-center shadow bg-sky-600 border-b h-24 mb-8 py-4" role="banner">
+            <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center">
+                    <a href="https://rbgvictoria.github.io/keybase-redevelopment" title="KeyBase redevelopment home" class="inline-flex items-center">
+                        <img class="h-8 md:h-10 mr-3" src="https://rbgvictoria.github.io/keybase-redevelopment/assets/img/keybase-logo-80.png" alt="KeyBase redevelopment logo" />
+                        <h1 class="text-lg md:text-2xl text-white font-semibold hover:text-gray-200 my-0 pr-4">KeyBase redevelopment</h1>
+                    </a>
+                </div>
+
+                <div class="flex flex-1 justify-end items-center text-right md:pl-10">
+                                    </div>
+            </div>
+
+                <button class="flex justify-center items-center bg-gray-50 border bg-gray-50 h-10 mr-4 px-5 rounded-full lg:hidden focus:outline-none"
+    onclick="navMenu.toggle()"
+    aria-label="nav menu"
+>
+    <svg id="js-nav-menu-show" xmlns="http://www.w3.org/2000/svg"
+        class="fill-current text-sky-700 h-9 w-4" viewBox="0 0 32 32"
+    >
+        <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"/>
+    </svg>
+
+    <svg id="js-nav-menu-hide" xmlns="http://www.w3.org/2000/svg"
+        class="hidden fill-current text-white h-9 w-4" viewBox="0 0 36 30"
+    >
+        <polygon points="32.8,4.4 28.6,0.2 18,10.8 7.4,0.2 3.2,4.4 13.8,15 3.2,25.6 7.4,29.8 18,19.2 28.6,29.8 32.8,25.6 22.2,15 "/>
+    </svg>
+</button>
+
+        </header>
+
+        <main role="main" class="w-full flex-auto">
+            <section class="container max-w-8xl mx-auto px-6 md:px-8 py-4">
+    <div class="flex flex-col lg:flex-row">
+
+        <div class="docsearch-content w-full lg:w-3/4 break-words pb-16" v-pre>
+            <h1>Back-end form setup</h1>
+<p>Below I have sketched the high-level setup of the back-end that I think will work best. I will add the details for each form later.</p>
+<ul class="table-of-contents">
+<li><a href="#content-the-dashboard">The dashboard</a></li>
+<li><a href="#content-inside-a-project">Inside a project</a></li>
+<li><a href="#content-key">Key</a></li>
+</ul>
+<h2><a id="content-the-dashboard" href="#content-the-dashboard" class="heading-permalink" aria-hidden="true" title="Permalink"></a>The dashboard</h2>
+<p>As everything in KeyBase is organised in projects, I think it is best to have a different dashboard for different projects, so nothing can leak from one project into another.</p>
+<p>In my proposal, in the main pane of the dashboard (or dashboard home page), you have the user account managament as well as the projects. In fact, what is under the account management box might be the same as what is under the account icon in the top-right corner of the page, so we might be able to remove that box as well.</p>
+<p>Unless, @twocngdagzyou have any plans for the menu, the information in the left pane is only accessible to Admin users, so we might
+be able to leave out the sidepane altogether.(I haven’t put all this in the sketches yet, as I do not want to make them again).</p>
+<p><img src="../../assets/images/keybase/keybase-dashboard-1.excalidraw.svg" alt="" /></p>
+<h2><a id="content-inside-a-project" href="#content-inside-a-project" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Inside a project</h2>
+<p>Once inside a project, a user has access to all the resources that are scoped to
+the project. They are listed in the sidepane. We have to experiment with where
+the project header (here ‘Project 1’) goes. Here, the project header needs to
+have a link under it, otherwise there is no way to get back to the Project form
+while staying inside the project. Another way we can do it is by moving the
+project header to the sidepane and add the project title to the breadcrumbs,
+<em>e.g.</em>, <code>Project 1 &gt; Keys &gt; List</code>, but then we have to find a place for the
+‘Dashboard’ link.</p>
+<p><img src="../../assets/images/keybase/keybase-dashboard-2.excalidraw.svg" alt="" /></p>
+<p>As you can see, I left the lists of keys, items, filters and sources out of the
+Project form. I did not like that when you click on an item in these lists, the
+form opens in a modal, rather than in the Dashboard. As these subforms just
+repeat what is in the sidepane, I think we might as well leave them out rather
+than try to change how they work.</p>
+<p>When clicking on an item in a list that is opened from the sidepane, the form
+opens in the dashboard.</p>
+<p><img src="../../assets/images/keybase/keybase-dashboard-3.excalidraw.svg" alt="" /></p>
+<h2><a id="content-key" href="#content-key" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Key</h2>
+<p>No specific changes to the key form, other than the changes that apply to all
+forms. The only thing is that I have added an ‘Import key’ button. We will have
+to see what we do about that in light of the comment I will make at the end.</p>
+<p>Note that the form is not complete. The author and the source are missing.</p>
+<p><img src="../../assets/images/keybase/keybase-dashboard-4.excalidraw.svg" alt="" /></p>
+<p>In the Key form I do like the lists of leads, items and imports, as the leads do
+not make sense outside the context of the key, and items and imports do not link
+to anything else.</p>
+<p><img src="../../assets/images/keybase/keybase-dashboard-5.excalidraw.svg" alt="" /></p>
+<div class="alert alert-warning">
+    <div class="alert-header">
+        Note
+    </div>
+    <div class="alert-body">
+        <p>@twocngdagz, I had noticed that you added a <code>KeyInput</code> model to the data
+model. I understood what it was for, but did not immediately grasp all its
+implications. I think now that we can remove the <code>ChangeNote</code> model and have a
+<code>changeNote</code> property (corresponding to
+<a href="https://www.w3.org/TR/2009/REC-skos-reference-20090818/#notes"><code>skos:changeNote</code></a>)
+on the <code>KeyInput</code> resource.</p>
+    </div>
+</div>        </div>
+
+        <nav id="js-nav-menu" class="nav-menu hidden lg:block">
+            <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-data-model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            KeyBase data model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/keybase-organisational-model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            KeyBase organisational model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/processing-keys"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Processing keys
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://rbgvictoria.github.io/keybase-redevelopment/docs/backend-form-setup"
+            class="lvl0  active font-semibold text-sky-700 nav-menu__item hover:text-blue-500"
+        >
+            Back-end form setup
+        </a>
+    
+    </li>
+    </ul>
+        </nav>
+    </div>
+</section>
+        </main>
+
+        <script src="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/js/main.js?id=392f1ff6d6270841cecb523b36b99dda"></script>
+
+        <script>
+    const navMenu = {
+        toggle() {
+            const menu = document.getElementById('js-nav-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('lg:block');
+            document.getElementById('js-nav-menu-hide').classList.toggle('hidden');
+            document.getElementById('js-nav-menu-show').classList.toggle('hidden');
+        },
+    }
+</script>
+
+        <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
+            <ul class="flex flex-col md:flex-row justify-center">
+                <li class="md:mr-2">
+                    &copy; <a href="https://tighten.co" title="Tighten website">Tighten</a> 2026.
+                </li>
+
+                <li>
+                    Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten">Jigsaw</a>
+                    and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework">Tailwind CSS</a>.
+                </li>
+            </ul>
+        </footer>
+    </body>
+</html>
