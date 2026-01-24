@@ -2524,6 +2524,73 @@ class KeyResource extends JsonResource
     }
 }
 </code></pre>
+<hr />
+<blockquote>
+<p>Can you explain how the recursive descent in the KeyResource buildNode method works?</p>
+</blockquote>
+<p>The <code>buildNode</code> method uses a <strong>post-order traversal</strong> strategy. This means it explores the deepest branches of your key tree first before deciding whether the current “parent” lead should be kept, pruned, or skipped.</p>
+<p>Think of it like a scout walking to the very end of a trail to see if it leads anywhere useful. If the end of the trail doesn’t contain a target item, the scout walks back and tells the system to “prune” (delete) that entire path.</p>
+<hr />
+<h3><a id="content-the-three-phase-process" href="#content-the-three-phase-process" class="heading-permalink" aria-hidden="true" title="Permalink"></a>The Three-Phase Process</h3>
+<p>Each time <code>buildNode</code> is called, it moves through these three distinct phases:</p>
+<h4><a id="content-1-the-descent-exploring" href="#content-1-the-descent-exploring" class="heading-permalink" aria-hidden="true" title="Permalink"></a>1. The Descent (Exploring)</h4>
+<p>The method first identifies the “logical children” of the current lead (handling those reticulations and subkeys we discussed). It then calls itself for every child.</p>
+<ul>
+<li><strong>The Stack:</strong> As it moves deeper, the computer “remembers” where it left off on the higher branches.</li>
+<li><strong>Safety:</strong> The <code>visited</code> array ensures that if a lead points back to itself (a cycle), the code stops rather than crashing.</li>
+</ul>
+<h4><a id="content-2-the-evaluation-bottom-up-logic" href="#content-2-the-evaluation-bottom-up-logic" class="heading-permalink" aria-hidden="true" title="Permalink"></a>2. The Evaluation (Bottom-Up Logic)</h4>
+<p>Once the recursion hits a “leaf” (a lead with no children), the process starts moving back <strong>up</strong> the tree. At this stage, the method looks at the results of its children:</p>
+<ul>
+<li><strong>Pruning:</strong> If we are filtering and a child returns <code>null</code> (meaning it didn’t find a target item), that child is discarded from the parent’s list.</li>
+<li><strong>Persistence:</strong> If a node has a <code>target_item</code> OR it has at least one child that survived the pruning, the node stays alive.</li>
+</ul>
+<h4><a id="content-3-the-transformation-cleanup" href="#content-3-the-transformation-cleanup" class="heading-permalink" aria-hidden="true" title="Permalink"></a>3. The Transformation (Cleanup)</h4>
+<p>Before the node is returned to the parent, it checks the <strong>Skip Logic</strong>:</p>
+<ul>
+<li>If a node is just a “pass-through” (it has no item of its own and only one valid child), it “skips” itself.</li>
+<li>It passes its own <code>statement</code> into a <code>skipped_leads</code> array and returns its child instead. This is how we turn a long, boring “straight line” of leads into a concise tree for the user.</li>
+</ul>
+<hr />
+<h3><a id="content-visualizing-the-data-flow" href="#content-visualizing-the-data-flow" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Visualizing the Data Flow</h3>
+<p>Imagine a tree where you are looking for <strong>Item C</strong>:</p>
+<ol>
+<li><strong>Lead 1</strong> (Parent)</li>
+</ol>
+<ul>
+<li><strong>Lead 2</strong> (Leads to Item A)  <em>Pruned (returns null)</em></li>
+<li><strong>Lead 3</strong> (Leads to Lead 4)</li>
+<li><strong>Lead 4</strong> (Leads to Item C)  <em>Kept (returns array)</em></li>
+</ul>
+<p>As the recursion “unwinds,” <strong>Lead 3</strong> sees it has a valid child (<strong>Lead 4</strong>), so it stays. <strong>Lead 1</strong> sees it has a valid child (<strong>Lead 3</strong>), so it stays. The final JSON only contains the path <strong>1 → 3 → 4</strong>.</p>
+<h3><a id="content-summary-of-state" href="#content-summary-of-state" class="heading-permalink" aria-hidden="true" title="Permalink"></a>Summary of State</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Action</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Call</strong></td>
+<td><code>buildNode()</code></td>
+<td>Move deeper into the tree.</td>
+</tr>
+<tr>
+<td><strong>Return Null</strong></td>
+<td><code>return null</code></td>
+<td>Signal to the parent that this branch is a “dead end.”</td>
+</tr>
+<tr>
+<td><strong>Return Array</strong></td>
+<td><code>return [...]</code></td>
+<td>Signal that this branch is “on the path” to a target.</td>
+</tr>
+</tbody>
+</table>
+<p>Would you like me to show you how to add a <strong>“depth”</strong> counter to this method so you can limit how deep the recursion goes?</p>
 <p><a href="../creating-project-tree-with-gemini">Chat continues here…</a></p>
         </div>
 
