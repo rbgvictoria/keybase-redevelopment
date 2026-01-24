@@ -2602,4 +2602,66 @@ class KeyResource extends JsonResource
 }
 ```
 
+---
+
+> Can you explain how the recursive descent in the KeyResource buildNode method works?
+
+The `buildNode` method uses a **post-order traversal** strategy. This means it explores the deepest branches of your key tree first before deciding whether the current "parent" lead should be kept, pruned, or skipped.
+
+Think of it like a scout walking to the very end of a trail to see if it leads anywhere useful. If the end of the trail doesn't contain a target item, the scout walks back and tells the system to "prune" (delete) that entire path.
+
+---
+
+### The Three-Phase Process
+
+Each time `buildNode` is called, it moves through these three distinct phases:
+
+#### 1. The Descent (Exploring)
+
+The method first identifies the "logical children" of the current lead (handling those reticulations and subkeys we discussed). It then calls itself for every child.
+
+* **The Stack:** As it moves deeper, the computer "remembers" where it left off on the higher branches.
+* **Safety:** The `visited` array ensures that if a lead points back to itself (a cycle), the code stops rather than crashing.
+
+#### 2. The Evaluation (Bottom-Up Logic)
+
+Once the recursion hits a "leaf" (a lead with no children), the process starts moving back **up** the tree. At this stage, the method looks at the results of its children:
+
+* **Pruning:** If we are filtering and a child returns `null` (meaning it didn't find a target item), that child is discarded from the parent's list.
+* **Persistence:** If a node has a `target_item` OR it has at least one child that survived the pruning, the node stays alive.
+
+#### 3. The Transformation (Cleanup)
+
+Before the node is returned to the parent, it checks the **Skip Logic**:
+
+* If a node is just a "pass-through" (it has no item of its own and only one valid child), it "skips" itself.
+* It passes its own `statement` into a `skipped_leads` array and returns its child instead. This is how we turn a long, boring "straight line" of leads into a concise tree for the user.
+
+---
+
+### Visualizing the Data Flow
+
+Imagine a tree where you are looking for **Item C**:
+
+1. **Lead 1** (Parent)
+* **Lead 2** (Leads to Item A)  *Pruned (returns null)*
+* **Lead 3** (Leads to Lead 4)
+* **Lead 4** (Leads to Item C)  *Kept (returns array)*
+
+
+
+
+
+As the recursion "unwinds," **Lead 3** sees it has a valid child (**Lead 4**), so it stays. **Lead 1** sees it has a valid child (**Lead 3**), so it stays. The final JSON only contains the path **1 → 3 → 4**.
+
+### Summary of State
+
+| Phase | Action | Purpose |
+| --- | --- | --- |
+| **Call** | `buildNode()` | Move deeper into the tree. |
+| **Return Null** | `return null` | Signal to the parent that this branch is a "dead end." |
+| **Return Array** | `return [...]` | Signal that this branch is "on the path" to a target. |
+
+Would you like me to show you how to add a **"depth"** counter to this method so you can limit how deep the recursion goes?
+
 [Chat continues here...](../creating-project-tree-with-gemini)
