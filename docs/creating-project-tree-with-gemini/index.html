@@ -26,7 +26,7 @@
                     <!-- Insert analytics code here -->
         
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
-        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=d9b301feb7d055053773e8b533f66267">
+        <link rel="stylesheet" href="https://rbgvictoria.github.io/keybase-redevelopment/assets/build/css/main.css?id=3b61f149744027025d54bd15d113320c">
 
 
             </head>
@@ -1034,7 +1034,9 @@ class FilterResource extends JsonResource
 <hr />
 <hr />
 <blockquote>
-<p>Is it possible to also use this filter_id on the keys requests. For the keys we will need to check if the key keys out any of the items in the filter, or the scope of the keys that key out these items, and so on recursively.</p>
+<p>Is it possible to also use this filter_id on the keys requests? For the keys
+we will need to check if the key keys out any of the items in the filter, or
+the scope of the keys that key out these items, and so on recursively.</p>
 </blockquote>
 <p>Yes, it is absolutely possible. To make this work, we will apply the same “Path to Root” logic to the <code>KeyController</code>.</p>
 <p>When viewing a specific <strong>Key</strong>, we now only want to show the leads and branches that eventually lead to the items contained in the <code>filter_id</code>. This means the tree will be pruned to show only the “relevant” pathways.</p>
