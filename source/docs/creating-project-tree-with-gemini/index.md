@@ -1009,7 +1009,9 @@ Would you like me to create a **FilterController** that allows users to save the
 ---
 
 >
-> Is it possible to also use this filter_id on the keys requests. For the keys we will need to check if the key keys out any of the items in the filter, or the scope of the keys that key out these items, and so on recursively.
+> Is it possible to also use this filter_id on the keys requests? For the keys
+> we will need to check if the key keys out any of the items in the filter, or
+> the scope of the keys that key out these items, and so on recursively.
 >
 
 Yes, it is absolutely possible. To make this work, we will apply the same "Path to Root" logic to the `KeyController`.
